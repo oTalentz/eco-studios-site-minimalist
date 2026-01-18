@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Eco - Premium Preloader</title>
+    <style>
+        /* Modern Reset */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            background-color: #FFFFFF;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Premium Font Stack */
+            font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .loader-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            aspect-ratio: 6 / 1;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* Typography Settings */
+        .text-base {
+            font-size: 100px;
+            font-weight: 900;
+            /* Ultra Bold */
+            text-anchor: middle;
+            dominant-baseline: middle;
+            letter-spacing: -6px;
+            /* Aggressive negative tracking for that "fashion/studio" look */
+            text-transform: uppercase;
+        }
+
+        /* Layer 1: The Stroke (Outline) */
+        .text-stroke {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 1.5px;
+            stroke-dasharray: 600;
+            /* calculated roughly based on character path length */
+            stroke-dashoffset: 600;
+            opacity: 1;
+            animation:
+                drawStroke 2.2s cubic-bezier(0.19, 1, 0.22, 1) forwards,
+                /* EaseOutExpo */
+                fadeStroke 0.5s ease-out 2.0s forwards;
+        }
+
+        /* Layer 2: The Fill (Liquid Rise) */
+        /* We move a rectangle BEHIND the text mask */
+        .fill-rect {
+            fill: #000000;
+            y: 100%;
+            /* Start below the text */
+            height: 100%;
+            animation: liquidRise 1.2s cubic-bezier(0.77, 0, 0.175, 1) 1.5s forwards;
+            /* EaseInOutQuart starting late */
+        }
+
+        /* Keyframes */
+        @keyframes drawStroke {
+            0% {
+                stroke-dashoffset: 600;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes liquidRise {
+            0% {
+                y: 100%;
+            }
+
+            100% {
+                y: 0%;
+            }
+        }
+
+        @keyframes fadeStroke {
+            to {
+                stroke-opacity: 0;
+                /* Fade out stroke as fill takes over for cleaner edge */
+            }
+        }
+
+        /* Subtle Container Entrance */
+        .loader-container {
+            animation: scaleIn 2.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .text-base {
+                letter-spacing: -3px;
+                /* Slightly less tight on mobile for readability */
+                font-weight: 800;
+            }
+
+            .text-stroke {
+                stroke-width: 2px;
+                /* Thicker stroke for small screens */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loader-container">
+        <svg viewBox="0 0 800 150" xmlns="http://www.w3.org/2000/svg">
+
+            <!-- DEFINITIONS -->
+            <defs>
+                <!-- Create a mask from the text itself -->
+                <clipPath id="text-mask-path">
+                    <text x="50%" y="50%" class="text-base">STUDIO ECO</text>
+                </clipPath>
+            </defs>
+
+            <!-- 1. FILL LAYER (Clipped by Text) -->
+            <!-- This rect sits "inside" the text shape and moves up -->
+            <g clip-path="url(#text-mask-path)">
+                <rect class="fill-rect" x="0" y="0" width="100%" height="100%" />
+            </g>
+
+            <!-- 2. STROKE LAYER (Overlay) -->
+            <!-- Sits on top to draw the outline -->
+            <text x="50%" y="50%" class="text-base text-stroke">STUDIO ECO</text>
+
+        </svg>
+    </div>
+
+</body>
+
+</html>

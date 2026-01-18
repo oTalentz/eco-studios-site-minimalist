@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Eco - 3D Cube Preloader</title>
+    <style>
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f8f5e6; /* Creme suave */
+            font-family: sans-serif;
+        }
+
+        /* Preloader Container */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f5e6;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+
+        /* 3D Scene */
+        .scene {
+            width: 60px;
+            height: 60px;
+            perspective: 600px;
+        }
+
+        /* The Cube */
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 4s linear infinite;
+        }
+
+        /* Faces Common Styles */
+        .cube__face {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: #3b5ba5; /* Initial Color */
+            opacity: 0.9;
+            border: 2px solid rgba(255, 255, 255, 0.2); /* Subtle edge definition */
+            
+            /* Color Cycle Animation */
+            animation: colorCycle 8s step-end infinite;
+        }
+
+        /* Face Positioning */
+        .cube__face--front  { transform: rotateY(  0deg) translateZ(30px); }
+        .cube__face--right  { transform: rotateY( 90deg) translateZ(30px); }
+        .cube__face--back   { transform: rotateY(180deg) translateZ(30px); }
+        .cube__face--left   { transform: rotateY(-90deg) translateZ(30px); }
+        .cube__face--top    { transform: rotateX( 90deg) translateZ(30px); }
+        .cube__face--bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+        /* Animations */
+        @keyframes rotateCube {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        /* 
+           Color Cycle:
+           Blue (#3b5ba5) -> Yellow (#eaca57) -> Pink (#d66b8a) -> Green (#57bfa3)
+           Total 8s cycle to sync with 2 rotations (4s each) or independent?
+           Prompt says "Sincronizado com a rotação". 
+           Let's smooth transition or step? Prompt says "transitar suavemente" (smoothly transition).
+        */
+        @keyframes colorCycle {
+            0%, 100% { background-color: #3b5ba5; } /* Blue */
+            25%      { background-color: #eaca57; } /* Yellow */
+            50%      { background-color: #d66b8a; } /* Pink */
+            75%      { background-color: #57bfa3; } /* Green */
+        }
+        
+        /* Overwrite the step-end with linear for smooth transition */
+        .cube__face {
+            animation: colorCycle 4s linear infinite; 
+        }
+
+        /* Utility to hide */
+        .hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="scene">
+            <div class="cube">
+                <div class="cube__face cube__face--front"></div>
+                <div class="cube__face cube__face--back"></div>
+                <div class="cube__face cube__face--right"></div>
+                <div class="cube__face cube__face--left"></div>
+                <div class="cube__face cube__face--top"></div>
+                <div class="cube__face cube__face--bottom"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            
+            // Optional: Minimum display time to ensure user sees the animation
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                
+                // Remove from DOM after transition completes to clean up
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 800); // Matches CSS transition time
+            }, 1500); // Wait 1.5s before fading out
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>eco studios. Education, Games & Creativity</title>
+
+    <!-- External Dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#5C86A3",
+                        "primary-accent": "#3b19e6",
+                        "background-light": "#F5F7FA",
+                        "background-dark": "#111827",
+                        "waaark-pink": "#FFC4D0",
+                        "waaark-blue": "#9DCBE6",
+                        "waaark-dark-blue": "#5C86A3",
+                        "overlay-bg": "#F9FAFB",
+                        "text-dark": "#121118",
+                    },
+                    fontFamily: {
+                        display: ["Poppins", "sans-serif"],
+                        manrope: ["Manrope", "sans-serif"],
+                        sans: ["Poppins", "sans-serif"],
+                    },
+                    boxShadow: {
+                        'soft-xl': '0 20px 40px -10px rgba(0, 0, 0, 0.15)',
+                    }
+                },
+            },
+        };
+    </script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .manrope {
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .shape-blob {
+            position: absolute;
+            fill: currentColor;
+        }
+
+        /* Screen 2 specific */
+        .strike-link::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -5%;
+            width: 110%;
+            height: 3px;
+            background-color: currentColor;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .strike-link:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Screen 3 specific */
+        .hover-reveal-text {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .group:hover .hover-reveal-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hover-zoom-img {
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .group:hover .hover-zoom-img {
+            transform: scale(1.05);
+        }
+
+        .hover-overlay {
+            background-color: rgba(59, 25, 230, 0.9);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .group:hover .hover-overlay {
+            opacity: 1;
+        }
+
+        /* Screen 5 specific */
+        .fluid-shape {
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -50px) rotate(10deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(-5deg);
+            }
+
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+        }
+
+        .sr-only-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        .logo-marquee {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .logo-track {
+            display: flex;
+            width: max-content;
+            animation: logo-scroll 30s linear infinite;
+        }
+
+        .logo-track:hover {
+            animation-play-state: paused;
+        }
+
+        .logo-card {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 0 2rem;
+            margin-right: 1rem;
+            height: 80px;
+            min-width: 160px;
+            transition: all 0.3s ease;
+        }
+
+        .logo-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .logo-item {
+            max-height: 32px;
+            width: auto;
+            max-width: 120px;
+            object-fit: contain;
+            filter: grayscale(1) opacity(0.6);
+            transition: all 0.3s ease;
+        }
+
+        .logo-card:hover .logo-item {
+            filter: grayscale(0) opacity(1);
+        }
+
+        .logo-item-saucy {
+            filter: grayscale(1) brightness(0) opacity(0.6) !important;
+        }
+
+        .logo-card:hover .logo-item-saucy {
+            filter: grayscale(0) brightness(1) opacity(1) !important;
+        }
+
+        .logo-item-upscale {
+            max-height: 55px !important;
+            max-width: 150px !important;
+        }
+
+        .logo-card-compact {
+            min-width: 130px !important;
+            padding: 0 1.5rem !important;
+        }
+
+        .logo-item-4ks {
+            max-height: 60px !important;
+            max-width: 150px !important;
+        }
+
+        .logo-item-gabby {
+            max-height: 62px !important;
+            max-width: 160px !important;
+        }
+
+        .logo-item-waypoint {
+            filter: invert(1) opacity(0.6) !important;
+        }
+
+        .logo-card:hover .logo-item-waypoint {
+            filter: invert(1) opacity(1) !important;
+        }
+
+        @keyframes logo-scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Preloader & Paint Transition */
+        #global-preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f5e6;
+            z-index: 9999;
+        }
+
+        #paint-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #eaca57 0%, #d66b8a 100%);
+            z-index: 10000;
+            transform: translateY(150%);
+            /* Increased from 100% to hide the top wave completely */
+            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
+            /* Slower for more drama */
+            pointer-events: none;
+        }
+
+        #paint-overlay.slide-in {
+            transform: translateY(0%);
+        }
+
+        #paint-overlay.slide-out {
+            transform: translateY(-100%);
+        }
+
+        /* Blob Page Transition (Inspired by Sandstedt/Bodymovin) */
+        .blob-transition-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 2147483647;
+            /* Max z-index to ensure it's on top */
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: transparent !important;
+            /* Force transparent background */
+        }
+
+        .blob-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 150vmax;
+            height: 150vmax;
+            border-radius: 50%;
+            will-change: transform;
+            backface-visibility: hidden;
+            /* Prevent flickering */
+        }
+
+        /* First Blob (Yellow/Gold) */
+        .blob-layer.blob-first {
+            background-color: #eaca57;
+            /* Match preloader gold */
+            z-index: 1;
+            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        /* Second Blob (Pink/Red) */
+        .blob-layer.blob-second {
+            background-color: #d66b8a;
+            /* Match preloader pink */
+            z-index: 2;
+            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1) 0.15s;
+        }
+
+        /* Active State (Cover Screen) */
+        .blob-transition-overlay.active .blob-layer {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Exit State (Fade Out) */
+        .blob-transition-overlay.exit {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+
+        /* Cube 3D Styles */
+        .scene {
+            width: 60px;
+            height: 60px;
+            perspective: 600px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCube 4s linear infinite;
+        }
+
+        .cube__face {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-color: #3b5ba5;
+            opacity: 0.9;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            animation: colorCycle 4s linear infinite;
+        }
+
+        .cube__face--front {
+            transform: rotateY(0deg) translateZ(30px);
+        }
+
+        .cube__face--right {
+            transform: rotateY(90deg) translateZ(30px);
+        }
+
+        .cube__face--back {
+            transform: rotateY(180deg) translateZ(30px);
+        }
+
+        .cube__face--left {
+            transform: rotateY(-90deg) translateZ(30px);
+        }
+
+        .cube__face--top {
+            transform: rotateX(90deg) translateZ(30px);
+        }
+
+        .cube__face--bottom {
+            transform: rotateX(-90deg) translateZ(30px);
+        }
+
+        @keyframes rotateCube {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        @keyframes colorCycle {
+
+            0%,
+            100% {
+                background-color: #3b5ba5;
+            }
+
+            25% {
+                background-color: #eaca57;
+            }
+
+            50% {
+                background-color: #d66b8a;
+            }
+
+            75% {
+                background-color: #57bfa3;
+            }
+        }
+
+        @keyframes lightboxZoom {
+            0% {
+                opacity: 0;
+                transform: scale(0.92);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .lightbox-enter {
+            animation: lightboxZoom 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Prevent Image Download */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            pointer-events: auto;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+
+<body
+    class="h-screen w-screen overflow-x-hidden bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100">
+
+    <div id="paint-overlay">
+        <!-- Optional Wave Decoration -->
+        <svg class="paint-wave" viewBox="0 0 1440 320" preserveAspectRatio="none"
+            style="position: absolute; top: -100px; left: 0; width: 100%; height: 101px;">
+            <path fill="#eaca57" fill-opacity="1"
+                d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,261.3C960,256,1056,224,1152,197.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+            </path>
+        </svg>
+    </div>
+
+    <div id="global-preloader">
+        <div class="scene">
+            <div class="cube">
+                <div class="cube__face cube__face--front"></div>
+                <div class="cube__face cube__face--back"></div>
+                <div class="cube__face cube__face--right"></div>
+                <div class="cube__face cube__face--left"></div>
+                <div class="cube__face cube__face--top"></div>
+                <div class="cube__face cube__face--bottom"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="text/babel" data-presets="es2015,react">
+        const { useState, useEffect, useContext, createContext } = React;
+        const { createRoot, createPortal } = ReactDOM;
+        const { HashRouter, Routes, Route, Link: RouterLink, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Page Transition Logic (Adapted from Easy CSS Page/Slide Transitions) ---
+        const TransitionContext = createContext();
+
+        const TransitionProvider = ({ children }) => {
+            const [phase, setPhase] = useState('idle'); // idle, mounting, active, exit
+            const [colors, setColors] = useState({ first: '#eaca57', second: '#d66b8a' });
+            const navigate = useNavigate();
+
+            const getColorsForPath = (path) => {
+                // Determine colors based on destination path
+                if (path === '/') return { first: '#eaca57', second: '#d66b8a' }; // Home: Gold/Pink
+                if (path.startsWith('/works')) return { first: '#3b5ba5', second: '#6366f1' }; // Works: Blue/Indigo
+                if (path.startsWith('/studio')) return { first: '#10b981', second: '#34d399' }; // Studio: Emerald/Teal
+                if (path.startsWith('/contact')) return { first: '#f59e0b', second: '#fcd34d' }; // Contact: Amber/Yellow
+                if (path.startsWith('/design')) return { first: '#8b5cf6', second: '#ec4899' }; // Design: Violet/Pink
+                return { first: '#eaca57', second: '#d66b8a' }; // Default
+            };
+
+            const navigateWithTransition = (to) => {
+                if (phase !== 'idle') return;
+
+                // Set colors for the upcoming transition
+                setColors(getColorsForPath(to));
+
+                // 1. Mount (Render hidden/scale 0)
+                setPhase('mounting');
+
+                // 2. Start Transition (Blobs Expand) after a slight delay to allow paint
+                setTimeout(() => {
+                    setPhase('active');
+
+                    // 3. Wait for blobs to cover screen (Yellow ~0.8s, White ~1s total)
+                    setTimeout(() => {
+                        // 4. Navigate while covered
+                        navigate(to);
+
+                        // 5. Start Exit Phase (Fade Out / Reveal)
+                        // Give a small buffer for React to render the new page
+                        setTimeout(() => {
+                            setPhase('exit');
+
+                            // 6. Reset after fade out
+                            setTimeout(() => {
+                                setPhase('idle');
+                            }, 600); // Match fade out duration
+                        }, 100);
+                    }, 1000); // Wait for full coverage
+                }, 50); // Small delay to ensure DOM is mounted before adding active class
+            };
+
+            return (
+                <TransitionContext.Provider value={{ navigateWithTransition, phase }}>
+                    {children}
+                    <TransitionOverlay phase={phase} colors={colors} />
+                </TransitionContext.Provider>
+            );
+        };
+
+        const TransitionOverlay = ({ phase, colors }) => {
+            if (phase === 'idle') return null;
+
+            return (
+                <div className={`blob-transition-overlay ${phase === 'active' || phase === 'exit' ? 'active' : ''} ${phase === 'exit' ? 'exit' : ''}`}>
+                    <div className="blob-layer blob-first" style={{ backgroundColor: colors.first }}></div>
+                    <div className="blob-layer blob-second" style={{ backgroundColor: colors.second }}></div>
+                </div>
+            );
+        };
+
+        // Custom Link component to trigger transition
+        const Link = ({ to, children, className, onClick, transition = 'split_diamond', ...props }) => {
+            const context = useContext(TransitionContext);
+            if (!context) {
+                return <RouterLink to={to} className={className} onClick={onClick} {...props}>{children}</RouterLink>;
+            }
+            const { navigateWithTransition } = context;
+
+            const handleClick = (e) => {
+                e.preventDefault();
+                if (onClick) onClick(e);
+                navigateWithTransition(to, transition);
+            };
+
+            return <a href={to} onClick={handleClick} className={className} {...props}>{children}</a>;
+        };
+
+        // Configuração e serviços centrais (logs, segurança, performance)
+        const LOG_LEVELS = { debug: 10, info: 20, warn: 30, error: 40, off: 100 };
+        const Config = (() => {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const debugParam = params.get('debug');
+                const debugStorage = typeof localStorage !== 'undefined' ? localStorage.getItem('__debug') : null;
+                const debug = debugParam === 'true' || debugStorage === 'true';
+                const logLevel = debug ? LOG_LEVELS.debug : LOG_LEVELS.warn;
+                return { debug, logLevel };
+            } catch (e) {
+                return { debug: false, logLevel: LOG_LEVELS.warn };
+            }
+        })();
+
+        // Serviço de Log com níveis e transporte configurável (factory, sem classes p/ compat)
+        function createLogger(level, transport) {
+            var currentLevel = typeof level === 'number' ? level : LOG_LEVELS.warn;
+            var currentTransport = typeof transport === 'function' ? transport : function (entry) {
+                var method = entry.levelName === 'error' ? 'error' : entry.levelName;
+                var metaStr = entry.meta ? JSON.stringify(entry.meta) : '';
+                if (typeof console[method] === 'function') { console[method]('[' + entry.levelName + '] ' + entry.message, metaStr); }
+                else { console.log('[' + entry.levelName + '] ' + entry.message, metaStr); }
+            };
+            function setLevel(lvl) { currentLevel = lvl; }
+            function log(levelName, message, meta) {
+                var lvl = Object.prototype.hasOwnProperty.call(LOG_LEVELS, levelName) ? LOG_LEVELS[levelName] : LOG_LEVELS.info;
+                if (lvl < currentLevel) { return; }
+                try { currentTransport({ levelName: levelName, message: message, meta: meta, ts: Date.now() }); }
+                catch (err) { try { console.error('[logger] transport failed', err); } catch (_) { } }
+            }
+            return {
+                setLevel: setLevel,
+                log: log,
+                debug: function (msg, meta) { log('debug', msg, meta); },
+                info: function (msg, meta) { log('info', msg, meta); },
+                warn: function (msg, meta) { log('warn', msg, meta); },
+                error: function (msg, meta) { log('error', msg, meta); }
+            };
+        }
+        const logger = createLogger(Config.logLevel);
+
+        // Prevent Right Click on Images
+        document.addEventListener('contextmenu', function (e) {
+            if (e.target.tagName === 'IMG' || (e.target.style && e.target.style.backgroundImage)) {
+                e.preventDefault();
+            }
+        }, false);
+
+        // Sanitização e validação
+        function sanitizeString(input) {
+            const str = typeof input === 'string' ? input : String(input != null ? input : '');
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').trim();
+        }
+        function validateEmail(email) {
+            const e = sanitizeString(email);
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+        }
+        function validateName(name) {
+            const n = sanitizeString(name);
+            return n.length >= 2 && n.length <= 100;
+        }
+
+        // Cliente de API com timeout e tratamento de erros
+        async function fetchWithTimeout(url, options = {}, timeoutMs = 8000, fetcher = window.fetch) {
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeoutMs);
+            const safeHeaders = Object.assign({ 'Accept': 'application/json' }, options.headers || {});
+            const safeOpts = Object.assign({}, options, { signal: controller.signal, headers: safeHeaders });
+            try {
+                const res = await fetcher(url, safeOpts);
+                clearTimeout(id);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const ct = (typeof res.headers.get === 'function' ? res.headers.get('content-type') : '') || '';
+                return ct.includes('application/json') ? res.json() : res.text();
+            } catch (err) {
+                clearTimeout(id);
+                logger.error('API request failed', { url, error: String(err) });
+                throw err;
+            }
+        }
+
+        // Monitoramento de performance (factory)
+        function createPerformanceMonitor(logger) {
+            var observers = [];
+            function start() {
+                try {
+                    if ('PerformanceObserver' in window) {
+                        var longTaskObserver = new PerformanceObserver(function (list) {
+                            list.getEntries().forEach(function (e) { logger.warn('Long task', { duration: Math.round(e.duration) }); });
+                        });
+                        try { longTaskObserver.observe({ entryTypes: ['longtask'] }); observers.push(longTaskObserver); } catch (_) { }
+                        var paintObserver = new PerformanceObserver(function (list) {
+                            list.getEntries().forEach(function (e) { logger.info('Paint', { name: e.name, startTime: Math.round(e.startTime) }); });
+                        });
+                        try { paintObserver.observe({ entryTypes: ['paint'] }); observers.push(paintObserver); } catch (_) { }
+                    }
+                    logger.info('Performance monitor started');
+                } catch (e) { logger.error('Performance monitor error', { error: String(e) }); }
+            }
+            function mark(name) { try { performance.mark(name); } catch (_) { } }
+            function measure(name, start, end) {
+                try {
+                    performance.measure(name, start, end);
+                    var entryList = performance.getEntriesByName(name);
+                    var entry = entryList && entryList.length ? entryList[entryList.length - 1] : null;
+                    if (entry) { logger.info('Measure', { name: name, duration: Math.round(entry.duration) }); }
+                } catch (_) { }
+            }
+            function stop() { observers.forEach(function (o) { if (o && typeof o.disconnect === 'function') { o.disconnect(); } }); observers = []; }
+            return { start: start, mark: mark, measure: measure, stop: stop };
+        }
+        const perf = createPerformanceMonitor(logger);
+        perf.start();
+
+        // Rastreamento de navegação
+        const RouteChangeTracker = () => {
+            const location = useLocation();
+            useEffect(() => {
+                perf.mark('route_end');
+                perf.measure(`route:${location.pathname}`, 'route_start', 'route_end');
+                logger.info('Route change', { path: location.pathname });
+                perf.mark('route_start');
+            }, [location.pathname]);
+            useEffect(() => { perf.mark('route_start'); }, []);
+            return null;
+        };
+
+        // Boundary de erro
+        class ErrorBoundary extends React.Component {
+            constructor(props) { super(props); this.state = { hasError: false }; }
+            static getDerivedStateFromError(_) { return { hasError: true }; }
+            componentDidCatch(error, info) { logger.error('React error boundary', { error: String(error), info }); }
+            render() {
+                if (this.state.hasError) {
+                    return <div role="alert" className="p-4 m-4 rounded-lg bg-red-50 text-red-700 border border-red-200">Ocorreu um erro inesperado. Tente recarregar a página.</div>;
+                }
+                return this.props.children;
+            }
+        }
+        // --- Components ---
+
+        const Layout = ({ children }) => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const location = useLocation();
+            const isHome = location.pathname === '/';
+
+            useEffect(() => {
+                setIsMenuOpen(false);
+            }, [location]);
+
+            return (
+                <div className={`relative min-h-screen w-full transition-colors duration-300 ${isMenuOpen ? "bg-overlay-bg" : "bg-background-light dark:bg-background-dark"}`}>
+                    {/* Nav Bar */}
+                    <nav className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 transition-all duration-300 ${isMenuOpen ? "opacity-0 pointer-events-none" : (isHome ? "opacity-100 bg-transparent" : "opacity-100 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md")}`}>
+                        <Link className={`text-2xl md:text-3xl font-black tracking-tight text-waaark-dark-blue dark:text-white transition-colors ${isHome ? "invisible" : ""}`} to="/">
+                            eco studios
+                        </Link>
+                        <button
+                            onClick={() => setIsMenuOpen(true)}
+                            className="flex items-center gap-3 text-waaark-dark-blue dark:text-white group focus:outline-none"
+                        >
+                            <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Menu</span>
+                            <div className="flex flex-col gap-[5px] items-end">
+                                <span className="block w-6 h-[2px] bg-current"></span>
+                                <span className="block w-4 h-[2px] bg-current group-hover:w-6 transition-all duration-300"></span>
+                                <span className="block w-6 h-[2px] bg-current"></span>
+                            </div>
+                        </button>
+                    </nav>
+
+                    {/* Full Screen Menu Overlay */}
+                    <div className={`fixed inset-0 z-50 bg-overlay-bg flex flex-col justify-between p-6 md:p-12 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${isMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-8"}`}>
+                        <div className="w-full flex justify-between items-center z-50">
+                            <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-2xl md:text-3xl font-black tracking-tight text-gray-900 transition-colors">
+                                eco studios
+                            </Link>
+                            <button
+                                onClick={() => setIsMenuOpen(false)}
+                                className="flex items-center gap-3 text-gray-900 group cursor-pointer focus:outline-none select-none"
+                            >
+                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Close</span>
+                                <div className="relative w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full group-hover:border-gray-900 transition-colors">
+                                    <span className="absolute w-3 h-[2px] bg-gray-900 rotate-45 transform transition-transform duration-300"></span>
+                                    <span className="absolute w-3 h-[2px] bg-gray-900 -rotate-45 transform transition-transform duration-300"></span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <nav className="flex-grow flex flex-col items-center justify-center gap-2 md:gap-4 relative z-40">
+                            <Link to="/" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                home
+                            </Link>
+                            <Link to="/works" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                works
+                            </Link>
+                            <Link to="/studio" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                studio
+                            </Link>
+                            <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                contact
+                            </Link>
+                        </nav>
+
+                        <div className="w-full flex flex-col md:flex-row justify-center items-center gap-4 md:gap-12 z-50">
+                            <a className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400 hover:text-gray-900 transition-colors" href="#">Instagram</a>
+                            <a className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400 hover:text-gray-900 transition-colors" href="#">Twitter</a>
+                            <a className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400 hover:text-gray-900 transition-colors" href="#">Behance</a>
+                        </div>
+                    </div>
+
+                    {/* Main Content */}
+                    <main className={`relative w-full h-full transition-all duration-700 ease-in-out origin-top ${isMenuOpen ? "blur-sm scale-95 opacity-50 h-screen overflow-hidden" : ""}`}>
+                        {children}
+                    </main>
+
+                    {!isMenuOpen && (
+                        <div className="fixed bottom-4 right-6 text-[10px] text-gray-400 dark:text-gray-600 font-light opacity-50 hidden md:block pointer-events-none z-50">
+                            © 2023 Clone Design
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const Home = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const location = useLocation();
+
+            useEffect(() => {
+                setIsMenuOpen(false);
+            }, [location]);
+
+            return (
+                <React.Fragment>
+                    {/* Nav Bar */}
+                    <nav className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 transition-all duration-300 ${isMenuOpen ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+                        <Link className="text-2xl md:text-3xl font-black tracking-tight text-waaark-dark-blue dark:text-white transition-colors invisible" to="/">
+                            eco studios
+                        </Link>
+                        <button
+                            onClick={() => setIsMenuOpen(true)}
+                            className="flex items-center gap-3 text-waaark-dark-blue dark:text-white group focus:outline-none"
+                        >
+                            <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Menu</span>
+                            <div className="flex flex-col gap-[5px] items-end">
+                                <span className="block w-6 h-[2px] bg-current"></span>
+                                <span className="block w-4 h-[2px] bg-current group-hover:w-6 transition-all duration-300"></span>
+                                <span className="block w-6 h-[2px] bg-current"></span>
+                            </div>
+                        </button>
+                    </nav>
+
+                    {/* Full Screen Menu Overlay */}
+                    <div className={`fixed inset-0 z-50 bg-overlay-bg flex flex-col justify-between p-6 md:p-12 transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] ${isMenuOpen ? "opacity-100 visible translate-y-0" : "opacity-0 invisible translate-y-8"}`}>
+                        <div className="w-full flex justify-between items-center z-50">
+                            <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-2xl md:text-3xl font-black tracking-tight text-gray-900 transition-colors">
+                                eco studios
+                            </Link>
+                            <button
+                                onClick={() => setIsMenuOpen(false)}
+                                className="flex items-center gap-3 text-gray-900 group cursor-pointer focus:outline-none select-none"
+                            >
+                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Close</span>
+                                <div className="relative w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full group-hover:border-gray-900 transition-colors">
+                                    <span className="absolute w-3 h-[2px] bg-gray-900 rotate-45 transform transition-transform duration-300"></span>
+                                    <span className="absolute w-3 h-[2px] bg-gray-900 -rotate-45 transform transition-transform duration-300"></span>
+                                </div>
+                            </button>
+                        </div>
+
+                        <nav className="flex-grow flex flex-col items-center justify-center gap-2 md:gap-4 relative z-40">
+                            <Link to="/" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                home
+                            </Link>
+                            <Link to="/works" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                works
+                            </Link>
+                            <Link to="/studio" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                studio
+                            </Link>
+                            <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
+                                contact
+                            </Link>
+                        </nav>
+
+                        <div className="w-full flex flex-col md:flex-row justify-center items-center gap-4 md:gap-12 z-50">
+                            <a className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400 hover:text-gray-900 transition-colors" href="#">Instagram</a>
+                            <a className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400 hover:text-gray-900 transition-colors" href="#">Twitter</a>
+                            <a className="text-xs md:text-sm font-semibold tracking-[0.2em] uppercase text-gray-400 hover:text-gray-900 transition-colors" href="#">Behance</a>
+                        </div>
+                    </div>
+
+                    <div className={`relative h-screen w-screen overflow-hidden flex flex-col items-center justify-center transition-all duration-700 ease-in-out origin-top ${isMenuOpen ? "blur-sm scale-95 opacity-50" : ""}`}>
+                        {/* Background SVGs */}
+                        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                            <svg className="absolute -bottom-1/4 -left-1/4 w-[80vw] h-[80vw] text-waaark-blue/20 dark:text-waaark-blue/10 animate-pulse" style={{ animationDuration: "10s" }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M44.7,-76.4C58.9,-69.2,71.8,-59.1,81.6,-46.6C91.4,-34.1,98.1,-19.2,95.8,-5.3C93.5,8.6,82.2,21.5,70.6,32.3C59,43.1,47.1,51.8,34.8,59.3C22.5,66.8,9.8,73.1,-1.9,76.4C-13.6,79.7,-26.1,80,-37.1,74.7C-48.1,69.4,-57.6,58.5,-66.1,46.7C-74.6,34.9,-82.1,22.2,-83.4,9C-84.7,-4.2,-79.8,-17.9,-71.4,-29.4C-63,-40.9,-51.1,-50.2,-38.7,-58.1C-26.3,-66,-13.1,-72.5,1.2,-74.6C15.5,-76.7,31,-74.4,44.7,-76.4Z" fill="currentColor" transform="translate(100 100)"></path>
+                            </svg>
+                            <svg className="absolute -top-1/4 -right-1/4 w-[70vw] h-[70vw] text-waaark-pink/20 dark:text-waaark-pink/10" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M41.4,-72.1C53.7,-64.3,63.9,-53.4,72.3,-41.4C80.7,-29.4,87.3,-16.3,86.6,-3.6C85.9,9.1,77.9,21.4,68.4,32.1C58.9,42.8,47.9,51.9,36.4,60.1C24.9,68.3,12.9,75.6,0.3,75.1C-12.3,74.6,-24.1,66.3,-36.8,58.6C-49.5,50.9,-63.1,43.8,-70.8,32.5C-78.5,21.2,-80.3,5.7,-77.8,-8.7C-75.3,-23.1,-68.5,-36.4,-58.3,-46.2C-48.1,-56,-34.5,-62.3,-21.3,-69.3C-8.1,-76.3,4.7,-84,18.9,-83.2C33.1,-82.4,48.7,-73.1,41.4,-72.1Z" fill="currentColor" transform="translate(100 100)"></path>
+                            </svg>
+                        </div>
+
+
+                        {/* Card Container */}
+                        <div className="main-container relative w-full h-full md:w-[90%] md:h-[85%] bg-white dark:bg-gray-800 shadow-soft-xl overflow-hidden z-10 rounded-none md:rounded-[30px] transition-transform duration-500 hover:scale-[1.005]">
+                            <div className="absolute inset-0 w-full h-full bg-waaark-pink">
+                                <svg className="absolute top-0 right-0 w-[80%] h-[90%] md:w-[60%] md:h-full text-waaark-blue" preserveAspectRatio="none" viewBox="0 0 500 500">
+                                    <path d="M300,0 C200,50 150,200 250,300 C350,400 300,500 500,500 L500,0 Z" fill="currentColor" opacity="0.9"></path>
+                                    <path d="M350,0 C250,80 200,250 300,350 C400,450 450,500 500,500 L500,0 Z" fill="#88BEDD" opacity="0.5"></path>
+                                </svg>
+                                <svg className="absolute bottom-0 left-0 w-[90%] h-[80%] md:w-[70%] md:h-[90%] text-waaark-blue" preserveAspectRatio="none" style={{ transform: "rotate(180deg)" }} viewBox="0 0 500 500">
+                                    <path d="M300,0 C200,50 150,200 250,300 C350,400 300,500 500,500 L500,0 Z" fill="currentColor" opacity="0.8"></path>
+                                </svg>
+                                <svg className="absolute bottom-0 w-full h-[40%] text-white/90 dark:text-gray-900/10" preserveAspectRatio="none" viewBox="0 0 1440 320">
+                                    <path d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z" fill="currentColor" fillOpacity="1"></path>
+                                </svg>
+                                <svg className="absolute top-0 left-0 w-[50%] h-[60%] text-white/30 mix-blend-overlay" preserveAspectRatio="none" viewBox="0 0 400 400">
+                                    <path d="M0,0 L200,0 C100,200 300,150 0,400 Z" fill="currentColor"></path>
+                                </svg>
+                            </div>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+                                <h1 className="text-7xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter drop-shadow-sm select-none">
+                                    eco studios
+                                </h1>
+                                <p className="mt-2 md:mt-4 text-white/90 text-lg md:text-2xl font-light tracking-wide font-sans drop-shadow-sm">
+                                    Education, Games & Creativity
+                                </p>
+                                <Link to="/works" className="mt-8 w-4 h-4 rounded-full bg-waaark-dark-blue shadow-lg cursor-pointer hover:scale-125 transition-transform animate-bounce"></Link>
+                            </div>
+                        </div>
+                        <div className="absolute left-0 right-0 bottom-6 mx-auto w-[92%] md:w-[86%] lg:w-[80%] z-20">
+                            <p className="text-center text-xs font-bold tracking-[0.2em] uppercase text-gray-500/80 dark:text-gray-400/80 mb-3">
+                                Clients & Partners
+                            </p>
+                            <div className="logo-marquee">
+                                <div className="logo-track">
+                                    {/* Set 1 */}
+                                    <a href="https://www.4ksstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card logo-card-compact">
+                                        <img alt="4ks Studios" src="4ks-newicon.png" className="logo-item logo-item-4ks" />
+                                    </a>
+                                    <a href="https://www.youtube.com/@Gabby16bit" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Gabby16Bit" src="gabby16bits.png" className="logo-item logo-item-gabby" loading="lazy" decoding="async" data-fi="0" onError={(e) => { var a = ['Gabby16Bits.png', 'Gabby16Bit.png', 'gabby16bit.png', 'gabby16bits.webp', 'gabby16bits.jpg']; var i = parseInt(e.currentTarget.getAttribute('data-fi') || '0', 10); if (i < a.length) { e.currentTarget.setAttribute('data-fi', String(i + 1)); e.currentTarget.src = a[i]; } }} />
+                                    </a>
+                                    <a href="https://www.microsoft.com" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Microsoft" src="Microsoft - icone.png" className="logo-item" />
+                                    </a>
+                                    <a href="https://www.rareloot.at" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="RareLoot" src="RareLoot_logo_small.png" className="logo-item logo-item-upscale" />
+                                    </a>
+                                    <a href="https://www.youtube.com/@saucytv" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="SaucyTv" src="saucy-tv-logo-1024x573.png" className="logo-item logo-item-saucy" />
+                                    </a>
+                                    <a href="https://bugs.mojang.com" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Mojang" src="mojang_logo_icon.png" className="logo-item" />
+                                    </a>
+                                    <a href="https://www.minecraft.net/pt-br/marketplace/creator/eco-studios" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Minecraft" src="Minecraft Icon Logo.png" className="logo-item" />
+                                    </a>
+                                    <a href="https://waypointstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Waypoint Studios" src="Logo Waypoint 2.svg" className="logo-item logo-item-waypoint" />
+                                    </a>
+
+                                    {/* Set 2 (Duplicate) */}
+                                    <a href="https://www.4ksstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card logo-card-compact">
+                                        <img alt="4ks Studios" src="4ks-newicon.png" className="logo-item logo-item-4ks" />
+                                    </a>
+                                    <a href="https://www.youtube.com/@Gabby16bit" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Gabby16Bit" src="gabby16bits.png" className="logo-item logo-item-gabby" loading="lazy" decoding="async" data-fi="0" onError={(e) => { var a = ['Gabby16Bits.png', 'Gabby16Bit.png', 'gabby16bit.png', 'gabby16bits.webp', 'gabby16bits.jpg']; var i = parseInt(e.currentTarget.getAttribute('data-fi') || '0', 10); if (i < a.length) { e.currentTarget.setAttribute('data-fi', String(i + 1)); e.currentTarget.src = a[i]; } }} />
+                                    </a>
+                                    <a href="https://www.microsoft.com" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Microsoft" src="Microsoft - icone.png" className="logo-item" />
+                                    </a>
+                                    <a href="https://www.rareloot.at" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="RareLoot" src="RareLoot_logo_small.png" className="logo-item logo-item-upscale" />
+                                    </a>
+                                    <a href="https://www.youtube.com/@saucytv" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="SaucyTv" src="saucy-tv-logo-1024x573.png" className="logo-item logo-item-saucy" />
+                                    </a>
+                                    <a href="https://bugs.mojang.com" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Mojang" src="mojang_logo_icon.png" className="logo-item" />
+                                    </a>
+                                    <a href="https://www.minecraft.net/pt-br/marketplace/creator/eco-studios" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Minecraft" src="Minecraft Icon Logo.png" className="logo-item" />
+                                    </a>
+                                    <a href="https://waypointstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card">
+                                        <img alt="Waypoint Studios" src="Logo Waypoint 2.svg" className="logo-item logo-item-waypoint" />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </React.Fragment>
+            );
+        };
+
+        const WorksGalleryComp = () => {
+            const navigate = useNavigate();
+            const [selectedImage, setSelectedImage] = React.useState(null);
+            const [isZoomed, setIsZoomed] = React.useState(false);
+
+            // Reset zoom when image closes
+            React.useEffect(() => {
+                if (!selectedImage) setIsZoomed(false);
+            }, [selectedImage]);
+
+            // Lock body scroll when lightbox is open
+            React.useEffect(() => {
+                if (selectedImage) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+                return () => {
+                    document.body.style.overflow = '';
+                };
+            }, [selectedImage]);
+
+            const marqueeRef = React.useRef(null);
+            const [isHovered, setIsHovered] = React.useState(false);
+            const animationRef = React.useRef(null);
+            const speedRef = React.useRef(1.5); // Base speed
+            const progressRef = React.useRef(0);
+            const lastTimeRef = React.useRef(0);
+
+            // Controls for speed boost
+            const handleSpeedUp = (direction) => {
+                if (direction === 'right') {
+                    speedRef.current = 15.0; // Fast forward
+                } else if (direction === 'left') {
+                    speedRef.current = -15.0; // Rewind
+                }
+            };
+
+            const handleResetSpeed = () => {
+                speedRef.current = 1.5; // Normal speed
+            };
+
+            React.useEffect(() => {
+                const animate = (time) => {
+                    if (lastTimeRef.current === 0) {
+                        lastTimeRef.current = time;
+                    }
+                    const delta = time - lastTimeRef.current;
+                    lastTimeRef.current = time;
+
+                    if (marqueeRef.current) {
+                        // Update progress
+                        progressRef.current += (speedRef.current * delta) / 16; // Normalize to approx 60fps
+
+                        // Loop logic
+                        // Assuming 4 sets, one set width is 25% of total scroll width
+                        // Ideally we measure, but for now let's rely on percentage or large scroll width
+                        // Actually, better to use scrollLeft or transform
+                        // Let's use transform translateX
+
+                        // We need to know the width of one "set" to loop correctly.
+                        // Since we have 4 sets, we loop when we reach 25% (if sets are equal).
+                        // Let's measure the scrollWidth.
+                        const track = marqueeRef.current;
+                        const totalWidth = track.scrollWidth;
+                        const singleSetWidth = totalWidth / 4;
+
+                        // Only apply loop logic if width is valid (images loaded)
+                        if (singleSetWidth > 0) {
+                            if (progressRef.current >= singleSetWidth) {
+                                progressRef.current = 0; // Seamless loop forward
+                            } else if (progressRef.current <= 0) {
+                                progressRef.current = singleSetWidth; // Seamless loop backward
+                            }
+                        }
+
+                        track.style.transform = `translateX(-${progressRef.current}px)`;
+                    }
+
+                    animationRef.current = requestAnimationFrame(animate);
+                };
+
+                animationRef.current = requestAnimationFrame(animate);
+
+                return () => {
+                    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+                };
+            }, []);
+
+            const projects = [
+                { id: 1, title: 'Steamforge Valley', image: 'https://i.imgur.com/sENDcXz.png' },
+                { id: 2, title: 'Lhamma Ethereum', image: 'https://i.imgur.com/SpR0xQx.png' },
+                { id: 3, title: 'Green Skyline', image: 'https://i.imgur.com/drWznYs.png' },
+                { id: 4, title: 'The Quantum Core', image: 'https://i.imgur.com/dJnrBJV.png' },
+                { id: 13, title: 'Nebula Station', image: 'https://i.imgur.com/3i30xe3.png' },
+                { id: 14, title: "Pharaoh's Retreat", image: 'https://i.imgur.com/Z7ujaFs.png' },
+                { id: 15, title: 'Catsa', image: 'https://i.imgur.com/Ma4jbax.png' },
+                { id: 16, title: 'Riverwood City', image: 'https://i.imgur.com/XaorxgG.png' },
+            ];
+
+            const renderProjectCard = (project, index, setKeyPrefix) => (
+                <div
+                    key={`${setKeyPrefix}-${project.id}-${index}`}
+                    className="group relative h-full min-w-[300px] md:min-w-[400px] hover:min-w-[320px] md:hover:min-w-[450px] mr-6 transition-all duration-500 ease-in-out rounded-2xl overflow-hidden cursor-pointer bg-gray-200 shadow-soft-xl"
+                    onClick={() => setSelectedImage(project.image)}
+                >
+                    <div className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 ease-out group-hover:scale-110" style={{ backgroundImage: `url('${project.image}')` }}></div>
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors duration-500"></div>
+                    <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                        <h3 className="text-white text-2xl md:text-4xl font-bold lowercase tracking-tighter whitespace-nowrap">{project.title}</h3>
+                        <div className="h-1 w-12 bg-primary-accent mt-4 rounded-full"></div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <Layout>
+                    <div className="bg-background-light dark:bg-background-dark font-manrope text-text-dark antialiased min-h-screen flex flex-col relative z-10">
+                        <main className="flex-grow pt-24 px-0 md:px-0 lg:px-0 pb-20 overflow-hidden">
+                            <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 mb-12">
+                                <section className="py-12 md:py-20 max-w-4xl">
+                                    <h1 className="text-4xl md:text-6xl lg:text-[64px] font-bold leading-[1.1] tracking-tight text-text-dark dark:text-white mb-6">
+                                        We craft <span className="text-primary-accent">digital experiences</span> that defy expectations.
+                                    </h1>
+                                    <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl font-medium">
+                                        A selected collection of our most recent works, blending technical precision with artistic direction.
+                                    </p>
+                                </section>
+                            </div>
+
+                            <div className="w-full mb-20 relative group">
+                                {/* Navigation Arrows */}
+                                <button
+                                    className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 z-[100] w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white border border-white/20 transition-all active:scale-95 opacity-40 hover:opacity-100 duration-300"
+                                    onMouseDown={() => handleSpeedUp('left')}
+                                    onMouseUp={handleResetSpeed}
+                                    onMouseLeave={handleResetSpeed}
+                                    onTouchStart={() => handleSpeedUp('left')}
+                                    onTouchEnd={handleResetSpeed}
+                                    aria-label="Scroll Left"
+                                >
+                                    <span className="material-symbols-outlined text-3xl md:text-4xl">arrow_back</span>
+                                </button>
+                                <button
+                                    className="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 z-[100] w-12 h-12 md:w-16 md:h-16 flex items-center justify-center bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white border border-white/20 transition-all active:scale-95 opacity-40 hover:opacity-100 duration-300"
+                                    onMouseDown={() => handleSpeedUp('right')}
+                                    onMouseUp={handleResetSpeed}
+                                    onMouseLeave={handleResetSpeed}
+                                    onTouchStart={() => handleSpeedUp('right')}
+                                    onTouchEnd={handleResetSpeed}
+                                    aria-label="Scroll Right (Fast Forward)"
+                                >
+                                    <span className="material-symbols-outlined text-3xl md:text-4xl">arrow_forward</span>
+                                </button>
+
+                                <div className="logo-marquee w-full h-[60vh] md:h-[70vh] overflow-hidden">
+                                    <div ref={marqueeRef} className="h-full items-center flex flex-nowrap w-max will-change-transform" style={{ animation: 'none' }}>
+                                        {/* Set 1 */}
+                                        {projects.map((project, index) => renderProjectCard(project, index, 'set1'))}
+                                        {/* Set 2 (Duplicate) */}
+                                        {projects.map((project, index) => renderProjectCard(project, index, 'set2'))}
+                                        {/* Set 3 (Duplicate for coverage) */}
+                                        {projects.map((project, index) => renderProjectCard(project, index, 'set3'))}
+                                        {/* Set 4 (Duplicate for coverage) */}
+                                        {projects.map((project, index) => renderProjectCard(project, index, 'set4'))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
+                                <div className="flex justify-center mt-0">
+                                    <a href="https://www.minecraft.net/pt-br/marketplace/creator/eco-studios" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-8 py-4 border border-gray-200 dark:border-gray-700 hover:border-primary-accent dark:hover:border-primary-accent rounded-full transition-colors duration-300 group bg-white dark:bg-transparent">
+                                        <span className="text-sm font-bold uppercase tracking-widest text-gray-500 group-hover:text-primary-accent transition-colors">Minecraft Marketplace</span>
+                                    </a>
+                                </div>
+                            </div>
+
+
+                        </main>
+
+                        <footer className="border-t border-[#e5e5e5] dark:border-gray-800 bg-white dark:bg-background-dark py-16 md:py-24">
+                            <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 flex flex-col items-center text-center gap-10">
+                                <h2 className="text-3xl md:text-5xl font-bold text-text-dark dark:text-white tracking-tight">Have an idea?</h2>
+                                <Link to="/contact" className="inline-flex items-center gap-2 text-primary-accent hover:text-primary-accent/80 transition-colors text-xl md:text-2xl font-bold border-b-2 border-primary-accent pb-1">
+                                    Start a project
+                                    <span className="material-symbols-outlined text-[28px]">arrow_outward</span>
+                                </Link>
+                                <div className="flex flex-col md:flex-row items-center justify-between w-full pt-10 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-500">
+                                    <p>© 2026 Eco Studios. All rights reserved.</p>
+                                    <div className="flex gap-6 mt-4 md:mt-0">
+                                        <a className="hover:text-primary-accent" href="#">Privacy</a>
+                                        <a className="hover:text-primary-accent" href="#">Terms</a>
+                                        <Link className="hover:text-primary-accent" to="/design" aria-label="Brand & Design Guidelines">Brand & Design</Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+
+                        {/* Enhanced Lightbox Overlay with Portal */}
+                        {selectedImage && createPortal(
+                            <div
+                                className={`fixed inset-0 z-[2147483647] flex items-center justify-center bg-black/95 backdrop-blur-md lightbox-enter ${isZoomed ? 'overflow-auto cursor-zoom-out' : 'overflow-hidden cursor-zoom-in'}`}
+                                onClick={() => isZoomed ? setIsZoomed(false) : setSelectedImage(null)}
+                            >
+                                <button
+                                    className="fixed top-6 right-6 z-[2147483647] p-3 bg-white/10 hover:bg-white/20 text-white rounded-full backdrop-blur-md transition-all hover:scale-110"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setSelectedImage(null);
+                                    }}
+                                >
+                                    <span className="material-symbols-outlined text-2xl">close</span>
+                                </button>
+
+                                <div
+                                    className={`transition-all duration-300 ease-out ${isZoomed ? 'w-full min-h-full flex items-start justify-center p-0' : 'max-w-[90vw] max-h-[90vh] flex items-center justify-center p-4'}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsZoomed(!isZoomed);
+                                    }}
+                                >
+                                    <img
+                                        src={selectedImage}
+                                        alt="Full View"
+                                        className={`transition-all duration-300 ${isZoomed ? 'w-auto h-auto max-w-none shadow-none my-10' : 'max-w-full max-h-[85vh] object-contain rounded-sm shadow-2xl'}`}
+                                    />
+                                </div>
+                            </div>,
+                            document.body
+                        )}
+                    </div>
+                </Layout>
+            );
+        };
+        const WorksGallery = React.memo(WorksGalleryComp);
+
+        const SuccessPageComp = () => {
+            const navigate = useNavigate();
+            return (
+                <Layout>
+                    <div className="font-manrope bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden flex flex-col min-h-screen">
+                        <main className="flex-grow flex items-center justify-center relative w-full h-screen min-h-[700px]">
+                            <div className="absolute inset-0 z-0 overflow-hidden bg-background-dark">
+                                <div className="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-overlay" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAPl167PiBw4sXNyoSmtAznPiMqKVTNIQjxW8DS0IWDVBJnsv4o-GRawXuYBTiP_mZr3fsKIjBbuREO8N_vNuBVIGiP9cSJ85VPpLlUlgWIG-5l64PNRBBXGd_sZOy6HK-qeDcXFx1mSWdRNwrfSlwIUcVkLwws_LHOZ6UdsSYH-G7dDHghwYDtkGJDIR23o8daI2GXBss8DmGS_czC2xogEDlZrw8_TjtDrC-Futr8lXJNlxu7uj_KEkylJpnVYK3yWhQHy2iKvZyx')" }}></div>
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/90 via-[#6366f1]/80 to-[#ec4899]/80 mix-blend-multiply"></div>
+                                <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-[#ec4899] rounded-full blur-[120px] opacity-30 animate-pulse"></div>
+                                <div className="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] bg-[#3b19e6] rounded-full blur-[120px] opacity-40"></div>
+                            </div>
+
+                            <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center w-full max-w-4xl mx-auto mt-16 md:mt-0">
+                                <div className="mb-8 p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white animate-[bounce_2s_infinite]">
+                                    <span className="material-symbols-outlined text-4xl">check</span>
+                                </div>
+                                <h1 className="text-white text-6xl md:text-8xl lg:text-9xl font-extrabold lowercase tracking-tighter mb-6 drop-shadow-lg leading-none">
+                                    thank you!
+                                </h1>
+                                <p className="text-white/90 text-lg md:text-xl font-medium leading-relaxed max-w-lg mx-auto mb-10 antialiased">
+                                    We've received your inquiry. One of our creative directors will be in touch within 24 hours.
+                                </p>
+                                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
+                                    <button onClick={() => navigate('/')} className="group relative flex min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 border-2 border-white/30 hover:border-white hover:bg-white transition-all duration-300 text-white hover:text-primary-accent text-base font-bold tracking-[0.015em]">
+                                        <span className="truncate group-hover:translate-x-1 transition-transform">Back to Home</span>
+                                        <span className="material-symbols-outlined ml-2 text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                    </button>
+                                </div>
+                                <div className="mt-16 text-white/50 text-sm">
+                                    <p>While you wait, explore our <Link to="/works" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white transition-all">Case Studies</Link></p>
+                                </div>
+                            </div>
+                        </main>
+                    </div>
+                </Layout>
+            );
+        }
+        const SuccessPage = React.memo(SuccessPageComp);
+
+        const StudioComp = () => {
+            return (
+                <Layout>
+                    <div className="bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden font-manrope">
+                        <main>
+                            <section className="relative w-full min-h-[70vh] flex items-center justify-center bg-background-light dark:bg-background-dark overflow-hidden px-6">
+                                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-200/20 dark:bg-primary-accent/10 rounded-full blur-[100px] fluid-shape pointer-events-none" style={{ animationDuration: "25s" }}></div>
+                                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-200/30 dark:bg-pink-500/10 rounded-full blur-[120px] fluid-shape pointer-events-none" style={{ animationDelay: "-8s", animationDuration: "30s" }}></div>
+                                <h1 className="relative z-10 text-[13vw] md:text-[15vw] lg:text-[16vw] font-black leading-none tracking-[-0.06em] text-[#121118] dark:text-white text-center select-none pointer-events-none">
+                                    we are<br />eco studios.
+                                </h1>
+                            </section>
+
+                            <section className="flex flex-col lg:flex-row w-full bg-white dark:bg-[#1e1a32]">
+                                <div className="flex-1 px-8 py-20 lg:px-24 lg:py-32 flex flex-col justify-center border-r border-[#f1f0f4] dark:border-white/5">
+                                    <div className="max-w-xl">
+                                        <span className="inline-block mb-6 text-sm font-bold uppercase tracking-widest text-primary-accent">The Studio</span>
+                                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] mb-8 text-[#121118] dark:text-white tracking-[-0.02em]">
+                                            Building worlds, block by block, pixel by pixel.
+                                        </h2>
+                                        <div className="space-y-6 text-lg md:text-xl text-[#696388] dark:text-[#a09cb0] leading-relaxed">
+                                            <p>
+                                                We are a team of passionate creators dedicated to pushing the boundaries of what's possible in Minecraft and game development. Our love for gaming isn't just a hobby; it's the fuel that drives us to craft immersive experiences, intricate maps, and engaging gameplay mechanics that resonate with players worldwide.
+                                            </p>
+                                            <p>
+                                                From the sandbox freedom of Minecraft to the broader universe of game design, we pour our hearts into every project. We don't just build levels; we create memories, fostering communities and sparking imagination through the games we love and the worlds we bring to life.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex-1 min-h-[500px] lg:min-h-auto relative overflow-hidden group">
+                                    <img alt="Creative team collaborating in a modern studio" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-100 group-hover:scale-105" src="https://i.imgur.com/PJ0fOIR.png" />
+                                    <div className="absolute inset-0 bg-primary-accent/10 mix-blend-multiply pointer-events-none"></div>
+                                </div>
+                            </section>
+
+                            <section className="py-24 px-8 lg:px-24 bg-background-light dark:bg-background-dark relative">
+                                <div className="max-w-screen-2xl mx-auto">
+                                    <div className="mb-20 flex items-end justify-between border-b border-[#121118]/10 dark:border-white/10 pb-8">
+                                        <h2 className="text-6xl md:text-8xl font-black tracking-[-0.04em] text-[#121118] dark:text-white lowercase">our team</h2>
+                                        <p className="hidden md:block text-[#696388] dark:text-[#a09cb0] max-w-xs text-right mb-2">
+                                            A multidisciplinary group of thinkers, makers, and explorers.
+                                        </p>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-16 gap-x-8">
+                                        {[
+                                            { name: 'Leonardo Oliveira', role: 'Diretor Executivo (CEO)' },
+                                            { name: 'Guilherry Pereira', role: 'Lider do Desenvolvimento' },
+                                            { name: 'Geraldo Manoel', role: 'Lider do Design' }
+                                        ].map((member, i) => (
+                                            <div key={i} className="group cursor-default">
+                                                <div className="mb-4 overflow-hidden">
+                                                    <h3 className="text-2xl font-bold text-[#121118] dark:text-white group-hover:text-primary-accent transition-colors">{member.name}</h3>
+                                                    <p className="text-lg text-[#696388] dark:text-[#a09cb0] mt-1">
+                                                        {member.role}
+                                                    </p>
+                                                </div>
+                                                <div className="w-full h-px bg-[#121118]/10 dark:bg-white/10 group-hover:bg-primary-accent transition-all duration-500 origin-left"></div>
+                                            </div>
+                                        ))}
+                                        <div className="group cursor-default flex items-center justify-center">
+                                            <Link to="/contact" className="inline-flex items-center gap-2 text-primary-accent font-bold hover:gap-4 transition-all">
+                                                Join us
+                                                <span className="material-symbols-outlined">arrow_forward</span>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </main>
+                    </div>
+                </Layout>
+            );
+        }
+        const Studio = React.memo(StudioComp);
+
+        const DesignGuidelines = () => {
+            const navigate = useNavigate();
+            useEffect(function () {
+                document.title = 'eco studios — Brand & Design';
+                var desc = document.querySelector('meta[name="description"]');
+                if (!desc) { desc = document.createElement('meta'); desc.setAttribute('name', 'description'); document.head.appendChild(desc); }
+                desc.setAttribute('content', 'eco studios Design System & Brand Guidelines: colors, typography, usage rules, accessibility.');
+                var robots = document.querySelector('meta[name="robots"]');
+                if (!robots) { robots = document.createElement('meta'); robots.setAttribute('name', 'robots'); document.head.appendChild(robots); }
+                robots.setAttribute('content', 'index,follow');
+                var canonical = document.querySelector('link[rel="canonical"]');
+                if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel', 'canonical'); document.head.appendChild(canonical); }
+                canonical.setAttribute('href', window.location.href);
+            }, []);
+            return (
+                <Layout>
+                    <div className="bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden font-manrope">
+                        <main>
+                            <section className="relative w-full min-h-[45vh] flex items-center justify-center bg-background-light dark:bg-background-dark overflow-hidden px-6">
+                                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-200/20 dark:bg-primary-accent/10 rounded-full blur-[100px] fluid-shape pointer-events-none" style={{ animationDuration: "25s" }}></div>
+                                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-pink-200/30 dark:bg-pink-500/10 rounded-full blur-[120px] fluid-shape pointer-events-none" style={{ animationDelay: "-8s", animationDuration: "30s" }}></div>
+                                <div className="relative z-10 max-w-screen-lg text-center">
+                                    <span className="inline-block mb-4 text-xs font-bold uppercase tracking-widest text-primary-accent rounded-full px-3 py-1 bg-white/70 dark:bg-white/10 border border-white/40 dark:border-white/10">Guidelines</span>
+                                    <h1 className="text-4xl md:text-6xl font-black tracking-[-0.03em] text-[#121118] dark:text-white">Brand & Design System</h1>
+                                    <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-lg">Identity, components and usage rules aligned to Education, Games & Creativity.</p>
+                                </div>
+                            </section>
+                            <section className="px-6 lg:px-24 py-12 lg:py-16 bg-white dark:bg-[#1e1a32]">
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                    <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
+                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">Logo</h2>
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-24 h-24 rounded-lg bg-primary-accent/10 border border-primary-accent flex items-center justify-center text-primary-accent font-bold">eco</div>
+                                            <div className="w-14 h-14 rounded-lg bg-primary-accent/10 border border-primary-accent flex items-center justify-center text-primary-accent font-bold">e</div>
+                                        </div>
+                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">Use primary logo in high-contrast contexts. Icon-only for compact spaces.</p>
+                                    </div>
+                                    <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
+                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">Colors</h2>
+                                        <div className="grid grid-cols-5 gap-3">
+                                            <div className="h-10 rounded bg-primary-accent" title="primary-accent"></div>
+                                            <div className="h-10 rounded bg-waaark-blue" title="waaark-blue"></div>
+                                            <div className="h-10 rounded bg-waaark-pink" title="waaark-pink"></div>
+                                            <div className="h-10 rounded bg-background-light border border-[#f1f0f4]" title="background-light"></div>
+                                            <div className="h-10 rounded bg-background-dark" title="background-dark"></div>
+                                        </div>
+                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">Respect theme tokens and contrast requirements.</p>
+                                    </div>
+                                    <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
+                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">Typography</h2>
+                                        <p className="text-2xl font-display text-[#121118] dark:text-white">Poppins Aa</p>
+                                        <p className="text-lg manrope text-[#696388] dark:text-[#a09cb0]">Manrope Bb</p>
+                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">Use existing scale and families across UI.</p>
+                                    </div>
+                                </div>
+                            </section>
+                            <section className="px-6 lg:px-24 py-12 bg-background-light dark:bg-background-dark">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                    <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
+                                        <h3 className="text-lg font-bold text-[#121118] dark:text-white mb-3">Usage Rules</h3>
+                                        <ul className="space-y-2 text-[#696388] dark:text-[#a09cb0] text-sm">
+                                            <li>Keep clear space around the logo.</li>
+                                            <li>Use official colors and original proportions.</li>
+                                            <li>Do not alter, distort or apply effects.</li>
+                                            <li>Ensure sufficient contrast on all backgrounds.</li>
+                                        </ul>
+                                    </div>
+                                    <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
+                                        <h3 className="text-lg font-bold text-[#121118] dark:text-white mb-3">Accessibility</h3>
+                                        <ul className="space-y-2 text-[#696388] dark:text-[#a09cb0] text-sm">
+                                            <li>Keyboard navigable components.</li>
+                                            <li>ARIA roles and labels where appropriate.</li>
+                                            <li>WCAG 2.1 AA color contrast.</li>
+                                            <li>Meaningful headings hierarchy.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </section>
+                            <section className="px-6 lg:px-24 py-12 bg-white dark:bg-[#1e1a32]">
+                                <div className="max-w-screen-lg mx-auto flex items-center justify-between">
+                                    <div>
+                                        <p className="text-sm text-[#696388] dark:text-[#a09cb0]">Looking for assets or badges?</p>
+                                        <p className="text-sm text-[#696388] dark:text-[#a09cb0]">Contact us for additional resources.</p>
+                                    </div>
+                                    <button onClick={function () { navigate('/'); }} className="group flex items-center gap-2 text-primary-accent font-bold hover:gap-3 transition-all">
+                                        Back to Home
+                                        <span className="material-symbols-outlined">arrow_forward</span>
+                                    </button>
+                                </div>
+                            </section>
+                        </main>
+                    </div>
+                </Layout>
+            );
+        }
+
+        const Contact = () => {
+            const navigate = useNavigate();
+            const [name, setName] = useState('');
+            const [email, setEmail] = useState('');
+            const [details, setDetails] = useState('');
+            const serviceOptions = ['Education', 'Digital Marketing', 'Business Skilling', 'Marketplace'];
+            const [selectedServices, setSelectedServices] = useState([]);
+            const budgetOptions = ['Under $20K', '$20K-$50K', '$50K-$100K', '$100K+'];
+            const [budget, setBudget] = useState('');
+            var __now = new Date();
+            var __initY = __now.getFullYear();
+            var __initM = __now.getMonth();
+            var __initD = __now.getDate();
+            if (__now.getDay() === 0) {
+                var __dim = new Date(__initY, __initM + 1, 0).getDate();
+                if (__initD < __dim) { __initD = __initD + 1; }
+                else {
+                    __initD = 1;
+                    __initM = __initM + 1;
+                    if (__initM > 11) { __initM = 0; __initY = __initY + 1; }
+                    var __wdNext = new Date(__initY, __initM, __initD).getDay();
+                    if (__wdNext === 0) { __initD = 2; }
+                }
+            }
+            const [calYear, setCalYear] = useState(__initY);
+            const [calMonth, setCalMonth] = useState(__initM);
+            const [calDay, setCalDay] = useState(__initD);
+            const [calError, setCalError] = useState('');
+            const [selectedTime, setSelectedTime] = useState('');
+            const [errors, setErrors] = useState({});
+            function handleSubmit(e) {
+                e.preventDefault();
+                const sanitizedName = sanitizeString(name);
+                const sanitizedEmail = sanitizeString(email);
+                const sanitizedDetails = sanitizeString(details);
+                const nextErrors = {};
+                if (!validateName(sanitizedName)) nextErrors.name = 'Informe um nome válido (mín. 2 caracteres).';
+                if (!validateEmail(sanitizedEmail)) nextErrors.email = 'Informe um e-mail válido.';
+                if (selectedServices.length === 0) nextErrors.services = 'Selecione pelo menos um serviço.';
+                if (!budget) nextErrors.budget = 'Selecione um orçamento.';
+                if (!sanitizedDetails) nextErrors.details = 'Descreva seu projeto.';
+                if (isDisabledDay(calYear, calMonth, calDay)) nextErrors.date = 'Selecione uma data válida (sem domingos e sem datas passadas).';
+                if (!selectedTime) nextErrors.time = 'Selecione um horário disponível.';
+                setErrors(nextErrors);
+                if (Object.keys(nextErrors).length > 0) {
+                    logger.warn('Contato inválido', { name: sanitizedName, email: sanitizedEmail });
+                    return;
+                }
+                logger.info('Contato pronto para envio', { name: sanitizedName, email: sanitizedEmail, services: selectedServices, budget: budget, details: sanitizedDetails, date: new Date(calYear, calMonth, calDay).toISOString(), time: selectedTime });
+                navigate('/success');
+            }
+            function toggleService(s) {
+                if (s === 'All') {
+                    if (selectedServices.length === serviceOptions.length) setSelectedServices([]);
+                    else setSelectedServices(serviceOptions.slice());
+                    return;
+                }
+                const idx = selectedServices.indexOf(s);
+                if (idx >= 0) {
+                    const next = selectedServices.slice();
+                    next.splice(idx, 1);
+                    setSelectedServices(next);
+                } else {
+                    setSelectedServices(selectedServices.concat([s]));
+                }
+            }
+            function isServiceSelected(s) {
+                if (s === 'All') return selectedServices.length === serviceOptions.length;
+                return selectedServices.indexOf(s) >= 0;
+            }
+            function chipClasses(selected) {
+                return selected
+                    ? "px-4 py-2 rounded-full border border-primary-accent text-primary-accent bg-primary-accent/10 text-sm font-medium transition-colors"
+                    : "px-4 py-2 rounded-full border border-[#dddce5] dark:border-white/20 text-[#696388] dark:text-[#a09cb0] bg-white/60 dark:bg-transparent text-sm font-medium hover:border-primary-accent hover:text-primary-accent transition-colors";
+            }
+            // Calendar helpers
+            const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+            function isLeapYear(y) { return (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0); }
+            function daysInMonth(y, m) { return m === 1 ? (isLeapYear(y) ? 29 : 28) : [31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m] !== -1 ? [31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m] : (isLeapYear(y) ? 29 : 28); }
+            function firstDayOffset(y, m) { var d = new Date(y, m, 1).getDay(); return (d + 6) % 7; } // Monday-based
+            function clampDay(y, m, d) { var dim = daysInMonth(y, m); return Math.max(1, Math.min(dim, d)); }
+            function changeMonth(delta) {
+                var y = calYear; var m = calMonth + delta;
+                while (m < 0) { m += 12; y -= 1; }
+                while (m > 11) { m -= 12; y += 1; }
+                var d = clampDay(y, m, calDay);
+                setCalYear(y); setCalMonth(m); setCalDay(d); setCalError('');
+            }
+            function setMonthDirect(m) {
+                if (m < 0 || m > 11) { setCalError('Invalid month'); return; }
+                var d = clampDay(calYear, m, calDay);
+                setCalMonth(m); setCalDay(d); setCalError('');
+            }
+            function setYearDirect(v) {
+                var y = parseInt(v, 10);
+                if (isNaN(y) || y < 1900 || y > 2100) { setCalError('Informe um ano válido entre 1900 e 2100.'); return; }
+                var d = clampDay(y, calMonth, calDay);
+                setCalYear(y); setCalDay(d); setCalError('');
+            }
+            function isPast(y, m, d) { var now = new Date(); var t = new Date(now.getFullYear(), now.getMonth(), now.getDate()); var dt = new Date(y, m, d); return dt.getTime() < t.getTime(); }
+            function isDisabledDay(y, m, d) { var wd = new Date(y, m, d).getDay(); return wd === 0 || isPast(y, m, d); }
+            function onDayKey(e, dayNum) {
+                var key = e.key;
+                if (key === 'Enter' || key === ' ') { e.preventDefault(); if (!isDisabledDay(calYear, calMonth, dayNum)) { selectDay(dayNum); } return; }
+                if (key === 'ArrowLeft') { e.preventDefault(); moveSelection(-1); }
+                else if (key === 'ArrowRight') { e.preventDefault(); moveSelection(1); }
+                else if (key === 'ArrowUp') { e.preventDefault(); moveSelection(-7); }
+                else if (key === 'ArrowDown') { e.preventDefault(); moveSelection(7); }
+            }
+            function moveSelection(delta) {
+                var d = calDay + delta;
+                var dim = daysInMonth(calYear, calMonth);
+                if (d < 1) { changeMonth(-1); setCalDay(clampDay(calYear, calMonth, daysInMonth(calYear, calMonth))); return; }
+                if (d > dim) { changeMonth(1); setCalDay(1); return; }
+                setCalDay(d);
+            }
+            function selectDay(d) { if (isDisabledDay(calYear, calMonth, d)) { setCalError('Data indisponível'); return; } setCalDay(d); setSelectedTime(''); setCalError(''); }
+            function getTimesForSelected() {
+                return ['09:30 AM', '11:00 AM', '02:15 PM'];
+            }
+            function canSubmit() {
+                var nmOk = validateName(sanitizeString(name));
+                var emOk = validateEmail(sanitizeString(email));
+                var svcOk = selectedServices.length > 0;
+                var budOk = !!budget;
+                var detOk = sanitizeString(details).length > 0;
+                var dateOk = !isDisabledDay(calYear, calMonth, calDay);
+                var timeOk = !!selectedTime;
+                return nmOk && emOk && svcOk && budOk && detOk && dateOk && timeOk;
+            }
+            return (
+                <Layout>
+                    <div className="bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden font-manrope">
+                        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-73px)] pt-24">
+                            <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-20 xl:px-32 bg-white dark:bg-background-dark relative overflow-hidden">
+                                <div className="max-w-lg w-full mx-auto z-10">
+                                    <div className="mb-10">
+                                        <p className="text-[#121118] dark:text-white text-5xl lg:text-6xl font-black leading-[0.9] tracking-[-0.033em] mb-4">let's talk</p>
+                                        <p className="text-[#696388] dark:text-[#a09cb0] text-lg font-normal leading-relaxed">
+                                            Have an idea? We'd love to help you build it. Fill out the form or <a className="text-primary-accent hover:underline lg:hidden" href="#booking">book a call</a>.
+                                        </p>
+                                    </div>
+                                    <form className="flex flex-col gap-8" onSubmit={handleSubmit} noValidate>
+                                        <label className="group block">
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Name</span>
+                                            <input
+                                                className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
+                                                placeholder="Jane Doe"
+                                                type="text"
+                                                autoComplete="name"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                                aria-invalid={Boolean(errors.name)}
+                                                aria-describedby={errors.name ? 'name-error' : undefined}
+                                            />
+                                            {errors.name && (
+                                                <span id="name-error" className="mt-2 text-sm text-red-600">{errors.name}</span>
+                                            )}
+                                        </label>
+                                        <label className="group block">
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Email</span>
+                                            <input
+                                                className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
+                                                placeholder="jane@example.com"
+                                                type="email"
+                                                autoComplete="email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                aria-invalid={Boolean(errors.email)}
+                                                aria-describedby={errors.email ? 'email-error' : undefined}
+                                            />
+                                            {errors.email && (
+                                                <span id="email-error" className="mt-2 text-sm text-red-600">{errors.email}</span>
+                                            )}
+                                        </label>
+                                        <div>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">What services are you interested in?</span>
+                                            <div className="flex flex-wrap gap-3">
+                                                {serviceOptions.map((s) => (
+                                                    <button key={s} type="button" onClick={() => toggleService(s)} className={chipClasses(isServiceSelected(s))}>
+                                                        {s}
+                                                    </button>
+                                                ))}
+                                                <button type="button" onClick={() => toggleService('All')} className={chipClasses(isServiceSelected('All'))}>All</button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">Expected project budget?</span>
+                                            <div className="flex flex-wrap gap-3">
+                                                {budgetOptions.map((b) => {
+                                                    const selected = budget === b;
+                                                    return (
+                                                        <button key={b} type="button" onClick={() => setBudget(b)} className={chipClasses(selected)}>
+                                                            {b}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                        <label className="group block">
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Project details</span>
+                                            <textarea
+                                                className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none h-24 resize-none"
+                                                placeholder="Tell us about your project..."
+                                                value={details}
+                                                onChange={(e) => setDetails(e.target.value)}
+                                            />
+                                        </label>
+                                        <div className="pt-4">
+                                            <button className={"group flex items-center gap-2 text-primary-accent font-bold text-lg transition-opacity " + (canSubmit() ? "hover:opacity-80" : "opacity-50 cursor-not-allowed")} type="submit" disabled={!canSubmit()} aria-disabled={!canSubmit()}>
+                                                Send Message
+                                                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="flex-1 relative bg-background-light dark:bg-[#1e1a32] overflow-hidden flex flex-col justify-center items-center px-6 py-12 lg:px-12" id="booking">
+                                <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+                                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#3b19e6]/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "0s" }}></div>
+                                    <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-pink-400/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "-5s" }}></div>
+                                    <div className="absolute bottom-0 right-[20%] w-[600px] h-[600px] bg-blue-300/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "-10s" }}></div>
+                                </div>
+                                <div className="relative z-10 w-full max-w-md mx-auto">
+                                    <div className="mb-8 text-center lg:text-left">
+                                        <span className="inline-block py-1 px-3 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/5 text-xs font-bold uppercase tracking-wider text-primary-accent mb-3 shadow-sm">
+                                            Discovery Call
+                                        </span>
+                                        <h2 className="text-3xl lg:text-4xl font-bold text-[#121118] dark:text-white mb-2">Ready to start?</h2>
+                                        <p className="text-[#696388] dark:text-[#a09cb0]">Book a 15-min discovery call directly.</p>
+                                    </div>
+
+                                    <div className="bg-white/70 dark:bg-[#141121]/80 backdrop-blur-xl rounded-xl shadow-xl border border-white/50 dark:border-white/5 overflow-hidden p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="font-bold text-lg text-[#121118] dark:text-white">{MONTHS[calMonth]} {calYear}</h3>
+                                            <div className="flex items-center gap-2">
+                                                <button type="button" aria-label="Previous month" onClick={() => changeMonth(-1)} className="size-8 rounded-full border border-[#dddce5] dark:border-white/10 flex items-center justify-center text-[#696388] hover:text-primary-accent hover:border-primary-accent transition-colors">
+                                                    <span className="material-symbols-outlined text-sm">chevron_left</span>
+                                                </button>
+                                                <button type="button" aria-label="Next month" onClick={() => changeMonth(1)} className="size-8 rounded-full border border-[#dddce5] dark:border-white/10 flex items-center justify-center text-[#696388] hover:text-primary-accent hover:border-primary-accent transition-colors">
+                                                    <span className="material-symbols-outlined text-sm">chevron_right</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <label className="flex items-center gap-2 text-xs text-[#696388] dark:text-[#a09cb0]">
+                                                <span>Month</span>
+                                                <select value={calMonth} onChange={(e) => setMonthDirect(parseInt(e.target.value, 10))} className="text-sm px-2 py-1 rounded border border-[#dddce5] dark:border-white/10 bg-white/70 dark:bg-transparent">
+                                                    {MONTHS.map(function (m, i) { return <option key={i} value={i}>{m}</option>; })}
+                                                </select>
+                                            </label>
+                                            <label className="flex items-center gap-2 text-xs text-[#696388] dark:text-[#a09cb0]">
+                                                <span>Year</span>
+                                                <input type="number" min="1900" max="2100" value={calYear} onChange={(e) => setYearDirect(e.target.value)} className="text-sm px-2 py-1 rounded border border-[#dddce5] dark:border-white/10 bg-white/70 dark:bg-transparent w-[90px]" />
+                                            </label>
+                                            {calError && <span className="text-red-600 text-xs">{calError}</span>}
+                                        </div>
+                                        <div role="grid" aria-label="Calendar" className="grid grid-cols-7 gap-2 mb-3 text-center text-sm">
+                                            {WEEKDAYS.map(function (w, idx) { return <div key={'w' + idx} className="text-[#696388]">{w}</div>; })}
+                                            {Array.apply(null, Array(firstDayOffset(calYear, calMonth))).map(function (_, i) { return <div key={'e' + i}></div>; })}
+                                            {Array.apply(null, Array(daysInMonth(calYear, calMonth))).map(function (_, i) {
+                                                var dayNum = i + 1; var selected = dayNum === calDay;
+                                                var disabled = isDisabledDay(calYear, calMonth, dayNum);
+                                                var base = "size-10 mx-auto flex items-center justify-center rounded-full";
+                                                var cls = disabled ? base + " text-[#a0a0a0] opacity-40 cursor-not-allowed"
+                                                    : (selected ? base + " bg-primary-accent text-white shadow-lg shadow-primary-accent/30 font-bold"
+                                                        : base + " text-[#696388] hover:bg-primary-accent/10 hover:text-primary-accent transition-colors");
+                                                return (
+                                                    <button
+                                                        key={'d' + dayNum}
+                                                        role="gridcell"
+                                                        aria-selected={selected}
+                                                        aria-disabled={disabled}
+                                                        disabled={disabled}
+                                                        tabIndex={selected ? 0 : -1}
+                                                        onKeyDown={(e) => onDayKey(e, dayNum)}
+                                                        onClick={function () { selectDay(dayNum); }}
+                                                        className={cls}
+                                                    >{dayNum}</button>
+                                                );
+                                            })}
+                                        </div>
+                                        <div className="border-t border-gray-100 dark:border-white/10 pt-5">
+                                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-3">Available times on {MONTHS[calMonth].slice(0, 3)} {calDay}</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {getTimesForSelected().map(function (t) {
+                                                    return (
+                                                        <button
+                                                            key={t}
+                                                            aria-pressed={selectedTime === t}
+                                                            onClick={function () { if (!isDisabledDay(calYear, calMonth, calDay)) { setSelectedTime(t); } }}
+                                                            className={(selectedTime === t ? "py-2 px-3 rounded text-sm font-bold border-2 border-primary-accent text-primary-accent bg-primary-accent/10 " : "py-2 px-3 rounded text-sm font-medium border border-primary-accent text-primary-accent bg-primary-accent/5 ") + "hover:bg-primary-accent hover:text-white transition-colors"}
+                                                        >{t}</button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Layout>
+            );
+        }
+
+        // --- App & Routing ---
+
+        const App = () => {
+            return (
+                <HashRouter>
+                    <TransitionProvider>
+                        <RouteChangeTracker />
+                        <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/works" element={<WorksGallery />} />
+                            <Route path="/success" element={<SuccessPage />} />
+                            <Route path="/studio" element={<Studio />} />
+                            <Route path="/contact" element={<Contact />} />
+                            <Route path="/design" element={<DesignGuidelines />} />
+                        </Routes>
+                    </TransitionProvider>
+                </HashRouter>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<ErrorBoundary><App /></ErrorBoundary>);
+
+        // Suíte mínima de testes
+        const __tests = [];
+        function test(name, fn) { __tests.push({ name, fn }); }
+        function assert(cond, msg = 'Falha de asserção') { if (!cond) throw new Error(msg); }
+        async function runTests() {
+            const results = { passed: 0, failed: 0, failures: [] };
+            for (const t of __tests) {
+                try {
+                    const out = t.fn();
+                    if (out && typeof out.then === 'function') await out;
+                    results.passed++;
+                    logger.info('Teste passou', { name: t.name });
+                } catch (e) {
+                    results.failed++;
+                    results.failures.push({ name: t.name, error: String(e) });
+                    logger.error('Teste falhou', { name: t.name, error: String(e) });
+                }
+            }
+            window.__testResults = results;
+            if (Config.debug) {
+                const el = document.createElement('div');
+                el.style.position = 'fixed';
+                el.style.bottom = '8px';
+                el.style.right = '8px';
+                el.style.zIndex = '9999';
+                el.style.background = 'rgba(0,0,0,0.6)';
+                el.style.color = '#fff';
+                el.style.padding = '8px 12px';
+                el.style.borderRadius = '8px';
+                el.style.fontSize = '12px';
+                el.style.fontFamily = 'monospace';
+                el.textContent = `Tests: ${results.passed} passed, ${results.failed} failed`;
+                document.body.appendChild(el);
+            }
+            return results;
+        }
+        // Casos de teste
+        test('sanitizeString remove < e >', () => {
+            assert(sanitizeString('<script>') === '&lt;script&gt;');
+        });
+        test('validateEmail válido', () => {
+            assert(validateEmail('jane@example.com') === true);
+        });
+        test('validateEmail inválido', () => {
+            assert(validateEmail('foo@bar') === false);
+        });
+        test('validateName tamanho mínimo', () => {
+            assert(validateName('Jo') === true);
+            assert(validateName('') === false);
+        });
+        test('Logger filtra por nível', () => {
+            const logs = [];
+            const transport = function (entry) { logs.push(entry); };
+            const l = createLogger(LOG_LEVELS.warn, transport);
+            l.debug('dbg');
+            l.warn('warn');
+            assert(logs.some((e) => e.message === 'warn') === true);
+            assert(logs.some((e) => e.message === 'dbg') === false);
+        });
+        test('fetchWithTimeout com fetch simulado', async () => {
+            const fakeFetch = () => new Promise((resolve) => {
+                setTimeout(() => resolve({
+                    ok: true,
+                    headers: { get: () => 'application/json' },
+                    json: async () => ({ ok: true }),
+                    text: async () => 'ok',
+                }), 50);
+            });
+            ta = await fetchWithTimeout('/fake', {}, 200, fakeFetch);
+            assert(data && data.ok === true);
+        });
+        setTimeout(() => { runTests(); }, 0);
+    </script>
+    <script>
+        // Preloader Logic
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('global-preloader');
+            const paint = document.getElementById('paint-overlay');
+
+            // Optional: wait a bit to ensure 3D cube is seen (e.g. 2s)
+            setTimeout(() => {
+                // 1. Paint slides IN from bottom (covering screen)
+                paint.classList.add('slide-in');
+
+                // 2. Wait for paint to cover (1.2s transition)
+                setTimeout(() => {
+                    // Hide preloader behind the paint
+                    if (preloader) preloader.style.display = 'none';
+
+                    // 3. Paint slides OUT to top (revealing site)
+                    paint.classList.remove('slide-in');
+                    paint.classList.add('slide-out'); // Moves to -100%
+
+                    // 4. Cleanup paint
+                    setTimeout(() => {
+                        if (paint) pastylay = 'none';
+                    }, 1250);
+
+                }, 1250); // Matches transition duration + buffer
+            }, 2000); // 2s initial delay
+        });
+    </script>
+</body>
+
+</html>
