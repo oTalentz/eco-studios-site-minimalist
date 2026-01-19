@@ -251,6 +251,35 @@
             }
         }
 
+        /* Showcase Marquee */
+        .showcase-marquee {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .showcase-track {
+            display: flex;
+            width: max-content;
+            animation: showcase-scroll 80s linear infinite;
+            padding: 60px 0;
+            /* Space for hover expansion */
+        }
+
+        .showcase-marquee:hover .showcase-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes showcase-scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-33.33%);
+            }
+        }
+
         /* Preloader & Paint Transition */
         #global-preloader {
             position: fixed;
@@ -970,6 +999,323 @@
             );
         };
 
+        const ShowcaseComp = () => {
+            const showcaseImages = [
+                { type: 'image', src: 'https://i.imgur.com/fYEO5L6.png', title: 'Armors+', description: 'Equip yourself with legendary armor sets designed for the ultimate warriors.', link: '#', locked: true },
+                { type: 'image', src: 'https://i.imgur.com/N2eArep.png', title: 'Autofarm+', description: 'Automate your agricultural empire with advanced farming technologies.', link: '#', locked: true },
+                { type: 'image', src: 'https://i.imgur.com/XudXaRz.png', title: 'Anime Pack', description: 'Join the squad and explore the wild.', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/anime-pack-2.0/4710635b-0a3f-4d3a-8990-b45232ae6b14' },
+                { type: 'image', src: 'https://i.imgur.com/0dy3FOn.png', title: 'World Soccer', description: 'Compete in the ultimate global soccer tournament.', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/world-soccer/f21bda3f-ae04-485a-ba9a-da660200cf15' },
+                { type: 'image', src: 'https://i.imgur.com/NeKgMWr.png', title: 'Ice Temple', description: 'Embark on this frozen adventure!', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/ice-temple/cd9ab9dc-b06f-490d-a0fb-49381077b2f4' },
+                { type: 'image', src: 'https://i.imgur.com/nLWi3dO.png', title: 'Pink House', description: 'A cozy atmosphere, sunny day and lots of fun!', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/pink-house/a633d941-f5c8-4fdf-9698-31bce462312e' },
+                { type: 'coming_soon' },
+                { type: 'coming_soon' },
+            ];
+
+            const [selectedProject, setSelectedProject] = React.useState(null);
+
+            // Create a larger set for smoother loop (3 sets)
+            const items = [...showcaseImages, ...showcaseImages, ...showcaseImages];
+
+            const trackRef = React.useRef(null);
+            const animationRef = React.useRef(null);
+            const progressRef = React.useRef(0);
+            const isDraggingRef = React.useRef(false);
+            const startXRef = React.useRef(0);
+            const lastXRef = React.useRef(0);
+            const [isHovered, setIsHovered] = React.useState(false);
+
+            // Auto-scroll speed
+            const speed = 0.3;
+
+            React.useEffect(() => {
+                const animate = () => {
+                    if (trackRef.current) {
+                        const track = trackRef.current;
+                        const totalWidth = track.scrollWidth;
+                        // We have 3 sets, so one set is 1/3 of total width
+                        const singleSetWidth = totalWidth / 3;
+
+                        // Only auto-scroll if not dragging and not hovered
+                        if (!isDraggingRef.current && !isHovered && singleSetWidth > 0) {
+                            progressRef.current += speed;
+                        }
+
+                        // Infinite loop wrapping logic
+                        if (singleSetWidth > 0) {
+                            if (progressRef.current >= singleSetWidth) {
+                                progressRef.current -= singleSetWidth;
+                            } else if (progressRef.current <= 0) {
+                                progressRef.current += singleSetWidth;
+                            }
+                        }
+
+                        track.style.transform = `translateX(-${progressRef.current}px)`;
+                    }
+                    animationRef.current = requestAnimationFrame(animate);
+                };
+                animationRef.current = requestAnimationFrame(animate);
+
+                return () => {
+                    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+                };
+            }, [isHovered]);
+
+            const handleMouseDown = (e) => {
+                isDraggingRef.current = true;
+                startXRef.current = e.clientX || (e.touches && e.touches[0].clientX);
+                lastXRef.current = startXRef.current;
+                if (trackRef.current) trackRef.current.style.cursor = 'grabbing';
+            };
+
+            const handleMouseMove = (e) => {
+                if (!isDraggingRef.current) return;
+                const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                if (clientX === undefined) return;
+
+                const deltaX = clientX - lastXRef.current;
+                lastXRef.current = clientX;
+
+                // Move opposite to drag direction (drag left -> content moves left -> progress increases)
+                // Inverted: Drag left (negative delta) -> We want to see right content -> content moves left.
+                // Wait. If I drag mouse left, I expect the content to move left with my mouse.
+                // Moving content left means translateX becomes more negative.
+                // translateX = -progress.
+                // So to move content left (negative translateX), progress must INCREASE.
+                // Drag left = negative deltaX.
+                // So progress -= deltaX (minus negative = plus). 
+                progressRef.current -= deltaX * 1.5;
+            };
+
+            const handleMouseUp = () => {
+                isDraggingRef.current = false;
+                if (trackRef.current) trackRef.current.style.cursor = 'grab';
+            };
+
+            return (
+                <section className="relative w-full overflow-hidden py-24 bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-white/5">
+                    <div className="mb-12 text-center px-6 relative z-10">
+                        <span className="inline-block mb-4 text-xs font-bold uppercase tracking-widest text-primary-accent rounded-full px-3 py-1 bg-white/70 dark:bg-white/10 border border-white/40 dark:border-white/10">Showcase</span>
+                        <h2 className="text-3xl md:text-5xl font-black text-[#121118] dark:text-white tracking-tight">Success Cases</h2>
+                    </div>
+
+                    <div
+                        className="showcase-marquee w-full cursor-grab active:cursor-grabbing"
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={() => {
+                            handleMouseUp();
+                            setIsHovered(false);
+                        }}
+                        onTouchStart={handleMouseDown}
+                        onTouchMove={handleMouseMove}
+                        onTouchEnd={handleMouseUp}
+                        onMouseEnter={() => setIsHovered(true)}
+                    >
+                        <div
+                            ref={trackRef}
+                            className="showcase-track flex items-center"
+                            style={{
+                                width: 'max-content',
+                                animation: 'none', // Disable CSS animation
+                                padding: '60px 0'
+                            }}
+                        >
+                            {items.map((item, i) => {
+                                // Pre-calculate random rotation for "organic" look
+                                const rot = (i % 5 === 0 ? -3 : i % 5 === 1 ? 2 : i % 5 === 2 ? -4 : i % 5 === 3 ? 3 : -2);
+                                const yOffset = (i % 3 === 0 ? 12 : i % 3 === 1 ? -8 : 4);
+
+                                return (
+                                    <div
+                                        key={i}
+                                        className="group relative flex-shrink-0 w-[240px] md:w-[280px] aspect-[3/4] mx-[-25px] transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] hover:z-50 hover:mx-4 cursor-pointer"
+                                        style={{
+                                            transform: `rotate(${rot}deg) translateY(${yOffset}px)`,
+                                        }}
+                                        onClick={() => {
+                                            if (!isDraggingRef.current && item.type === 'image') {
+                                                setSelectedProject(item);
+                                            }
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            // Only apply hover effect if NOT dragging
+                                            if (!isDraggingRef.current) {
+                                                e.currentTarget.style.transform = 'rotate(0deg) scale(1.1) translateY(0px)';
+                                                e.currentTarget.style.zIndex = '100';
+                                            }
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            e.currentTarget.style.transform = `rotate(${rot}deg) translateY(${yOffset}px)`;
+                                            e.currentTarget.style.zIndex = 'auto';
+                                        }}
+                                    >
+                                        <div className="w-full h-full p-2 bg-white dark:bg-[#1e1a32] shadow-xl rounded-sm transform transition-transform border border-gray-100 dark:border-white/5">
+                                            <div className="w-full h-full overflow-hidden relative bg-gray-200 dark:bg-[#2a2640] flex items-center justify-center">
+                                                {item.type === 'image' ? (
+                                                    <React.Fragment>
+                                                        <img src={item.src} alt="Showcase" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" />
+                                                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none"></div>
+                                                    </React.Fragment>
+                                                ) : (
+                                                    <div className="flex flex-col items-center justify-center h-full w-full bg-gray-100 dark:bg-[#2a2640] text-gray-400 dark:text-gray-500">
+                                                        <span className="text-xl font-bold uppercase tracking-widest opacity-50">Coming Soon</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+
+                    {/* Modal Portal */}
+                    {selectedProject && createPortal(
+                        <div className="fixed inset-0 z-[200] flex items-center justify-center px-4" style={{ perspective: '1000px' }}>
+                            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-fade-in" onClick={() => setSelectedProject(null)}></div>
+                            <div className="relative bg-white dark:bg-[#1e1a32] w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform transition-all animate-zoom-in border border-white/10">
+                                <div className="relative h-56">
+                                    <img src={selectedProject.src} alt={selectedProject.title} className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                                    <button
+                                        className="absolute top-4 right-4 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full backdrop-blur-md transition-all hover:scale-110 active:scale-95 border border-white/10"
+                                        onClick={() => setSelectedProject(null)}
+                                    >
+                                        <span className="material-symbols-outlined text-xl">close</span>
+                                    </button>
+                                    <div className="absolute bottom-4 left-6 right-6">
+                                        <h3 className="text-2xl font-bold text-white drop-shadow-md">{selectedProject.title}</h3>
+                                    </div>
+                                </div>
+                                <div className="p-6">
+                                    <p className="text-gray-600 dark:text-gray-300 mb-8 leading-relaxed font-medium">
+                                        {selectedProject.description}
+                                    </p>
+                                    {selectedProject.locked ? (
+                                        <button
+                                            disabled
+                                            className="flex items-center justify-center gap-2 w-full py-4 bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold rounded-xl cursor-not-allowed"
+                                        >
+                                            <span className="material-symbols-outlined">lock</span>
+                                            COMING SOON
+                                        </button>
+                                    ) : (
+                                        <a
+                                            href={selectedProject.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center justify-center gap-2 w-full py-4 bg-primary-accent text-white font-bold rounded-xl hover:bg-primary-accent/90 transition-all active:scale-95 shadow-lg shadow-primary-accent/25 hover:shadow-primary-accent/40"
+                                        >
+                                            <span className="material-symbols-outlined">download</span>
+                                            DOWNLOAD NOW
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                            <style>{`
+                                @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+                                .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
+                                @keyframes zoom-in { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+                                .animate-zoom-in { animation: zoom-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+                            `}</style>
+                        </div>,
+                        document.body
+                    )}
+                </section>
+            );
+        };
+
+        const StatsHighlight = () => {
+            const counterRef = React.useRef(null);
+            const suffixRef = React.useRef(null);
+            const [hasAnimated, setHasAnimated] = React.useState(false);
+
+            React.useEffect(() => {
+                const element = counterRef.current;
+                const suffix = suffixRef.current;
+                if (!element || hasAnimated) return;
+
+                const observer = new IntersectionObserver((entries) => {
+                    if (entries[0].isIntersecting) {
+                        const target = parseFloat(element.getAttribute('data-target'));
+                        const startTime = performance.now();
+                        const phase1Duration = 2500; // 2.5s for 100k-900k (Very slow)
+                        const phase2Duration = 1500; // 1.5s for 1M-3M (Slightly slower)
+
+                        const animate = (currentTime) => {
+                            const elapsed = currentTime - startTime;
+                            let currentVal;
+                            let isFinished = false;
+
+                            if (elapsed < phase1Duration) {
+                                // Phase 1: 100k to 900k
+                                const p = elapsed / phase1Duration;
+                                // Go from 0.1 to 0.99
+                                currentVal = 0.1 + (0.89 * p);
+                            } else {
+                                // Phase 2: 1M to 3M
+                                const p = Math.min((elapsed - phase1Duration) / phase2Duration, 1);
+                                const easeOut = 1 - Math.pow(1 - p, 3);
+                                currentVal = 1 + ((target - 1) * easeOut);
+
+                                if (p >= 1) isFinished = true;
+                            }
+
+                            if (currentVal < 1) {
+                                // Show 100k - 900k
+                                element.textContent = Math.floor(currentVal * 10) * 100 + 'k';
+                                if (suffix) suffix.style.display = 'none';
+                            } else {
+                                // Show 1, 2, 3 + Million
+                                element.textContent = Math.floor(currentVal);
+                                if (suffix) suffix.style.display = 'inline';
+                            }
+
+                            if (!isFinished) {
+                                requestAnimationFrame(animate);
+                            } else {
+                                element.textContent = target;
+                                if (suffix) suffix.style.display = 'inline';
+                                element.classList.add('pop-animation');
+                            }
+                        };
+
+                        requestAnimationFrame(animate);
+                        setHasAnimated(true);
+                        observer.disconnect();
+                    }
+                }, { threshold: 0.5 });
+
+                observer.observe(element);
+                return () => observer.disconnect();
+            }, [hasAnimated]);
+
+            return (
+                <section className="w-full pt-12 pb-24 md:pt-16 md:pb-32 flex flex-col items-center justify-center bg-background-light dark:bg-background-dark text-text-dark dark:text-white border-t border-gray-100 dark:border-white/5">
+                    <style>{`
+                        @keyframes pop {
+                            0% { transform: scale(1); }
+                            50% { transform: scale(1.35); text-shadow: 0 0 30px rgba(59, 25, 230, 0.5); }
+                            100% { transform: scale(1); text-shadow: none; }
+                        }
+                        .pop-animation {
+                            animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+                        }
+                    `}</style>
+                    <div className="text-center px-6 relative">
+                        <h2 className="text-[60px] md:text-[90px] lg:text-[120px] font-black leading-[0.9] tracking-tighter font-display text-text-dark dark:text-white">
+                            <span ref={counterRef} className="counter text-primary-accent inline-block origin-center" data-target="3">0</span>
+                            <span ref={suffixRef}>+ Million</span>
+                        </h2>
+                        <p className="mt-4 text-sm md:text-xl font-bold tracking-widest uppercase text-gray-400 dark:text-gray-500 font-display">
+                            Impressions across all platforms
+                        </p>
+                    </div>
+                </section>
+            );
+        };
+
         const WorksGalleryComp = () => {
             const navigate = useNavigate();
             const [selectedImage, setSelectedImage] = React.useState(null);
@@ -1147,6 +1493,9 @@
                                 </div>
                             </div>
 
+                            <ShowcaseComp />
+                            <StatsHighlight />
+
 
                         </main>
 
@@ -1292,9 +1641,12 @@
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-16 gap-x-8">
                                         {[
-                                            { name: 'Leonardo Oliveira', role: 'Diretor Executivo (CEO)' },
-                                            { name: 'Guilherry Pereira', role: 'Lider do Desenvolvimento' },
-                                            { name: 'Geraldo Manoel', role: 'Lider do Design' }
+                                            { name: 'Leonardo Oliveira', role: 'Executive Director (CEO)' },
+                                            { name: 'Guilherry Pereira', role: 'Lead Developer' },
+                                            { name: 'Geraldo Manoel', role: 'Lead Designer' },
+                                            { name: 'Lucas Novossade', role: '3D Designer' },
+                                            { name: 'Daniel Calazans', role: 'Level Designer' },
+                                            { name: 'Lucas de Lima', role: 'Developer' }
                                         ].map((member, i) => (
                                             <div key={i} className="group cursor-default">
                                                 <div className="mb-4 overflow-hidden">
@@ -1425,7 +1777,7 @@
             const [details, setDetails] = useState('');
             const serviceOptions = ['Education', 'Digital Marketing', 'Business Skilling', 'Marketplace'];
             const [selectedServices, setSelectedServices] = useState([]);
-            const budgetOptions = ['Under $20K', '$20K-$50K', '$50K-$100K', '$100K+'];
+            const budgetOptions = ['Under $5k', '$10k-$25k', '$25k-$50k', '$50k+'];
             const [budget, setBudget] = useState('');
             var __now = new Date();
             var __initY = __now.getFullYear();
@@ -1817,7 +2169,7 @@
                     text: async () => 'ok',
                 }), 50);
             });
-            ta = await fetchWithTimeout('/fake', {}, 200, fakeFetch);
+            const data = await fetchWithTimeout('/fake', {}, 200, fakeFetch);
             assert(data && data.ok === true);
         });
         setTimeout(() => { runTests(); }, 0);
