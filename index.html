@@ -63,20 +63,37 @@
     </script>
 
     <style>
-        /* Hide scrollbar globally */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            display: none;
+            width: 10px;
         }
 
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 5px;
+            border: 2px solid #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Dark mode scrollbar support if needed, but using neutral for now */
+
         html {
-            -ms-overflow-style: none;
-            /* IE and Edge */
-            scrollbar-width: none;
-            /* Firefox */
+            /* Prevent native elastic scrolling to fix "bounce back" issues */
+            overscroll-behavior-y: none;
+            scroll-behavior: auto;
+            /* Let Lenis handle smoothing */
         }
 
         body {
             font-family: 'Poppins', sans-serif;
+            overscroll-behavior-y: none;
         }
 
         .manrope {
