@@ -14,6 +14,7 @@
     <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
 
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com" rel="preconnect" />
@@ -55,6 +56,18 @@
     </script>
 
     <style>
+        /* Hide scrollbar globally */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        html {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
         }
@@ -744,6 +757,8 @@
 
         const Layout = ({ children }) => {
             const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [showNav, setShowNav] = useState(true);
+            const [lastScrollY, setLastScrollY] = useState(0);
             const location = useLocation();
             const isHome = location.pathname === '/';
 
@@ -751,10 +766,26 @@
                 setIsMenuOpen(false);
             }, [location]);
 
+            useEffect(() => {
+                const controlNavbar = () => {
+                    if (typeof window !== 'undefined') {
+                        const currentScrollY = window.scrollY;
+                        if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                            setShowNav(false);
+                        } else {
+                            setShowNav(true);
+                        }
+                        setLastScrollY(currentScrollY);
+                    }
+                };
+                window.addEventListener('scroll', controlNavbar);
+                return () => window.removeEventListener('scroll', controlNavbar);
+            }, [lastScrollY]);
+
             return (
                 <div className={`relative min-h-screen w-full transition-colors duration-300 ${isMenuOpen ? "bg-overlay-bg" : "bg-background-light dark:bg-background-dark"}`}>
                     {/* Nav Bar */}
-                    <nav className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 transition-all duration-300 ${isMenuOpen ? "opacity-0 pointer-events-none" : (isHome ? "opacity-100 bg-transparent" : "opacity-100 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md")}`}>
+                    <nav className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 md:px-12 md:py-8 transition-all duration-500 transform ${showNav ? "translate-y-0" : "-translate-y-full"} ${isMenuOpen ? "opacity-0 pointer-events-none" : (isHome ? "opacity-100 bg-transparent" : "opacity-100 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md")}`}>
                         <Link className={`text-2xl md:text-3xl font-black tracking-tight text-waaark-dark-blue dark:text-white transition-colors ${isHome ? "invisible" : ""}`} to="/">
                             eco studios
                         </Link>
@@ -1633,6 +1664,8 @@
                                 </div>
                             </section>
 
+
+
                             <section className="py-24 px-8 lg:px-24 bg-background-light dark:bg-background-dark relative">
                                 <div className="max-w-screen-2xl mx-auto">
                                     <div className="mb-20 flex items-end justify-between border-b border-[#121118]/10 dark:border-white/10 pb-8">
@@ -1648,7 +1681,8 @@
                                             { name: 'Geraldo Manoel', role: 'Lead Designer' },
                                             { name: 'Lucas Novossade', role: '3D Designer' },
                                             { name: 'Daniel Calazans', role: 'Level Designer' },
-                                            { name: 'Lucas de Lima', role: 'Developer' }
+                                            { name: 'Lucas de Lima', role: 'Developer' },
+                                            { name: 'David Predro', role: 'Level Designer' }
                                         ].map((member, i) => (
                                             <div key={i} className="group cursor-default">
                                                 <div className="mb-4 overflow-hidden">
@@ -2064,7 +2098,7 @@
                                                             key={t}
                                                             aria-pressed={selectedTime === t}
                                                             onClick={function () { if (!isDisabledDay(calYear, calMonth, calDay)) { setSelectedTime(t); } }}
-                                                            className={(selectedTime === t ? "py-2 px-3 rounded text-sm font-bold border-2 border-primary-accent text-primary-accent bg-primary-accent/10 " : "py-2 px-3 rounded text-sm font-medium border border-primary-accent text-primary-accent bg-primary-accent/5 ") + "hover:bg-primary-accent hover:text-white transition-colors"}
+                                                            className={(selectedTime === t ? "py-2 px-3 rounded text-sm font-bold bg-primary-accent text-white shadow-lg shadow-primary-accent/30 scale-105 " : "py-2 px-3 rounded text-sm font-medium border border-primary-accent text-primary-accent bg-primary-accent/5 hover:bg-primary-accent hover:text-white ") + "transition-all duration-300"}
                                                         >{t}</button>
                                                     );
                                                 })}
@@ -2083,6 +2117,26 @@
         // --- App & Routing ---
 
         const App = () => {
+            useEffect(() => {
+                const lenis = new Lenis({
+                    duration: 1.2,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    direction: 'vertical',
+                    gestureDirection: 'vertical',
+                    smooth: true,
+                    mouseMultiplier: 1,
+                    smoothTouch: false,
+                    touchMultiplier: 2,
+                });
+
+                function raf(time) {
+                    lenis.raf(time);
+                    requestAnimationFrame(raf);
+                }
+
+                requestAnimationFrame(raf);
+            }, []);
+
             return (
                 <HashRouter>
                     <TransitionProvider>
