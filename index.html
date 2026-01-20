@@ -1826,7 +1826,7 @@
             const [details, setDetails] = useState('');
             const serviceOptions = ['Education', 'Digital Marketing', 'Business Skilling', 'Marketplace'];
             const [selectedServices, setSelectedServices] = useState([]);
-            const budgetOptions = ['Under $5k', '$10k-$25k', '$25k-$50k', '$50k+'];
+            const budgetOptions = ['Under $20K', '$20K-$50K', '$50K-$100K', '$100K+'];
             const [budget, setBudget] = useState('');
             var __now = new Date();
             var __initY = __now.getFullYear();
@@ -1891,8 +1891,8 @@
             }
             function chipClasses(selected) {
                 return selected
-                    ? "px-4 py-2 border border-[#e5e5e5] bg-[#ccff00] text-[#0c0c0c] text-xs font-bold uppercase tracking-widest transition-colors"
-                    : "px-4 py-2 border border-[#333333] text-[#e5e5e5] text-xs font-bold uppercase tracking-widest hover:border-[#ccff00] hover:text-[#ccff00] transition-colors";
+                    ? "px-4 py-2 rounded-full border border-primary-accent text-primary-accent bg-primary-accent/10 text-sm font-medium transition-colors"
+                    : "px-4 py-2 rounded-full border border-[#dddce5] dark:border-white/20 text-[#696388] dark:text-[#a09cb0] bg-white/60 dark:bg-transparent text-sm font-medium hover:border-primary-accent hover:text-primary-accent transition-colors";
             }
             // Calendar helpers
             const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -1952,178 +1952,175 @@
             }
             return (
                 <Layout>
-                    <div className="bg-[#0c0c0c] text-[#e5e5e5] overflow-x-hidden font-sans selection:bg-[#ccff00] selection:text-black">
-                        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-73px)] pt-24 border-t border-[#333333]">
-
-                            {/* Column 1: Info & Context */}
-                            <div className="w-full lg:w-[25%] p-6 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#333333] flex flex-col justify-between bg-[#0c0c0c] z-10">
-                                <div>
-                                    <p className="text-xs font-mono text-[#555555] mb-8">01 — CONTACT</p>
-                                    <h1 className="text-[12vw] lg:text-[4vw] font-black leading-[0.8] tracking-tighter uppercase mb-8 text-[#e5e5e5]">
-                                        Let's<br />Talk
-                                    </h1>
-                                    <p className="text-[#808080] text-sm md:text-base leading-relaxed max-w-xs uppercase tracking-widest mb-8">
-                                        Based in Lisbon.<br />
-                                        Available Worldwide.
-                                    </p>
-                                    <div className="flex flex-col gap-2 text-sm font-mono text-[#ccff00]">
-                                        <a href="mailto:hello@ecostudios.com" className="hover:underline flex items-center gap-2">
-                                            <span className="w-2 h-2 bg-[#ccff00] rounded-full"></span>
-                                            hello@ecostudios.com
-                                        </a>
-                                        <a href="tel:+351912345678" className="hover:underline opacity-70">+351 912 345 678</a>
+                    <div className="bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden font-manrope">
+                        <div className="flex flex-col lg:flex-row min-h-[calc(100vh-73px)] pt-24">
+                            <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-20 xl:px-32 bg-white dark:bg-background-dark relative overflow-hidden">
+                                <div className="max-w-lg w-full mx-auto z-10">
+                                    <div className="mb-10">
+                                        <p className="text-[#121118] dark:text-white text-5xl lg:text-6xl font-black leading-[0.9] tracking-[-0.033em] mb-4">let's talk</p>
+                                        <p className="text-[#696388] dark:text-[#a09cb0] text-lg font-normal leading-relaxed">
+                                            Have an idea? We'd love to help you build it. Fill out the form or <a className="text-primary-accent hover:underline lg:hidden" href="#booking">book a call</a>.
+                                        </p>
                                     </div>
-                                </div>
-                                <div className="hidden lg:block mt-12">
-                                    <p className="text-[10px] text-[#333333] uppercase tracking-[0.2em]">© 2024 Eco Studios — All Rights Reserved</p>
-                                </div>
-                            </div>
-
-                            {/* Column 2: Form */}
-                            <div className="w-full lg:w-[45%] p-6 lg:p-10 border-b lg:border-b-0 lg:border-r border-[#333333] relative bg-[#0c0c0c] z-10">
-                                <p className="text-xs font-mono text-[#555555] text-right mb-6">02 — INQUIRY FORM</p>
-                                <form className="flex flex-col gap-8" onSubmit={handleSubmit} noValidate>
-                                    <label className="group block">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#555555] mb-2 block">Name</span>
-                                        <input
-                                            className="w-full bg-transparent border-0 border-b border-[#333333] px-0 py-2 text-lg text-[#e5e5e5] placeholder-[#333333] focus:ring-0 focus:border-[#ccff00] transition-colors rounded-none font-mono"
-                                            placeholder="Jane Doe"
-                                            type="text"
-                                            autoComplete="name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                        />
-                                        {errors.name && <span className="mt-1 text-xs text-[#ccff00] font-mono">{errors.name}</span>}
-                                    </label>
-
-                                    <label className="group block">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#555555] mb-2 block">Email</span>
-                                        <input
-                                            className="w-full bg-transparent border-0 border-b border-[#333333] px-0 py-2 text-lg text-[#e5e5e5] placeholder-[#333333] focus:ring-0 focus:border-[#ccff00] transition-colors rounded-none font-mono"
-                                            placeholder="jane@example.com"
-                                            type="email"
-                                            autoComplete="email"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                        />
-                                        {errors.email && <span className="mt-1 text-xs text-[#ccff00] font-mono">{errors.email}</span>}
-                                    </label>
-
-                                    <div>
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#555555] mb-3 block">Services</span>
-                                        <div className="flex flex-wrap gap-2">
-                                            {serviceOptions.map((s) => (
-                                                <button key={s} type="button" onClick={() => toggleService(s)} className={`px-3 py-1 border text-[10px] uppercase tracking-widest transition-all ${isServiceSelected(s) ? 'bg-[#ccff00] border-[#ccff00] text-black font-bold' : 'border-[#333333] text-[#808080] hover:border-[#ccff00] hover:text-[#ccff00]'}`}>
-                                                    {s}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#555555] mb-3 block">Budget</span>
-                                        <div className="flex flex-wrap gap-2">
-                                            {budgetOptions.map((b) => (
-                                                <button key={b} type="button" onClick={() => setBudget(b)} className={`px-3 py-1 border text-[10px] uppercase tracking-widest transition-all ${budget === b ? 'bg-[#ccff00] border-[#ccff00] text-black font-bold' : 'border-[#333333] text-[#808080] hover:border-[#ccff00] hover:text-[#ccff00]'}`}>
-                                                    {b}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    <label className="group block">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-[#555555] mb-2 block">Details</span>
-                                        <textarea
-                                            className="w-full bg-transparent border-0 border-b border-[#333333] px-0 py-2 text-lg text-[#e5e5e5] placeholder-[#333333] focus:ring-0 focus:border-[#ccff00] transition-colors rounded-none h-20 resize-none font-mono"
-                                            placeholder="Project details..."
-                                            value={details}
-                                            onChange={(e) => setDetails(e.target.value)}
-                                        />
-                                    </label>
-
-                                    <div className="pt-2">
-                                        <button className={"w-full group flex items-center justify-center gap-3 border border-[#ccff00] px-6 py-4 uppercase tracking-widest text-xs font-bold transition-all " + (canSubmit() ? "bg-[#ccff00] text-black hover:bg-white hover:border-white" : "opacity-50 cursor-not-allowed text-[#ccff00] bg-transparent")} type="submit" disabled={!canSubmit()}>
-                                            Send Request
-                                            <span className="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            {/* Column 3: Booking & 3D */}
-                            <div className="w-full lg:w-[30%] flex flex-col bg-[#0c0c0c] relative overflow-hidden">
-                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20">
-                                    {/* 3D Wireframe Cube Effect */}
-                                    <div className="cube-wrapper w-48 h-48 relative perspective-1000">
-                                        <style dangerouslySetInnerHTML={{
-                                            __html: `
-                                            .cube-wrapper { perspective: 1000px; }
-                                            .cube { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; animation: spin 20s infinite linear; }
-                                            .face { position: absolute; width: 100%; height: 100%; border: 2px solid #ccff00; background: transparent; display: flex; align-items: center; justify-content: center; }
-                                            .f-front  { transform: rotateY(0deg) translateZ(96px); }
-                                            .f-back   { transform: rotateY(180deg) translateZ(96px); }
-                                            .f-right  { transform: rotateY(90deg) translateZ(96px); }
-                                            .f-left   { transform: rotateY(-90deg) translateZ(96px); }
-                                            .f-top    { transform: rotateX(90deg) translateZ(96px); }
-                                            .f-bottom { transform: rotateX(-90deg) translateZ(96px); }
-                                            @keyframes spin { 0% { transform: rotateX(0deg) rotateY(0deg); } 100% { transform: rotateX(360deg) rotateY(360deg); } }
-                                        `}} />
-                                        <div className="cube">
-                                            <div className="face f-front"></div>
-                                            <div className="face f-back"></div>
-                                            <div className="face f-right"></div>
-                                            <div className="face f-left"></div>
-                                            <div className="face f-top"></div>
-                                            <div className="face f-bottom"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="p-6 lg:p-10 relative z-10 flex-1 flex flex-col">
-                                    <p className="text-xs font-mono text-[#555555] text-right mb-8">03 — SCHEDULE</p>
-
-                                    <div className="flex-1 flex flex-col justify-end">
-                                        <div className="mb-6">
-                                            <h2 className="text-2xl font-black uppercase tracking-tight text-[#e5e5e5] mb-2">Discovery<br />Call</h2>
-                                            <p className="text-[#808080] text-xs uppercase tracking-widest">15 Min • Google Meet</p>
-                                        </div>
-
-                                        <div className="border border-[#333333] p-4 bg-[#0c0c0c]/90 backdrop-blur-sm">
-                                            <div className="flex items-center justify-between mb-4">
-                                                <h3 className="font-bold text-xs text-[#e5e5e5] uppercase tracking-widest">{MONTHS[calMonth]} {calYear}</h3>
-                                                <div className="flex gap-1">
-                                                    <button type="button" onClick={() => changeMonth(-1)} className="size-6 border border-[#333333] flex items-center justify-center text-[#e5e5e5] hover:border-[#ccff00] hover:text-[#ccff00]"><span className="material-symbols-outlined text-[10px]">chevron_left</span></button>
-                                                    <button type="button" onClick={() => changeMonth(1)} className="size-6 border border-[#333333] flex items-center justify-center text-[#e5e5e5] hover:border-[#ccff00] hover:text-[#ccff00]"><span className="material-symbols-outlined text-[10px]">chevron_right</span></button>
-                                                </div>
-                                            </div>
-
-                                            <div className="grid grid-cols-7 gap-1 text-center mb-3">
-                                                {WEEKDAYS.map((w, i) => <div key={i} className="text-[#555555] text-[8px] uppercase tracking-wider">{w.slice(0, 1)}</div>)}
-                                                {Array.apply(null, Array(firstDayOffset(calYear, calMonth))).map((_, i) => <div key={'e' + i}></div>)}
-                                                {Array.apply(null, Array(daysInMonth(calYear, calMonth))).map((_, i) => {
-                                                    const d = i + 1;
-                                                    const sel = d === calDay;
-                                                    const dis = isDisabledDay(calYear, calMonth, d);
-                                                    return (
-                                                        <button key={d} onClick={() => !dis && selectDay(d)} disabled={dis} className={`h-6 flex items-center justify-center text-[10px] font-mono transition-colors ${dis ? 'text-[#333] cursor-not-allowed' : sel ? 'bg-[#ccff00] text-black font-bold' : 'text-[#888] hover:text-white hover:bg-[#333]'}`}>
-                                                            {d}
-                                                        </button>
-                                                    )
-                                                })}
-                                            </div>
-
-                                            <div className="flex flex-wrap gap-2 pt-3 border-t border-[#333333]">
-                                                {getTimesForSelected().map(t => (
-                                                    <button key={t} onClick={() => setSelectedTime(t)} className={`px-2 py-1 text-[9px] uppercase tracking-widest border transition-all ${selectedTime === t ? 'bg-[#e5e5e5] border-[#e5e5e5] text-black font-bold' : 'border-[#333333] text-[#808080] hover:border-[#ccff00] hover:text-[#ccff00]'}`}>
-                                                        {t}
+                                    <form className="flex flex-col gap-8" onSubmit={handleSubmit} noValidate>
+                                        <label className="group block">
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Name</span>
+                                            <input
+                                                className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
+                                                placeholder="Jane Doe"
+                                                type="text"
+                                                autoComplete="name"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                                aria-invalid={Boolean(errors.name)}
+                                                aria-describedby={errors.name ? 'name-error' : undefined}
+                                            />
+                                            {errors.name && (
+                                                <span id="name-error" className="mt-2 text-sm text-red-600">{errors.name}</span>
+                                            )}
+                                        </label>
+                                        <label className="group block">
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Email</span>
+                                            <input
+                                                className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
+                                                placeholder="jane@example.com"
+                                                type="email"
+                                                autoComplete="email"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                                aria-invalid={Boolean(errors.email)}
+                                                aria-describedby={errors.email ? 'email-error' : undefined}
+                                            />
+                                            {errors.email && (
+                                                <span id="email-error" className="mt-2 text-sm text-red-600">{errors.email}</span>
+                                            )}
+                                        </label>
+                                        <div>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">What services are you interested in?</span>
+                                            <div className="flex flex-wrap gap-3">
+                                                {serviceOptions.map((s) => (
+                                                    <button key={s} type="button" onClick={() => toggleService(s)} className={chipClasses(isServiceSelected(s))}>
+                                                        {s}
                                                     </button>
                                                 ))}
+                                                <button type="button" onClick={() => toggleService('All')} className={chipClasses(isServiceSelected('All'))}>All</button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">Expected project budget?</span>
+                                            <div className="flex flex-wrap gap-3">
+                                                {budgetOptions.map((b) => {
+                                                    const selected = budget === b;
+                                                    return (
+                                                        <button key={b} type="button" onClick={() => setBudget(b)} className={chipClasses(selected)}>
+                                                            {b}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                        <label className="group block">
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Project details</span>
+                                            <textarea
+                                                className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none h-24 resize-none"
+                                                placeholder="Tell us about your project..."
+                                                value={details}
+                                                onChange={(e) => setDetails(e.target.value)}
+                                            />
+                                        </label>
+                                        <div className="pt-4">
+                                            <button className={"group flex items-center gap-2 text-primary-accent font-bold text-lg transition-opacity " + (canSubmit() ? "hover:opacity-80" : "opacity-50 cursor-not-allowed")} type="submit" disabled={!canSubmit()} aria-disabled={!canSubmit()}>
+                                                Send Message
+                                                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="flex-1 relative bg-background-light dark:bg-[#1e1a32] overflow-hidden flex flex-col justify-center items-center px-6 py-12 lg:px-12" id="booking">
+                                <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+                                    <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#3b19e6]/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "0s" }}></div>
+                                    <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-pink-400/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "-5s" }}></div>
+                                    <div className="absolute bottom-0 right-[20%] w-[600px] h-[600px] bg-blue-300/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "-10s" }}></div>
+                                </div>
+                                <div className="relative z-10 w-full max-w-md mx-auto">
+                                    <div className="mb-8 text-center lg:text-left">
+                                        <span className="inline-block py-1 px-3 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/5 text-xs font-bold uppercase tracking-wider text-primary-accent mb-3 shadow-sm">
+                                            Discovery Call
+                                        </span>
+                                        <h2 className="text-3xl lg:text-4xl font-bold text-[#121118] dark:text-white mb-2">Ready to start?</h2>
+                                        <p className="text-[#696388] dark:text-[#a09cb0]">Book a 15-min discovery call directly.</p>
+                                    </div>
+
+                                    <div className="bg-white/70 dark:bg-[#141121]/80 backdrop-blur-xl rounded-xl shadow-xl border border-white/50 dark:border-white/5 overflow-hidden p-6">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <h3 className="font-bold text-lg text-[#121118] dark:text-white">{MONTHS[calMonth]} {calYear}</h3>
+                                            <div className="flex items-center gap-2">
+                                                <button type="button" aria-label="Previous month" onClick={() => changeMonth(-1)} className="size-8 rounded-full border border-[#dddce5] dark:border-white/10 flex items-center justify-center text-[#696388] hover:text-primary-accent hover:border-primary-accent transition-colors">
+                                                    <span className="material-symbols-outlined text-sm">chevron_left</span>
+                                                </button>
+                                                <button type="button" aria-label="Next month" onClick={() => changeMonth(1)} className="size-8 rounded-full border border-[#dddce5] dark:border-white/10 flex items-center justify-center text-[#696388] hover:text-primary-accent hover:border-primary-accent transition-colors">
+                                                    <span className="material-symbols-outlined text-sm">chevron_right</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <label className="flex items-center gap-2 text-xs text-[#696388] dark:text-[#a09cb0]">
+                                                <span>Month</span>
+                                                <select value={calMonth} onChange={(e) => setMonthDirect(parseInt(e.target.value, 10))} className="text-sm px-2 py-1 rounded border border-[#dddce5] dark:border-white/10 bg-white/70 dark:bg-transparent">
+                                                    {MONTHS.map(function (m, i) { return <option key={i} value={i}>{m}</option>; })}
+                                                </select>
+                                            </label>
+                                            <label className="flex items-center gap-2 text-xs text-[#696388] dark:text-[#a09cb0]">
+                                                <span>Year</span>
+                                                <input type="number" min="1900" max="2100" value={calYear} onChange={(e) => setYearDirect(e.target.value)} className="text-sm px-2 py-1 rounded border border-[#dddce5] dark:border-white/10 bg-white/70 dark:bg-transparent w-[90px]" />
+                                            </label>
+                                            {calError && <span className="text-red-600 text-xs">{calError}</span>}
+                                        </div>
+                                        <div role="grid" aria-label="Calendar" className="grid grid-cols-7 gap-2 mb-3 text-center text-sm">
+                                            {WEEKDAYS.map(function (w, idx) { return <div key={'w' + idx} className="text-[#696388]">{w}</div>; })}
+                                            {Array.apply(null, Array(firstDayOffset(calYear, calMonth))).map(function (_, i) { return <div key={'e' + i}></div>; })}
+                                            {Array.apply(null, Array(daysInMonth(calYear, calMonth))).map(function (_, i) {
+                                                var dayNum = i + 1; var selected = dayNum === calDay;
+                                                var disabled = isDisabledDay(calYear, calMonth, dayNum);
+                                                var base = "size-10 mx-auto flex items-center justify-center rounded-full";
+                                                var cls = disabled ? base + " text-[#a0a0a0] opacity-40 cursor-not-allowed"
+                                                    : (selected ? base + " bg-primary-accent text-white shadow-lg shadow-primary-accent/30 font-bold"
+                                                        : base + " text-[#696388] hover:bg-primary-accent/10 hover:text-primary-accent transition-colors");
+                                                return (
+                                                    <button
+                                                        key={'d' + dayNum}
+                                                        role="gridcell"
+                                                        aria-selected={selected}
+                                                        aria-disabled={disabled}
+                                                        disabled={disabled}
+                                                        tabIndex={selected ? 0 : -1}
+                                                        onKeyDown={(e) => onDayKey(e, dayNum)}
+                                                        onClick={function () { selectDay(dayNum); }}
+                                                        className={cls}
+                                                    >{dayNum}</button>
+                                                );
+                                            })}
+                                        </div>
+                                        <div className="border-t border-gray-100 dark:border-white/10 pt-5">
+                                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-3">Available times on {MONTHS[calMonth].slice(0, 3)} {calDay}</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {getTimesForSelected().map(function (t) {
+                                                    return (
+                                                        <button
+                                                            key={t}
+                                                            aria-pressed={selectedTime === t}
+                                                            onClick={function () { if (!isDisabledDay(calYear, calMonth, calDay)) { setSelectedTime(t); } }}
+                                                            className={(selectedTime === t ? "py-2 px-3 rounded text-sm font-bold border-2 border-primary-accent text-primary-accent bg-primary-accent/10 " : "py-2 px-3 rounded text-sm font-medium border border-primary-accent text-primary-accent bg-primary-accent/5 ") + "hover:bg-primary-accent hover:text-white transition-colors"}
+                                                        >{t}</button>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </Layout>
@@ -2203,80 +2200,7 @@
                             </div>
                         </main>
 
-                        {/* Footer */}
-                        <footer className="bg-black text-white w-full pt-16 pb-4 px-6 md:px-12 overflow-hidden">
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 mb-24">
-                                {/* Left Column: Navigation */}
-                                <div className="flex flex-col space-y-2">
-                                    <nav className="flex flex-col items-start space-y-1">
-                                        <Link className="text-lg font-extrabold uppercase tracking-wide hover:text-gray-300 transition-colors" to="/studio">Studio</Link>
-                                        <Link className="text-lg font-extrabold uppercase tracking-wide hover:text-gray-300 transition-colors" to="/works">Our Work</Link>
-                                        <Link className="text-lg font-extrabold uppercase tracking-wide hover:text-gray-300 transition-colors" to="/services">Services</Link>
-                                        <Link className="text-lg font-extrabold uppercase tracking-wide hover:text-gray-300 transition-colors" to="/contact">Contact</Link>
-                                    </nav>
-                                </div>
-                                {/* Middle Column: Legal/Links */}
-                                <div className="flex flex-col">
-                                    <ul className="text-xs text-gray-400 space-y-2 font-light">
-                                        <li><a className="hover:text-white transition-colors" href="#">News &amp; Media</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">Creative Lease Programme</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">Copyright Policy</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">Cookies Policy</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">AI Statement</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">Terms &amp; Conditions</a></li>
-                                        <li><a className="hover:text-white transition-colors" href="#">Product Information</a></li>
-                                    </ul>
-                                </div>
-                                {/* Right Column: Awards & Social */}
-                                <div className="flex flex-col items-start lg:items-end lg:text-right">
-                                    {/* Awards */}
-                                    <div className="mb-10">
-                                        <p className="text-xs text-gray-400 mb-2">Current Awards Count:</p>
-                                        <div className="flex items-center lg:justify-end gap-2 text-2xl font-serif italic text-white">
-                                            {/* Left Laurel */}
-                                            <svg className="opacity-80 text-gray-300" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="32"><path d="M18 20.353a8.683 8.683 0 0 0-7.078-4.246 8.683 8.683 0 0 0-7.078 4.246"></path><path d="M8 12.875a4.721 4.721 0 0 0-2.314-3.52 4.721 4.721 0 0 0-3.32-.47"></path><path d="M10.882 16.591a6.661 6.661 0 0 0-4.708-3.047 6.661 6.661 0 0 0-4.305.816"></path><path d="M5.5 10c1.5 0 2.5-1.5 2.5-1.5s-1-2-2.5-2S3 8 3 8s1 2 2.5 2z"></path></svg>
-                                            <span className="font-sans font-bold text-2xl mx-1">13</span>
-                                            {/* Right Laurel (Flipped) */}
-                                            <svg className="opacity-80 transform scale-x-[-1] text-gray-300" fill="none" height="32" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="32"><path d="M18 20.353a8.683 8.683 0 0 0-7.078-4.246 8.683 8.683 0 0 0-7.078 4.246"></path><path d="M8 12.875a4.721 4.721 0 0 0-2.314-3.52 4.721 4.721 0 0 0-3.32-.47"></path><path d="M10.882 16.591a6.661 6.661 0 0 0-4.708-3.047 6.661 6.661 0 0 0-4.305.816"></path><path d="M5.5 10c1.5 0 2.5-1.5 2.5-1.5s-1-2-2.5-2S3 8 3 8s1 2 2.5 2z"></path></svg>
-                                        </div>
-                                    </div>
-                                    {/* Socials */}
-                                    <div>
-                                        <p className="text-xs text-gray-400 mb-4">See what's up</p>
-                                        <div className="flex gap-3">
-                                            <a aria-label="Instagram" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-brands fa-instagram text-sm"></i>
-                                            </a>
-                                            <a aria-label="Facebook" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-brands fa-facebook-f text-sm"></i>
-                                            </a>
-                                            <a aria-label="Website" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-solid fa-globe text-sm"></i>
-                                            </a>
-                                            <a aria-label="Dribbble" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-brands fa-dribbble text-sm"></i>
-                                            </a>
-                                            <a aria-label="Twitter" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-brands fa-twitter text-sm"></i>
-                                            </a>
-                                            <a aria-label="Vimeo" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-brands fa-vimeo-v text-sm"></i>
-                                            </a>
-                                            <a aria-label="LinkedIn" className="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
-                                                <i className="fa-brands fa-linkedin-in text-sm"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {/* Footer Bottom - Huge Text */}
-                            <div className="w-full flex justify-center items-end border-t border-gray-800 pt-8 lg:pt-0 border-none">
-                                <h1 className="text-[clamp(3rem,13vw,12rem)] leading-[0.8] tracking-[-0.04em] text-white uppercase text-center w-full font-black">
-                                    Eco Studios
-                                </h1>
-                            </div>
-                        </footer>
+
                     </div>
                 </Layout>
             );
