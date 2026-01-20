@@ -747,6 +747,16 @@
             useEffect(() => { perf.mark('route_start'); }, []);
             return null;
         };
+        const ScrollUnlocker = () => {
+            const location = useLocation();
+            useEffect(() => {
+                document.documentElement.style.overflow = '';
+                document.documentElement.style.overflowY = '';
+                document.body.style.overflow = '';
+                document.body.style.overflowY = '';
+            }, [location.pathname]);
+            return null;
+        };
 
         // Boundary de erro
         class ErrorBoundary extends React.Component {
@@ -2233,6 +2243,7 @@
                 <HashRouter>
                     <TransitionProvider>
                         <RouteChangeTracker />
+                        <ScrollUnlocker />
                         <Routes>
                             <Route path="/" element={<Home />} />
                             <Route path="/works" element={<WorksGallery />} />
@@ -2346,6 +2357,10 @@
                     // 4. Cleanup paint
                     setTimeout(() => {
                         if (paint) paint.style.display = 'none';
+                        document.documentElement.style.overflow = '';
+                        document.documentElement.style.overflowY = '';
+                        document.body.style.overflow = '';
+                        document.body.style.overflowY = '';
                     }, 1250);
 
                 }, 1250); // Matches transition duration + buffer
