@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eco Studios Replica</title>
+<!-- Load Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Font Configuration -->
+<style data-purpose="typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;800;900&display=swap');
+    
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .font-heavy {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+  </style>
+<!-- Custom Styles for Specific Layout Needs -->
+<style data-purpose="custom-layout">
+    /* Ensure the vertical dividers extend properly */
+    .column-divider {
+      border-right: 1px solid #e5e7eb; /* tailwind gray-200 */
+    }
+    
+    /* Remove border on the last column */
+    .column-divider:last-child {
+      border-right: none;
+    }
+
+    /* Custom sizing for the huge footer text */
+    .mega-text {
+      font-size: clamp(3rem, 13vw, 12rem);
+      line-height: 0.8;
+      letter-spacing: -0.04em;
+    }
+
+    /* Smooth transition for images */
+    .hover-scale {
+      transition: transform 0.5s ease;
+    }
+    .hover-scale:hover {
+      transform: scale(1.02);
+    }
+  </style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/></head>
+<body class="bg-white text-black antialiased">
+<!-- BEGIN: MainContent -->
+<!-- This section contains the 3-column service options -->
+<main class="w-full min-h-screen flex flex-col">
+<div class="grid grid-cols-1 lg:grid-cols-3 w-full h-full flex-grow">
+<!-- BEGIN: Column 1 - Submit a Brief -->
+<article class="column-divider p-8 lg:p-12 flex flex-col h-full relative group">
+<!-- Duration Tag -->
+<div class="mb-6">
+<span class="inline-block bg-[#f0f0f0] rounded-full px-3 py-1 text-xs font-medium text-gray-600">2-5 minutes</span>
+</div>
+<!-- Header -->
+<h2 class="text-3xl md:text-4xl font-heavy uppercase mb-6 leading-tight max-w-[80%]">
+          Submit a<br/>Brief
+        </h2>
+<!-- Description -->
+<p class="text-sm md:text-base text-gray-800 leading-relaxed mb-12 max-w-sm">
+          In just 5 steps provide us with all the most vital information about your project so we can get started sooner.
+        </p>
+<!-- Image Area -->
+<div class="mt-auto flex justify-center items-center w-full relative h-[400px] lg:h-[600px] overflow-hidden">
+<!-- Overlay Text (Visible in reference image) -->
+<span class="absolute z-10 font-bold text-xs tracking-widest uppercase pointer-events-none mix-blend-multiply opacity-80 text-black" style="top: 50%; left: 10%;">
+             ECO STUDIOS.
+           </span>
+<img alt="Abstract pink organic 3D shape" class="w-full h-full hover-scale object-contain" id="img_col_1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNELrAml9N_HuKXgzDGfULPi3l3TgDyRtn_qljpXiuJ3sgK0pAVnsG8ZoWjGES-RpMcJAGtk-d1azYcmliDrd_UgDUWLu5RPsa39Qtu7X-O0yiOTXzEZnLKIMOX7MhJWgLzlY7QV5U7H9Mv1c92E_YmXVsnAVBTrYVZakSf58b2blmhjnrTbVniDf29XOZ-zehukSdh-bjTf6Nlt6TfWKYaTf8Z-SHbx0_c1ZnLrxTZT1sy7oNhoKvkIW_D9QqImt4EUFxdqlXdnnv"/>
+</div>
+</article>
+<!-- END: Column 1 -->
+<!-- BEGIN: Column 2 - Get In Touch -->
+<article class="column-divider p-8 lg:p-12 flex flex-col h-full relative group">
+<!-- Duration Tag -->
+<div class="mb-6">
+<span class="inline-block bg-[#f0f0f0] rounded-full px-3 py-1 text-xs font-medium text-gray-600">1 minute</span>
+</div>
+<!-- Header -->
+<h2 class="text-3xl md:text-4xl font-heavy uppercase mb-6 leading-tight max-w-[80%]">
+          Get in<br/>Touch
+        </h2>
+<!-- Description -->
+<p class="text-sm md:text-base text-gray-800 leading-relaxed mb-12 max-w-sm">
+          Use a traditional contact form to send us a quick message. We usually reply the same day.
+        </p>
+<!-- Image Area -->
+<div class="mt-auto flex justify-center items-center w-full h-[400px] lg:h-[600px] overflow-hidden">
+<img alt="Abstract blue flowing 3D shape" class="w-full h-full hover-scale object-contain" id="img_col_2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-Qmx2z8cIItFj2_j-RbSEAQIy6cW-8C7GQS1udwF8s5DxJy2xzDgFnKAaAq91y0KirTyTNykHf8zC9qgXb7s1Kkq-b00nZUt-A-AS_K9NR0Vdi9ILSRAG5ETJ-bbdNNh5C1OcF4waY_Yt9alslYIzrII7Gc4PnrEFIzfGvBcIUuBTBxbxHcDAHifZuFeloyMiEzfuZHSccp6K9DSqlvOWcFoAkb5QJ2Rh9LiXMYBAT-3WxtkVZ91mu-kmmZfpZjlSqDCzu_t8Pkn-"/>
+</div>
+</article>
+<!-- END: Column 2 -->
+<!-- BEGIN: Column 3 - Book a Free Call -->
+<article class="column-divider p-8 lg:p-12 flex flex-col h-full relative group">
+<!-- Duration Tag -->
+<div class="mb-6">
+<span class="inline-block bg-[#f0f0f0] rounded-full px-3 py-1 text-xs font-medium text-gray-600">3 minutes</span>
+</div>
+<!-- Header -->
+<h2 class="text-3xl md:text-4xl font-heavy uppercase mb-6 leading-tight max-w-[80%]">
+          Book a<br/>Free Call
+        </h2>
+<!-- Description -->
+<p class="text-sm md:text-base text-gray-800 leading-relaxed mb-12 max-w-sm">
+          Book a free 30-minute consultation with one of our Creative Directors to see if we'll be a good fit for your project.
+        </p>
+<!-- Image Area -->
+<div class="mt-auto flex justify-center items-center w-full h-[400px] lg:h-[600px] overflow-hidden">
+<img alt="Abstract twisted pastel 3D shape" class="w-full h-full hover-scale object-contain" id="img_col_3" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkg9wg3_5Mb1I6nettvG1eh72KVnto91ptH2mHraJHQTXIGeAX1xSFSChEuXshxpM7iPuopCQgv8fi5Euc4uGwJyQlUiyTQApJ74d0TjOP6HgDV3qxtBfE2QehpnCBwRZVQM9UuWqASugL3mzsejaGBjPuFrMF3d9TFU_cbT1KQMHQnpKUpW_h_SyptEgOSKFqlQ29AI5MLPrZBcfEk8SV5I8rpWcG4MrTySJRTPrxLB-yzEu8mww5NVE4r9_2qnu-eto9_Ep2_cvI"/>
+</div>
+</article>
+<!-- END: Column 3 -->
+</div>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: Footer -->
+<footer class="bg-black text-white w-full pt-16 pb-4 px-6 md:px-12 overflow-hidden">
+<!-- BEGIN: Footer Top Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 mb-24">
+<!-- Left Column: Navigation -->
+<div class="flex flex-col space-y-2">
+<nav class="flex flex-col items-start space-y-1">
+<a class="text-lg font-heavy uppercase tracking-wide hover:text-gray-300 transition-colors" href="#">Studio</a>
+<a class="text-lg font-heavy uppercase tracking-wide hover:text-gray-300 transition-colors" href="#">Our Work</a>
+<a class="text-lg font-heavy uppercase tracking-wide hover:text-gray-300 transition-colors" href="#">Services</a>
+<a class="text-lg font-heavy uppercase tracking-wide hover:text-gray-300 transition-colors" href="#">Contact</a>
+</nav>
+</div>
+<!-- Middle Column: Legal/Links -->
+<div class="flex flex-col">
+<ul class="text-xs text-gray-400 space-y-2 font-light">
+<li><a class="hover:text-white transition-colors" href="#">News &amp; Media</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Creative Lease Programme</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Copyright Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Cookies Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">AI Statement</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Terms &amp; Conditions</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Product Information</a></li>
+</ul>
+</div>
+<!-- Right Column: Awards & Social -->
+<div class="flex flex-col items-start lg:items-end lg:text-right">
+<!-- Awards -->
+<div class="mb-10">
+<p class="text-xs text-gray-400 mb-2">Current Awards Count:</p>
+<div class="flex items-center lg:justify-end gap-2 text-2xl font-serif italic text-white">
+<!-- Left Laurel -->
+<svg class="opacity-80 text-gray-300" fill="none" height="32" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="32"><path d="M18 20.353a8.683 8.683 0 0 0-7.078-4.246 8.683 8.683 0 0 0-7.078 4.246"></path><path d="M8 12.875a4.721 4.721 0 0 0-2.314-3.52 4.721 4.721 0 0 0-3.32-.47"></path><path d="M10.882 16.591a6.661 6.661 0 0 0-4.708-3.047 6.661 6.661 0 0 0-4.305.816"></path><path d="M5.5 10c1.5 0 2.5-1.5 2.5-1.5s-1-2-2.5-2S3 8 3 8s1 2 2.5 2z"></path></svg>
+<span class="font-sans font-bold text-2xl mx-1">13</span>
+<!-- Right Laurel (Flipped) -->
+<svg class="opacity-80 transform scale-x-[-1] text-gray-300" fill="none" height="32" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="32"><path d="M18 20.353a8.683 8.683 0 0 0-7.078-4.246 8.683 8.683 0 0 0-7.078 4.246"></path><path d="M8 12.875a4.721 4.721 0 0 0-2.314-3.52 4.721 4.721 0 0 0-3.32-.47"></path><path d="M10.882 16.591a6.661 6.661 0 0 0-4.708-3.047 6.661 6.661 0 0 0-4.305.816"></path><path d="M5.5 10c1.5 0 2.5-1.5 2.5-1.5s-1-2-2.5-2S3 8 3 8s1 2 2.5 2z"></path></svg>
+</div>
+</div>
+<!-- Socials -->
+<div>
+<p class="text-xs text-gray-400 mb-4">See what's up</p>
+<div class="flex gap-3">
+<a aria-label="Instagram" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-brands fa-instagram text-sm"></i>
+</a>
+<a aria-label="Facebook" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-brands fa-facebook-f text-sm"></i>
+</a>
+<a aria-label="Website" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-solid fa-globe text-sm"></i>
+</a>
+<a aria-label="Dribbble" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-brands fa-dribbble text-sm"></i>
+</a>
+<a aria-label="Twitter" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-brands fa-twitter text-sm"></i>
+</a>
+<a aria-label="Vimeo" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-brands fa-vimeo-v text-sm"></i>
+</a>
+<a aria-label="LinkedIn" class="w-8 h-8 rounded-full border flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white border-gray-400" href="#">
+<i class="fa-brands fa-linkedin-in text-sm"></i>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- END: Footer Top Grid -->
+<!-- BEGIN: Footer Bottom - Huge Text -->
+<div class="w-full flex justify-center items-end border-t border-gray-800 pt-8 lg:pt-0 border-none">
+<h1 class="mega-text text-white uppercase tracking-tighter text-center w-full font-black">
+        Eco Studios
+      </h1>
+</div>
+<!-- END: Footer Bottom -->
+</footer>
+<!-- END: Footer -->
+</body></html><!-- MISSING_IMAGES:
+- Abstract pink organic 3D shape
+- Abstract blue flowing 3D shape
+- Abstract twisted pastel 3D shape
+-->
