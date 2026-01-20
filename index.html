@@ -502,7 +502,7 @@
 </head>
 
 <body
-    class="h-screen w-screen overflow-x-hidden bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100">
+    class="min-h-screen w-screen overflow-x-hidden bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100">
 
     <div id="paint-overlay">
         <!-- Optional Wave Decoration -->
@@ -939,7 +939,7 @@
                         </div>
                     </div>
 
-                    <div className={`relative h-screen w-screen overflow-hidden flex flex-col items-center justify-center transition-all duration-700 ease-in-out origin-top ${isMenuOpen ? "blur-sm scale-95 opacity-50" : ""}`}>
+                    <div className={`relative min-h-screen w-screen overflow-x-hidden flex flex-col items-center justify-center transition-all duration-700 ease-in-out origin-top ${isMenuOpen ? "blur-sm scale-95 opacity-50" : ""}`}>
                         {/* Background SVGs */}
                         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
                             <svg className="absolute -bottom-1/4 -left-1/4 w-[80vw] h-[80vw] text-waaark-blue/20 dark:text-waaark-blue/10 animate-pulse" style={{ animationDuration: "10s" }} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -1606,7 +1606,7 @@
             return (
                 <Layout>
                     <div className="font-manrope bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden flex flex-col min-h-screen">
-                        <main className="flex-grow flex items-center justify-center relative w-full h-screen min-h-[700px]">
+                        <main className="flex-grow flex items-center justify-center relative w-full min-h-screen min-h-[700px]">
                             <div className="absolute inset-0 z-0 overflow-hidden bg-background-dark">
                                 <div className="absolute inset-0 bg-cover bg-center opacity-60 mix-blend-overlay" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAPl167PiBw4sXNyoSmtAznPiMqKVTNIQjxW8DS0IWDVBJnsv4o-GRawXuYBTiP_mZr3fsKIjBbuREO8N_vNuBVIGiP9cSJ85VPpLlUlgWIG-5l64PNRBBXGd_sZOy6HK-qeDcXFx1mSWdRNwrfSlwIUcVkLwws_LHOZ6UdsSYH-G7dDHghwYDtkGJDIR23o8daI2GXBss8DmGS_czC2xogEDlZrw8_TjtDrC-Futr8lXJNlxu7uj_KEkylJpnVYK3yWhQHy2iKvZyx')" }}></div>
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/90 via-[#6366f1]/80 to-[#ec4899]/80 mix-blend-multiply"></div>
@@ -1891,8 +1891,8 @@
             }
             function chipClasses(selected) {
                 return selected
-                    ? "px-4 py-2 rounded-full border border-primary-accent text-primary-accent bg-primary-accent/10 text-sm font-medium transition-colors"
-                    : "px-4 py-2 rounded-full border border-[#dddce5] dark:border-white/20 text-[#696388] dark:text-[#a09cb0] bg-white/60 dark:bg-transparent text-sm font-medium hover:border-primary-accent hover:text-primary-accent transition-colors";
+                    ? "px-4 py-2 rounded-full border border-primary-accent text-primary-accent bg-black shadow-[0_0_15px_rgba(99,102,241,0.5)] text-sm font-bold transition-all duration-300"
+                    : "px-4 py-2 rounded-full border border-white/10 text-gray-400 bg-white/5 hover:bg-white/10 hover:border-primary-accent hover:text-white text-sm font-medium transition-all duration-300";
             }
             // Calendar helpers
             const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -2111,7 +2111,7 @@
                                                             key={t}
                                                             aria-pressed={selectedTime === t}
                                                             onClick={function () { if (!isDisabledDay(calYear, calMonth, calDay)) { setSelectedTime(t); } }}
-                                                            className={(selectedTime === t ? "py-2 px-3 rounded text-sm font-bold border-2 border-primary-accent text-primary-accent bg-primary-accent/10 " : "py-2 px-3 rounded text-sm font-medium border border-primary-accent text-primary-accent bg-primary-accent/5 ") + "hover:bg-primary-accent hover:text-white transition-colors"}
+                                                            className={(selectedTime === t ? "py-2 px-3 rounded text-sm font-bold border-2 border-primary-accent text-white bg-primary-accent " : "py-2 px-3 rounded text-sm font-medium border border-primary-accent text-primary-accent bg-primary-accent/5 ") + "hover:bg-primary-accent hover:text-white transition-colors"}
                                                         >{t}</button>
                                                     );
                                                 })}
