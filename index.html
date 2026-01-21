@@ -2096,7 +2096,7 @@
                                     </div>
                                     <form className="flex flex-col gap-8" onSubmit={handleSubmit} noValidate>
                                         <label className="group block">
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Name</span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Name <span className="text-red-500">*</span></span>
                                             <input
                                                 className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
                                                 placeholder="Jane Doe"
@@ -2112,7 +2112,7 @@
                                             )}
                                         </label>
                                         <label className="group block">
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Email</span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Email <span className="text-red-500">*</span></span>
                                             <input
                                                 className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
                                                 placeholder="jane@example.com"
@@ -2128,7 +2128,7 @@
                                             )}
                                         </label>
                                         <div>
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">What services are you interested in?</span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">What services are you interested in? <span className="text-red-500">*</span></span>
                                             <div className="flex flex-wrap gap-3">
                                                 {serviceOptions.map((s) => (
                                                     <button key={s} type="button" onClick={() => toggleService(s)} className={chipClasses(isServiceSelected(s))}>
@@ -2137,9 +2137,12 @@
                                                 ))}
                                                 <button type="button" onClick={() => toggleService('All')} className={chipClasses(isServiceSelected('All'))}>All</button>
                                             </div>
+                                            {errors.services && (
+                                                <span className="mt-2 text-sm text-red-600 block">{errors.services}</span>
+                                            )}
                                         </div>
                                         <div>
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">Expected project budget?</span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">Expected project budget? <span className="text-red-500">*</span></span>
                                             <div className="flex flex-wrap gap-3">
                                                 {budgetOptions.map((b) => {
                                                     const selected = budget === b;
@@ -2150,22 +2153,28 @@
                                                     );
                                                 })}
                                             </div>
+                                            {errors.budget && (
+                                                <span className="mt-2 text-sm text-red-600 block">{errors.budget}</span>
+                                            )}
                                         </div>
                                         <label className="group block">
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Project details</span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Project details <span className="text-red-500">*</span></span>
                                             <textarea
                                                 className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none h-24 resize-none"
                                                 placeholder="Tell us about your project..."
                                                 value={details}
                                                 onChange={(e) => setDetails(e.target.value)}
                                             />
+                                            {errors.details && (
+                                                <span className="mt-2 text-sm text-red-600 block">{errors.details}</span>
+                                            )}
                                         </label>
                                         <div className="pt-4">
                                             <button
-                                                className={"group flex items-center gap-2 text-primary-accent font-bold text-lg transition-all " + (canSubmit() && !isSubmitting ? "hover:opacity-80" : "opacity-50 cursor-not-allowed")}
+                                                className={"group flex items-center gap-2 text-primary-accent font-bold text-lg transition-all " + (isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:opacity-80")}
                                                 type="submit"
-                                                disabled={!canSubmit() || isSubmitting}
-                                                aria-disabled={!canSubmit() || isSubmitting}
+                                                disabled={isSubmitting}
+                                                aria-disabled={isSubmitting}
                                             >
                                                 {isSubmitting ? (
                                                     <React.Fragment>
