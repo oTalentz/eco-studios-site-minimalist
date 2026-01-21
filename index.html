@@ -12,6 +12,7 @@
     <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
     <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
     <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
@@ -1872,7 +1873,7 @@
             const [details, setDetails] = useState('');
             const serviceOptions = ['Education', 'Digital Marketing', 'Business Skilling', 'Marketplace'];
             const [selectedServices, setSelectedServices] = useState([]);
-            const budgetOptions = ['Under 5k', '10-25k', '25-50k', '100k+'];
+            const budgetOptions = ['Under $5k', '$5k - $10k', '$10k - $25k', '$25k+'];
             const [budget, setBudget] = useState('');
             var __now = new Date();
             var __initY = __now.getFullYear();
@@ -1895,6 +1896,16 @@
             const [calError, setCalError] = useState('');
             const [selectedTime, setSelectedTime] = useState('');
             const [errors, setErrors] = useState({});
+
+            // --- SUPABASE CONFIGURATION ---
+            // 1. Crie um projeto em https://supabase.com
+            // 2. Crie uma tabela chamada 'contacts' com as colunas: name (text), email (text), services (jsonb/text), budget (text), details (text)
+            // 3. Copie a URL e a Anon Key das configurações da API do seu projeto e cole abaixo:
+            const SUPABASE_URL = "SUA_URL_DO_SUPABASE_AQUI";
+            const SUPABASE_KEY = "SUA_ANON_KEY_DO_SUPABASE_AQUI";
+            // Inicializa o cliente apenas se as chaves estiverem preenchidas e a lib carregada
+            const supabaseClient = (window.supabase && SUPABASE_URL.includes("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
             async function handleSubmit(e) {
                 e.preventDefault();
                 const sanitizedName = sanitizeString(name);
@@ -1917,7 +1928,35 @@
                     return;
                 }
 
-                // --- FORM SUBMISSION INTEGRATION ---
+                // --- SUPABASE INTEGRATION ---
+                if (supabaseClient) {
+                    try {
+                        const { data, error } = await supabaseClient
+                            .from('contacts')
+                            .insert([
+                                {
+                                    name: sanitizedName,
+                                    email: sanitizedEmail,
+                                    services: selectedServices,
+                                    budget: budget,
+                                    details: sanitizedDetails,
+                                    created_at: new Date().toISOString()
+                                }
+                            ]);
+
+                        if (error) throw error;
+
+                        logger.info('Contato salvo no Supabase com sucesso');
+                        navigate('/success');
+                        return;
+                    } catch (err) {
+                        console.error('Erro ao salvar no Supabase:', err);
+                        alert("Ocorreu um erro ao salvar seu contato. Tente novamente ou use outro meio.");
+                        return;
+                    }
+                }
+
+                // --- FORM SUBMISSION INTEGRATION (Formspree Fallback) ---
                 // Para tornar este formulário 100% funcional, você pode usar um serviço como Formspree.
                 // 1. Crie uma conta em https://formspree.io/
                 // 2. Crie um novo formulário e obtenha o ID do formulário (ex: "xzyqjklm")
@@ -1978,7 +2017,7 @@
             function chipClasses(selected) {
                 const base = "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border";
                 return selected
-                    ? `${base} border-primary-accent bg-primary-accent text-white shadow-md shadow-primary-accent/20 transform scale-105`
+                    ? `${base} border-primary-accent bg-primary-accent text-white shadow-sm`
                     : `${base} border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 bg-white dark:bg-white/5 hover:border-primary-accent hover:text-primary-accent hover:bg-gray-50 dark:hover:bg-white/10`;
             }
             // Calendar helpers
