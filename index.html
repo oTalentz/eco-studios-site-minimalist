@@ -1976,9 +1976,10 @@
                 return selectedServices.indexOf(s) >= 0;
             }
             function chipClasses(selected) {
+                const base = "px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 border";
                 return selected
-                    ? "px-4 py-2 rounded-full border border-primary-accent text-primary-accent bg-black shadow-[0_0_15px_rgba(99,102,241,0.5)] text-sm font-bold transition-all duration-300"
-                    : "px-4 py-2 rounded-full border border-white/10 text-gray-400 bg-white/5 hover:bg-white/10 hover:border-primary-accent hover:text-white text-sm font-medium transition-all duration-300";
+                    ? `${base} border-primary-accent bg-primary-accent text-white shadow-md shadow-primary-accent/20 transform scale-105`
+                    : `${base} border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 bg-white dark:bg-white/5 hover:border-primary-accent hover:text-primary-accent hover:bg-gray-50 dark:hover:bg-white/10`;
             }
             // Calendar helpers
             const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
