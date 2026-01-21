@@ -1872,7 +1872,7 @@
             const [details, setDetails] = useState('');
             const serviceOptions = ['Education', 'Digital Marketing', 'Business Skilling', 'Marketplace'];
             const [selectedServices, setSelectedServices] = useState([]);
-            const budgetOptions = ['Under $20K', '$20K-$50K', '$50K-$100K', '$100K+'];
+            const budgetOptions = ['Under 5k', '10-25k', '25-50k', '100k+'];
             const [budget, setBudget] = useState('');
             var __now = new Date();
             var __initY = __now.getFullYear();
@@ -1895,7 +1895,7 @@
             const [calError, setCalError] = useState('');
             const [selectedTime, setSelectedTime] = useState('');
             const [errors, setErrors] = useState({});
-            function handleSubmit(e) {
+            async function handleSubmit(e) {
                 e.preventDefault();
                 const sanitizedName = sanitizeString(name);
                 const sanitizedEmail = sanitizeString(email);
@@ -1906,14 +1906,54 @@
                 if (selectedServices.length === 0) nextErrors.services = 'Selecione pelo menos um serviço.';
                 if (!budget) nextErrors.budget = 'Selecione um orçamento.';
                 if (!sanitizedDetails) nextErrors.details = 'Descreva seu projeto.';
-                if (isDisabledDay(calYear, calMonth, calDay)) nextErrors.date = 'Selecione uma data válida (sem domingos e sem datas passadas).';
-                if (!selectedTime) nextErrors.time = 'Selecione um horário disponível.';
+
+                // Calendar validation removed since Discovery Call is unavailable
+                // if (isDisabledDay(calYear, calMonth, calDay)) nextErrors.date = 'Selecione uma data válida (sem domingos e sem datas passadas).';
+                // if (!selectedTime) nextErrors.time = 'Selecione um horário disponível.';
+
                 setErrors(nextErrors);
                 if (Object.keys(nextErrors).length > 0) {
                     logger.warn('Contato inválido', { name: sanitizedName, email: sanitizedEmail });
                     return;
                 }
-                logger.info('Contato pronto para envio', { name: sanitizedName, email: sanitizedEmail, services: selectedServices, budget: budget, details: sanitizedDetails, date: new Date(calYear, calMonth, calDay).toISOString(), time: selectedTime });
+
+                // --- FORM SUBMISSION INTEGRATION ---
+                // Para tornar este formulário 100% funcional, você pode usar um serviço como Formspree.
+                // 1. Crie uma conta em https://formspree.io/
+                // 2. Crie um novo formulário e obtenha o ID do formulário (ex: "xzyqjklm")
+                // 3. Substitua "SEU_ID_FORMSPREE" abaixo pelo seu ID real.
+                // 4. Descomente o bloco de código abaixo e remova a simulação atual.
+
+                /*
+                try {
+                    const response = await fetch("https://formspree.io/f/SEU_ID_FORMSPREE", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            name: sanitizedName,
+                            email: sanitizedEmail,
+                            services: selectedServices,
+                            budget: budget,
+                            details: sanitizedDetails
+                        })
+                    });
+
+                    if (response.ok) {
+                        navigate('/success');
+                    } else {
+                        console.error("Erro no envio:", response.statusText);
+                        alert("Houve um erro ao enviar sua mensagem. Por favor, tente novamente.");
+                    }
+                } catch (error) {
+                    console.error("Erro de rede:", error);
+                    alert("Erro de conexão. Verifique sua internet.");
+                }
+                */
+
+                // --- Simulação Atual (Remover quando integrar) ---
+                logger.info('Contato pronto para envio', { name: sanitizedName, email: sanitizedEmail, services: selectedServices, budget: budget, details: sanitizedDetails });
                 navigate('/success');
             }
             function toggleService(s) {
@@ -1992,9 +2032,10 @@
                 var svcOk = selectedServices.length > 0;
                 var budOk = !!budget;
                 var detOk = sanitizeString(details).length > 0;
-                var dateOk = !isDisabledDay(calYear, calMonth, calDay);
-                var timeOk = !!selectedTime;
-                return nmOk && emOk && svcOk && budOk && detOk && dateOk && timeOk;
+                // Calendar checks removed
+                // var dateOk = !isDisabledDay(calYear, calMonth, calDay);
+                // var timeOk = !!selectedTime;
+                return nmOk && emOk && svcOk && budOk && detOk;
             }
             return (
                 <Layout>
@@ -2084,6 +2125,23 @@
                                 </div>
                             </div>
                             <div className="flex-1 relative bg-background-light dark:bg-[#1e1a32] overflow-hidden flex flex-col justify-center items-center px-6 py-12 lg:px-12" id="booking">
+                                {/* Unavailable Overlay */}
+                                <div className="absolute inset-0 z-50 bg-background-light/80 dark:bg-[#1e1a32]/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-8">
+                                    <div className="bg-white dark:bg-[#141121] p-6 rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 max-w-sm">
+                                        <span className="material-symbols-outlined text-4xl text-gray-400 mb-4">event_busy</span>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Unavailable</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6">Discovery calls are currently unavailable. Please contact us via the form.</p>
+
+                                        <div className="border-t border-gray-200 dark:border-white/10 pt-4 mt-2">
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Looking for help with a Marketplace World or Add-On?</p>
+                                            <a href="https://discord.gg/ecostudios" target="_blank" rel="noopener noreferrer" className="text-primary-accent hover:underline text-sm font-semibold flex items-center justify-center gap-1">
+                                                Join our Discord to open a ticket
+                                                <span className="material-symbols-outlined text-sm">open_in_new</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
                                     <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#3b19e6]/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "0s" }}></div>
                                     <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-pink-400/20 mix-blend-multiply filter blur-3xl opacity-70 rounded-full fluid-shape" style={{ animationDelay: "-5s" }}></div>
@@ -2175,28 +2233,32 @@
 
         // --- Service Modal Component ---
         const ServiceModal = ({ isOpen, onClose, service }) => {
-            const [isVisible, setIsVisible] = useState(false);
+            const [isMounted, setIsMounted] = useState(false);
+            const [isAnimating, setIsAnimating] = useState(false);
 
             useEffect(() => {
                 if (isOpen) {
-                    console.log('[ServiceModal] Opening - Visible state set to true');
-                    setIsVisible(true);
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    console.log('[ServiceModal] Closing - Starting exit animation timer');
+                    setIsMounted(true);
+                    // Use setTimeout to ensure the element is in the DOM and painted with initial state
+                    // before changing to the animated state.
                     const timer = setTimeout(() => {
-                        console.log('[ServiceModal] Closed - Unmounting component');
-                        setIsVisible(false);
+                        setIsAnimating(true);
+                    }, 50);
+                    document.body.style.overflow = 'hidden';
+                    return () => clearTimeout(timer);
+                } else {
+                    setIsAnimating(false);
+                    const timer = setTimeout(() => {
+                        setIsMounted(false);
                     }, 800); // Match longest transition
                     document.body.style.overflow = '';
                     return () => {
-                        console.log('[ServiceModal] Cleanup - Clearing exit timer');
                         clearTimeout(timer);
                     };
                 }
             }, [isOpen]);
 
-            if (!isVisible && !isOpen) return null;
+            if (!isMounted) return null;
 
             // Safety check for service data
             if (!service) {
@@ -2206,22 +2268,22 @@
 
             return (
                 <div
-                    className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-700 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                    className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-all duration-700 ${isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                     role="dialog"
                     aria-modal="true"
                 >
                     {/* Backdrop */}
                     <div
-                        className={`absolute inset-0 bg-black/40 backdrop-blur-md transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+                        className={`absolute inset-0 bg-black/40 backdrop-blur-md transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${isAnimating ? 'opacity-100' : 'opacity-0'}`}
                         onClick={onClose}
                     ></div>
 
                     {/* Modal Content */}
-                    <div className={`relative bg-white w-full max-w-5xl overflow-hidden shadow-2xl transform transition-all duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-12 opacity-0'}`}>
+                    <div className={`relative bg-white w-full max-w-5xl overflow-hidden shadow-2xl transform transition-all duration-[1000ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${isAnimating ? 'scale-100 translate-y-0 opacity-100' : 'scale-95 translate-y-12 opacity-0'}`}>
                         <div className="flex flex-col lg:flex-row min-h-[500px]">
 
                             {/* Content Side */}
-                            <div className={`flex-1 p-8 lg:p-12 flex flex-col justify-center bg-white relative z-10 transition-all duration-[1000ms] delay-100 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
+                            <div className={`flex-1 p-8 lg:p-12 flex flex-col justify-center bg-white relative z-10 transition-all duration-[1000ms] delay-100 ease-[cubic-bezier(0.16,1,0.3,1)] ${isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'}`}>
                                 <button
                                     onClick={onClose}
                                     className="absolute top-6 right-6 lg:hidden p-2 text-gray-500 hover:text-black transition-colors"
@@ -2260,7 +2322,7 @@
                             </div>
 
                             {/* Image Side */}
-                            <div className={`hidden lg:flex lg:w-5/12 relative bg-gray-100 items-center justify-center overflow-hidden transition-all duration-[1000ms] delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
+                            <div className={`hidden lg:flex lg:w-5/12 relative bg-gray-100 items-center justify-center overflow-hidden transition-all duration-[1000ms] delay-200 ease-[cubic-bezier(0.16,1,0.3,1)] ${isAnimating ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'}`}>
                                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-gray-200"></div>
                                 <button
                                     onClick={onClose}
@@ -2358,45 +2420,45 @@
         const SERVICE_DETAILS = {
             educational: {
                 id: 'educational',
-                title: 'EDUCACIONAL',
-                subtitle: 'TRANSFORME O APRENDIZADO',
-                description: 'Levamos a educação para o próximo nível com experiências imersivas no Minecraft. Ideal para escolas, museus e projetos históricos.',
+                title: 'EDUCATIONAL',
+                subtitle: 'TRANSFORM LEARNING',
+                description: 'We take education to the next level with immersive Minecraft experiences. Ideal for schools, museums, and historical projects.',
                 benefits: [
-                    'Engajamento estudantil superior',
-                    'Visualização histórica precisa',
-                    'Gamificação de currículos',
-                    'Aulas interativas em 3D'
+                    'Student Engagement',
+                    'Accurate Historical Visualization',
+                    'Gamification of Education',
+                    'Interactive & 3D Classes'
                 ],
                 image: 'https://i.imgur.com/zaZjR5F.png',
-                cta: 'INICIAR PROJETO'
+                cta: 'START PROJECT'
             },
             institutional: {
                 id: 'institutional',
-                title: 'INSTITUCIONAL',
-                subtitle: 'SUA MARCA NO METAVERSO',
-                description: 'Construímos a presença digital da sua empresa. De sedes virtuais a ativações de marca completas e memoráveis.',
+                title: 'INSTITUTIONAL',
+                subtitle: 'YOUR BRAND IN THE METAVERSE',
+                description: 'We build your company\'s digital presence. From virtual headquarters to complete and memorable brand activations.',
                 benefits: [
-                    'Visibilidade inovadora',
-                    'Eventos virtuais imersivos',
-                    'Team building gamificado',
-                    'Design corporativo fiel'
+                    'Innovative Visibility',
+                    'Immersive Virtual Events',
+                    'Gamified Team Building',
+                    'Faithful Corporate Design'
                 ],
                 image: 'https://i.imgur.com/pUFnQgw.png',
-                cta: 'CRIAR ESPAÇO'
+                cta: 'CREATE SPACE'
             },
             servers: {
                 id: 'servers',
-                title: 'SERVIDORES',
-                subtitle: 'INFRAESTRUTURA COMPLETA',
-                description: 'Desenvolvimento técnico de ponta a ponta. Plugins, mapas, lobbies e sistemas complexos para sua comunidade.',
+                title: 'SERVERS',
+                subtitle: 'COMPLETE INFRASTRUCTURE',
+                description: 'End-to-end technical development. Plugins, maps, lobbies, and complex systems for your community.',
                 benefits: [
-                    'Plugins 100% customizados',
-                    'Lobbies de alta performance',
-                    'Minigames exclusivos',
-                    'Suporte técnico especializado'
+                    '100% Customized Plugins',
+                    'High Quality Lobbies/Maps',
+                    'Exclusive Minigames',
+                    'Specialized Technical Support'
                 ],
                 image: 'https://i.imgur.com/oNHhTmH.png',
-                cta: 'DESENVOLVER SERVIDOR'
+                cta: 'DEVELOP SERVER'
             }
         };
 
@@ -2482,13 +2544,13 @@
 
                                     <div className="p-8 lg:p-12 flex flex-col h-full min-w-[320px]">
                                         <div className="mb-6">
-                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Aprendizado</span>
+                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Learning</span>
                                         </div>
                                         <h2 className="text-3xl md:text-4xl font-unbounded font-black uppercase mb-6 leading-none tracking-tight whitespace-nowrap group-hover:text-[#172554] transition-colors duration-[800ms]">
-                                            Educacional
+                                            Educational
                                         </h2>
                                         <p className="text-sm md:text-base text-gray-800 group-hover:text-[#1e40af] leading-relaxed mb-12 max-w-sm font-medium transition-colors duration-[800ms]">
-                                            Transformamos o aprendizado com experiências imersivas. Mapas históricos, aulas interativas e gamificação para escolas e museus.
+                                            We transform learning with immersive experiences. Historical maps, interactive lessons, and gamification for schools and museums.
                                         </p>
                                         <div className="mt-auto flex justify-center items-center w-full relative h-[400px] lg:h-[600px]">
                                             <span className="absolute z-10 font-bold text-xs tracking-widest uppercase pointer-events-none mix-blend-multiply opacity-80 text-black group-hover:text-[#172554]/10 group-hover:mix-blend-normal transition-colors duration-[800ms]" style={{ top: '50%', left: '10%' }}>
@@ -2500,7 +2562,7 @@
 
                                     {/* Mobile Tap Hint */}
                                     <div className="absolute bottom-4 right-4 lg:hidden opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span className="bg-black/10 text-black text-xs px-2 py-1 rounded">Toque para ver mais</span>
+                                        <span className="bg-black/10 text-black text-xs px-2 py-1 rounded">Tap to see more</span>
                                     </div>
                                 </article>
 
@@ -2514,13 +2576,13 @@
 
                                     <div className="p-8 lg:p-12 flex flex-col h-full min-w-[320px]">
                                         <div className="mb-6">
-                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Corporativo</span>
+                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Corporate</span>
                                         </div>
                                         <h2 className="text-3xl md:text-4xl font-unbounded font-black uppercase mb-6 leading-none tracking-tight whitespace-nowrap group-hover:text-[#172554] transition-colors duration-[800ms]">
-                                            Institucional
+                                            Institutional
                                         </h2>
                                         <p className="text-sm md:text-base text-gray-800 group-hover:text-[#1e40af] leading-relaxed mb-12 max-w-sm font-medium transition-colors duration-[800ms]">
-                                            Leve sua marca para o metaverso dos blocos. Recriação de sedes, ativações de marca e eventos corporativos dentro do jogo.
+                                            Take your brand to the block metaverse. Headquarters recreation, brand activations, and corporate events within the game.
                                         </p>
                                         <div className="mt-auto flex justify-center items-center w-full h-[400px] lg:h-[600px]">
                                             <img alt="Minecraft Alex Character Example" className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/pUFnQgw.png" />
@@ -2541,10 +2603,10 @@
                                             <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Multiplayer</span>
                                         </div>
                                         <h2 className="text-3xl md:text-4xl font-unbounded font-black uppercase mb-6 leading-none tracking-tight whitespace-nowrap group-hover:text-[#172554] transition-colors duration-[800ms]">
-                                            Servidores
+                                            Servers
                                         </h2>
                                         <p className="text-sm md:text-base text-gray-800 group-hover:text-[#1e40af] leading-relaxed mb-12 max-w-sm font-medium transition-colors duration-[800ms]">
-                                            Desenvolvimento completo de servidores. Configuração de plugins, construção de lobbies e minigames personalizados.
+                                            Complete server development. Plugin configuration, lobby building, and custom minigames.
                                         </p>
                                         <div className="mt-auto flex justify-center items-center w-full h-[400px] lg:h-[600px]">
                                             <img alt="Minecraft Alex Character Example" className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/oNHhTmH.png" />
