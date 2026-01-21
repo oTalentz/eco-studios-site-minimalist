@@ -1896,18 +1896,20 @@
             const [calError, setCalError] = useState('');
             const [selectedTime, setSelectedTime] = useState('');
             const [errors, setErrors] = useState({});
+            const [isSubmitting, setIsSubmitting] = useState(false);
 
             // --- SUPABASE CONFIGURATION ---
             // 1. Crie um projeto em https://supabase.com
             // 2. Crie uma tabela chamada 'contacts' com as colunas: name (text), email (text), services (jsonb/text), budget (text), details (text)
             // 3. Copie a URL e a Anon Key das configurações da API do seu projeto e cole abaixo:
-            const SUPABASE_URL = "SUA_URL_DO_SUPABASE_AQUI";
-            const SUPABASE_KEY = "SUA_ANON_KEY_DO_SUPABASE_AQUI";
+            const SUPABASE_URL = "https://xnilbsqeppvwlvruedwl.supabase.co";
+            const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuaWxic3FlcHB2d2x2cnVlZHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5NjEzMzEsImV4cCI6MjA4NDUzNzMzMX0.LroYBRCZH6f8nf3YQd_e7QnlliwESvY_Imjq64U43Kk";
             // Inicializa o cliente apenas se as chaves estiverem preenchidas e a lib carregada
             const supabaseClient = (window.supabase && SUPABASE_URL.includes("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
             async function handleSubmit(e) {
                 e.preventDefault();
+                setIsSubmitting(true);
                 const sanitizedName = sanitizeString(name);
                 const sanitizedEmail = sanitizeString(email);
                 const sanitizedDetails = sanitizeString(details);
@@ -1924,6 +1926,7 @@
 
                 setErrors(nextErrors);
                 if (Object.keys(nextErrors).length > 0) {
+                    setIsSubmitting(false);
                     logger.warn('Contato inválido', { name: sanitizedName, email: sanitizedEmail });
                     return;
                 }
@@ -1951,6 +1954,7 @@
                         return;
                     } catch (err) {
                         console.error('Erro ao salvar no Supabase:', err);
+                        setIsSubmitting(false);
                         alert("Ocorreu um erro ao salvar seu contato. Tente novamente ou use outro meio.");
                         return;
                     }
