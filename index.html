@@ -2163,15 +2163,15 @@
                                                 aria-disabled={!canSubmit() || isSubmitting}
                                             >
                                                 {isSubmitting ? (
-                                                    <>
+                                                    <React.Fragment>
                                                         Sending...
                                                         <span className="animate-spin material-symbols-outlined text-lg">progress_activity</span>
-                                                    </>
+                                                    </React.Fragment>
                                                 ) : (
-                                                    <>
+                                                    <React.Fragment>
                                                         Send Message
                                                         <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                                                    </>
+                                                    </React.Fragment>
                                                 )}
                                             </button>
                                         </div>
