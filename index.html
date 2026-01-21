@@ -2156,9 +2156,23 @@
                                             />
                                         </label>
                                         <div className="pt-4">
-                                            <button className={"group flex items-center gap-2 text-primary-accent font-bold text-lg transition-opacity " + (canSubmit() ? "hover:opacity-80" : "opacity-50 cursor-not-allowed")} type="submit" disabled={!canSubmit()} aria-disabled={!canSubmit()}>
-                                                Send Message
-                                                <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                            <button
+                                                className={"group flex items-center gap-2 text-primary-accent font-bold text-lg transition-all " + (canSubmit() && !isSubmitting ? "hover:opacity-80" : "opacity-50 cursor-not-allowed")}
+                                                type="submit"
+                                                disabled={!canSubmit() || isSubmitting}
+                                                aria-disabled={!canSubmit() || isSubmitting}
+                                            >
+                                                {isSubmitting ? (
+                                                    <>
+                                                        Sending...
+                                                        <span className="animate-spin material-symbols-outlined text-lg">progress_activity</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        Send Message
+                                                        <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                                    </>
+                                                )}
                                             </button>
                                         </div>
                                     </form>
