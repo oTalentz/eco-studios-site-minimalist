@@ -1866,6 +1866,12 @@
             );
         }
 
+        // --- SUPABASE CONFIGURATION ---
+        const SUPABASE_URL = "https://xnilbsqeppvwlvruedwl.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuaWxic3FlcHB2d2x2cnVlZHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5NjEzMzEsImV4cCI6MjA4NDUzNzMzMX0.LroYBRCZH6f8nf3YQd_e7QnlliwESvY_Imjq64U43Kk";
+        // Inicializa o cliente apenas se as chaves estiverem preenchidas e a lib carregada
+        const supabaseClient = (window.supabase && SUPABASE_URL.includes("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
         const Contact = () => {
             const navigate = useNavigate();
             const [name, setName] = useState('');
@@ -1897,15 +1903,6 @@
             const [selectedTime, setSelectedTime] = useState('');
             const [errors, setErrors] = useState({});
             const [isSubmitting, setIsSubmitting] = useState(false);
-
-            // --- SUPABASE CONFIGURATION ---
-            // 1. Crie um projeto em https://supabase.com
-            // 2. Crie uma tabela chamada 'contacts' com as colunas: name (text), email (text), services (jsonb/text), budget (text), details (text)
-            // 3. Copie a URL e a Anon Key das configurações da API do seu projeto e cole abaixo:
-            const SUPABASE_URL = "https://xnilbsqeppvwlvruedwl.supabase.co";
-            const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuaWxic3FlcHB2d2x2cnVlZHdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg5NjEzMzEsImV4cCI6MjA4NDUzNzMzMX0.LroYBRCZH6f8nf3YQd_e7QnlliwESvY_Imjq64U43Kk";
-            // Inicializa o cliente apenas se as chaves estiverem preenchidas e a lib carregada
-            const supabaseClient = (window.supabase && SUPABASE_URL.includes("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
             async function handleSubmit(e) {
                 e.preventDefault();
@@ -1955,7 +1952,11 @@
                     } catch (err) {
                         console.error('Erro ao salvar no Supabase:', err);
                         setIsSubmitting(false);
-                        alert("Ocorreu um erro ao salvar seu contato. Tente novamente ou use outro meio.");
+                        if (err.code === '401' || (err.message && err.message.includes('row-level security'))) {
+                            alert("Erro de permissão (RLS). Vá no painel do Supabase > Table Editor > contacts > Clique em 'No active RLS policies' (ou no cadeado) > Disable RLS. Isso é necessário para testes públicos.");
+                        } else {
+                            alert("Ocorreu um erro ao salvar seu contato. Detalhes no console.");
+                        }
                         return;
                     }
                 }
