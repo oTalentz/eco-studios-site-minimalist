@@ -2797,7 +2797,7 @@
                         .eq('id', id);
                     if (error) throw error;
                     setContacts(contacts.filter(c => c.id !== id));
-                    if (selectedContact?.id === id) setSelectedContact(null);
+                    if (selectedContact && selectedContact.id === id) setSelectedContact(null);
                 } catch (error) {
                     alert('Erro ao excluir: ' + error.message);
                 }
