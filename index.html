@@ -279,6 +279,11 @@
             filter: invert(1) opacity(1) !important;
         }
 
+        .logo-item-xbox {
+            max-height: 70px !important;
+            max-width: 180px !important;
+        }
+
         @keyframes logo-scroll {
             0% {
                 transform: translateX(0);
@@ -555,6 +560,627 @@
         // --- Page Transition Logic (Adapted from Easy CSS Page/Slide Transitions) ---
         const TransitionContext = createContext();
 
+        // --- Language Context & Translations ---
+        const LanguageContext = createContext();
+
+        const TRANSLATIONS = {
+            en: {
+                menu: "Menu",
+                close: "Close",
+                home: "home",
+                works: "works",
+                studio: "studio",
+                services: "services",
+                contact: "contact",
+                clients_partners: "Clients & Partners",
+                showcase: "Showcase",
+                success_cases: "Success Cases",
+                coming_soon: "Coming Soon",
+                showcase_items: {
+                    armors_plus: {
+                        title: "Armors+",
+                        description: "Equip yourself with legendary armor sets designed for the ultimate warriors."
+                    },
+                    autofarm_plus: {
+                        title: "Autofarm+",
+                        description: "Automate your agricultural empire with advanced farming technologies."
+                    },
+                    anime_pack: {
+                        title: "Anime Pack",
+                        description: "Join the squad and explore the wild."
+                    },
+                    world_soccer: {
+                        title: "World Soccer",
+                        description: "Compete in the ultimate global soccer tournament."
+                    },
+                    ice_temple: {
+                        title: "Ice Temple",
+                        description: "Embark on this frozen adventure!"
+                    },
+                    pink_house: {
+                        title: "Pink House",
+                        description: "A cozy atmosphere, sunny day and lots of fun!"
+                    },
+                    download_btn: "DOWNLOAD NOW",
+                    locked_btn: "COMING SOON"
+                },
+                education_games_creativity: "Education, Games & Creativity",
+                stats_highlight: {
+                    impressions: "Impressions across all platforms",
+                    suffix: "+ Million"
+                },
+                tap_to_see_more: "Tap to see more",
+                calendar: {
+                    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+                    weekdays: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+                    month_label: "Month",
+                    year_label: "Year",
+                    available_times: "Available times on",
+                    errors: {
+                        invalid_month: "Invalid month",
+                        invalid_year: "Please enter a valid year between 1900 and 2100.",
+                        unavailable_date: "Date unavailable"
+                    }
+                },
+                service_details: {
+                    educational: {
+                        title: 'EDUCATIONAL',
+                        subtitle: 'TRANSFORM LEARNING',
+                        description: 'We take education to the next level with immersive Minecraft experiences. Ideal for schools, museums, and historical projects.',
+                        benefits: [
+                            'Student Engagement',
+                            'Accurate Historical Visualization',
+                            'Gamification of Education',
+                            'Interactive & 3D Classes'
+                        ],
+                        cta: 'START PROJECT',
+                        tag: 'Learning'
+                    },
+                    institutional: {
+                        title: 'INSTITUTIONAL',
+                        subtitle: 'YOUR BRAND IN THE METAVERSE',
+                        description: 'We build your company\'s digital presence. From virtual headquarters to complete and memorable brand activations.',
+                        benefits: [
+                            'Innovative Visibility',
+                            'Immersive Virtual Events',
+                            'Gamified Team Building',
+                            'Faithful Corporate Design'
+                        ],
+                        cta: 'CREATE SPACE',
+                        tag: 'Corporate'
+                    },
+                    servers: {
+                        title: 'SERVERS',
+                        subtitle: 'COMPLETE INFRASTRUCTURE',
+                        description: 'End-to-end technical development. Plugins, maps, lobbies, and complex systems for your community.',
+                        benefits: [
+                            '100% Customized Plugins',
+                            'High Quality Lobbies/Maps',
+                            'Exclusive Minigames',
+                            'Specialized Technical Support'
+                        ],
+                        cta: 'DEVELOP SERVER',
+                        tag: 'Multiplayer'
+                    },
+                    alts: {
+                        educational: "Minecraft Character Educational Example",
+                        institutional: "Institutional Minecraft Character",
+                        servers: "Minecraft Server Character"
+                    }
+                },
+                say_hello: {
+                    static: "Say",
+                    cta: "Start a Project"
+                },
+                contact_page: {
+                    lets_talk: "let's talk",
+                    subtitle_prefix: "Have an idea? We'd love to help you build it. Fill out the form or ",
+                    subtitle_link: "book a call",
+                    name: "Name",
+                    email: "Email",
+                    services_label: "What services are you interested in?",
+                    budget_label: "Expected project budget?",
+                    details_label: "Project details",
+                    details_placeholder: "Tell us about your project...",
+                    placeholders: {
+                        name: "Jane Doe",
+                        email: "jane@example.com"
+                    },
+                    send_btn: "Send Message",
+                    sending_btn: "Sending...",
+                    errors: {
+                        name: "Please enter a valid name (min. 2 characters).",
+                        email: "Please enter a valid email.",
+                        services: "Select at least one service.",
+                        budget: "Select a budget.",
+                        details: "Describe your project."
+                    },
+                    discovery: {
+                        unavailable: "Unavailable",
+                        unavailable_desc: "Discovery calls are currently unavailable. Please contact us via the form.",
+                        help_marketplace: "Looking for help with a Marketplace World or Add-On?",
+                        discord_btn: "Join our Discord to open a ticket",
+                        tag: "Discovery Call",
+                        title: "Ready to start?",
+                        desc: "Book a 15-min discovery call directly."
+                    },
+                    service_options: {
+                        Education: "Education",
+                        "Digital Marketing": "Digital Marketing",
+                        "Business Skilling": "Business Skilling",
+                        Marketplace: "Marketplace",
+                        All: "All"
+                    },
+                    budget_options: {
+                        "Under $5k": "Under $5k",
+                        "$5k - $10k": "$5k - $10k",
+                        "$10k - $25k": "$10k - $25k",
+                        "$25k+": "$25k+"
+                    },
+                    alerts: {
+                        rls_error: "Permission Error (RLS). Go to Supabase Dashboard > Table Editor > contacts > Click 'No active RLS policies' (or lock icon) > Disable RLS. Required for public testing.",
+                        save_error: "An error occurred while saving your contact. Check console for details.",
+                        send_error: "An error occurred while sending your message. Please try again.",
+                        connection_error: "Connection error. Please check your internet."
+                    }
+                },
+                works_page: {
+                    title_prefix: "We craft",
+                    title_highlight: "digital experiences",
+                    title_suffix: "that defy expectations.",
+                    subtitle: "A selected collection of our most recent works, blending technical precision with artistic direction.",
+                    marketplace_btn: "Minecraft Marketplace",
+                    footer_title: "Have an idea?",
+                    start_project: "Start a project",
+                    privacy: "Privacy",
+                    terms: "Terms",
+                    brand_guidelines: "Brand & Design",
+                    all_rights_reserved: "© 2026 Eco Studios. All rights reserved."
+                },
+                design_guidelines: {
+                    title: "Brand & Design System",
+                    subtitle: "Identity, components and usage rules aligned to Education, Games & Creativity.",
+                    label: "Guidelines",
+                    sections: {
+                        logo: {
+                            title: "Logo",
+                            desc: "Use primary logo in high-contrast contexts. Icon-only for compact spaces."
+                        },
+                        colors: {
+                            title: "Colors",
+                            desc: "Respect theme tokens and contrast requirements."
+                        },
+                        typography: {
+                            title: "Typography",
+                            desc: "Use existing scale and families across UI."
+                        },
+                        usage: {
+                            title: "Usage Rules",
+                            rules: [
+                                "Keep clear space around the logo.",
+                                "Use official colors and original proportions.",
+                                "Do not alter, distort or apply effects.",
+                                "Ensure sufficient contrast on all backgrounds."
+                            ]
+                        },
+                        accessibility: {
+                            title: "Accessibility",
+                            items: [
+                                "Keyboard navigable components.",
+                                "ARIA roles and labels where appropriate.",
+                                "WCAG 2.1 AA color contrast.",
+                                "Meaningful headings hierarchy."
+                            ]
+                        },
+                        footer: {
+                            assets_text: "Looking for assets or badges?",
+                            contact_text: "Contact us for additional resources.",
+                            back_home: "Back to Home"
+                        }
+                    }
+                },
+                success_page: {
+                    title: "thank you!",
+                    message: "We've received your inquiry. One of our creative directors will be in touch within 24 hours.",
+                    back_home: "Back to Home",
+                    explore_text: "While you wait, explore our",
+                    case_studies: "Case Studies"
+                },
+                studio_page: {
+                    hero_title: "we are<br />eco studios.",
+                    about_label: "The Studio",
+                    about_title: "Building worlds, block by block, pixel by pixel.",
+                    about_p1: "We are a team of passionate creators dedicated to pushing the boundaries of what's possible in Minecraft and game development. Our love for gaming isn't just a hobby; it's the fuel that drives us to craft immersive experiences, intricate maps, and engaging gameplay mechanics that resonate with players worldwide.",
+                    about_p2: "From the sandbox freedom of Minecraft to the broader universe of game design, we pour our hearts into every project. We don't just build levels; we create memories, fostering communities and sparking imagination through the games we love and the worlds we bring to life.",
+                    about_p3: "Eco Studios joined as an Official Minecraft Partner in late 2021.",
+                    team_title: "our team",
+                    team_subtitle: "A multidisciplinary group of thinkers, makers, and explorers.",
+                    more_members: "More members",
+                    join_us: "Join us",
+                    roles: {
+                        ceo: "Executive Director (CEO)",
+                        lead_developer: "Lead Developer",
+                        lead_designer: "Lead Designer",
+                        designer_3d: "3D Designer",
+                        level_designer: "Level Designer",
+                        developer: "Developer"
+                    },
+                    alts: {
+                        minecraft_partner: "Official Minecraft Partner",
+                        eco_badge: "Eco Studios Badge",
+                        team_img: "Creative team collaborating in a modern studio"
+                    }
+                },
+                admin: {
+                    loading: "Loading...",
+                    title: "Admin Access",
+                    email: "Email",
+                    password: "Password",
+                    login_btn: "Login",
+                    logging_in: "Logging in...",
+                    error: "Login error: ",
+                    success: "Success",
+                    dashboard: "Dashboard",
+                    logout: "Logout",
+                    messages: "Messages",
+                    no_messages: "No messages found.",
+                    delete: "Delete",
+                    close: "Close",
+                    message_details: "Message Details",
+                    services: "Services",
+                    form_submissions: "Form Submissions",
+                    go_to_site: "Go to Site",
+                    date: "Date",
+                    name: "Name",
+                    budget: "Budget",
+                    details: "Details",
+                    actions: "Actions",
+                    view_details: "View Details",
+                    submission_details: "Submission Details",
+                    confirm_delete: "Are you sure you want to delete this contact?",
+                    delete_error: "Error deleting: ",
+                    fetch_error: "Error fetching contacts. Check if you are logged in and RLS allows reading.",
+                    no_submissions: "No submissions found."
+                }
+            },
+            pt: {
+                menu: "Menu",
+                close: "Fechar",
+                home: "início",
+                works: "trabalhos",
+                studio: "estúdio",
+                services: "serviços",
+                contact: "contato",
+                clients_partners: "Clientes & Parceiros",
+                showcase: "Destaques",
+                success_cases: "Casos de Sucesso",
+                coming_soon: "Em Breve",
+                showcase_items: {
+                    armors_plus: {
+                        title: "Armors+",
+                        description: "Equipe-se com conjuntos de armaduras lendários projetados para os guerreiros supremos."
+                    },
+                    autofarm_plus: {
+                        title: "Autofarm+",
+                        description: "Automatize seu império agrícola com tecnologias avançadas de cultivo."
+                    },
+                    anime_pack: {
+                        title: "Pacote Anime",
+                        description: "Junte-se ao esquadrão e explore o mundo selvagem."
+                    },
+                    world_soccer: {
+                        title: "Futebol Mundial",
+                        description: "Compita no torneio global de futebol definitivo."
+                    },
+                    ice_temple: {
+                        title: "Templo de Gelo",
+                        description: "Embarque nesta aventura congelante!"
+                    },
+                    pink_house: {
+                        title: "Casa Rosa",
+                        description: "Uma atmosfera aconchegante, dia ensolarado e muita diversão!"
+                    },
+                    download_btn: "BAIXAR AGORA",
+                    locked_btn: "EM BREVE"
+                },
+                education_games_creativity: "Educação, Jogos & Criatividade",
+                stats_highlight: {
+                    impressions: "Impressões em todas as plataformas",
+                    suffix: "+ Milhões"
+                },
+                tap_to_see_more: "Toque para ver mais",
+                calendar: {
+                    months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+                    weekdays: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+                    month_label: "Mês",
+                    year_label: "Ano",
+                    available_times: "Horários disponíveis em",
+                    errors: {
+                        invalid_month: "Mês inválido",
+                        invalid_year: "Informe um ano válido entre 1900 e 2100.",
+                        unavailable_date: "Data indisponível"
+                    }
+                },
+                service_details: {
+                    educational: {
+                        title: 'EDUCACIONAL',
+                        subtitle: 'TRANSFORME O APRENDIZADO',
+                        description: 'Levamos a educação para o próximo nível com experiências imersivas no Minecraft. Ideal para escolas, museus e projetos históricos.',
+                        benefits: [
+                            'Engajamento dos Alunos',
+                            'Visualização Histórica Precisa',
+                            'Gamificação da Educação',
+                            'Aulas Interativas & 3D'
+                        ],
+                        cta: 'INICIAR PROJETO',
+                        tag: 'Aprendizado'
+                    },
+                    institutional: {
+                        title: 'INSTITUCIONAL',
+                        subtitle: 'SUA MARCA NO METAVERSO',
+                        description: 'Construímos a presença digital da sua empresa. De sedes virtuais a ativações de marca completas e memoráveis.',
+                        benefits: [
+                            'Visibilidade Inovadora',
+                            'Eventos Virtuais Imersivos',
+                            'Team Building Gamificado',
+                            'Design Corporativo Fiel'
+                        ],
+                        cta: 'CRIAR ESPAÇO',
+                        tag: 'Corporativo'
+                    },
+                    servers: {
+                        title: 'SERVIDORES',
+                        subtitle: 'INFRAESTRUTURA COMPLETA',
+                        description: 'Desenvolvimento técnico de ponta a ponta. Plugins, mapas, lobbies e sistemas complexos para sua comunidade.',
+                        benefits: [
+                            'Plugins 100% Personalizados',
+                            'Lobbies/Mapas de Alta Qualidade',
+                            'Minigames Exclusivos',
+                            'Suporte Técnico Especializado'
+                        ],
+                        cta: 'DESENVOLVER SERVIDOR',
+                        tag: 'Multiplayer'
+                    },
+                    alts: {
+                        educational: "Exemplo Educacional de Personagem Minecraft",
+                        institutional: "Personagem Minecraft Institucional",
+                        servers: "Personagem de Servidor Minecraft"
+                    }
+                },
+                say_hello: {
+                    static: "Diga",
+                    cta: "Começar Projeto"
+                },
+                contact_page: {
+                    lets_talk: "vamos conversar",
+                    subtitle_prefix: "Tem uma ideia? Adoraríamos ajudar você a construí-la. Preencha o formulário ou ",
+                    subtitle_link: "agende uma chamada",
+                    name: "Nome",
+                    email: "E-mail",
+                    services_label: "Em quais serviços você tem interesse?",
+                    budget_label: "Orçamento esperado para o projeto?",
+                    details_label: "Detalhes do projeto",
+                    details_placeholder: "Conte-nos sobre seu projeto...",
+                    placeholders: {
+                        name: "João Silva",
+                        email: "joao@exemplo.com"
+                    },
+                    send_btn: "Enviar Mensagem",
+                    sending_btn: "Enviando...",
+                    errors: {
+                        name: "Informe um nome válido (mín. 2 caracteres).",
+                        email: "Informe um e-mail válido.",
+                        services: "Selecione pelo menos um serviço.",
+                        budget: "Selecione um orçamento.",
+                        details: "Descreva seu projeto."
+                    },
+                    discovery: {
+                        unavailable: "Indisponível",
+                        unavailable_desc: "Chamadas de descoberta estão indisponíveis no momento. Por favor, contate-nos pelo formulário.",
+                        help_marketplace: "Procurando ajuda com um Mundo ou Add-On do Marketplace?",
+                        discord_btn: "Entre no nosso Discord para abrir um ticket",
+                        tag: "Chamada de Descoberta",
+                        title: "Pronto para começar?",
+                        desc: "Agende uma chamada de 15 min diretamente."
+                    },
+                    service_options: {
+                        Education: "Educação",
+                        "Digital Marketing": "Marketing Digital",
+                        "Business Skilling": "Capacitação Empresarial",
+                        Marketplace: "Marketplace",
+                        All: "Todos"
+                    },
+                    budget_options: {
+                        "Under $5k": "Menos de $5k",
+                        "$5k - $10k": "$5k - $10k",
+                        "$10k - $25k": "$10k - $25k",
+                        "$25k+": "$25k+"
+                    },
+                    alerts: {
+                        rls_error: "Erro de Permissão (RLS). Vá para Supabase Dashboard > Table Editor > contacts > Clique 'No active RLS policies' > Desative RLS. Necessário para testes públicos.",
+                        save_error: "Ocorreu um erro ao salvar seu contato. Verifique o console para detalhes.",
+                        send_error: "Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.",
+                        connection_error: "Erro de conexão. Por favor, verifique sua internet."
+                    }
+                },
+                works_page: {
+                    title_prefix: "Criamos",
+                    title_highlight: "experiências digitais",
+                    title_suffix: "que desafiam expectativas.",
+                    subtitle: "Uma seleção dos nossos trabalhos mais recentes, misturando precisão técnica com direção artística.",
+                    marketplace_btn: "Minecraft Marketplace",
+                    footer_title: "Tem uma ideia?",
+                    start_project: "Iniciar projeto",
+                    privacy: "Privacidade",
+                    terms: "Termos",
+                    brand_guidelines: "Marca & Design",
+                    all_rights_reserved: "© 2026 Eco Studios. Todos os direitos reservados."
+                },
+                design_guidelines: {
+                    title: "Sistema de Marca & Design",
+                    subtitle: "Identidade, componentes e regras de uso alinhados a Educação, Jogos & Criatividade.",
+                    label: "Diretrizes",
+                    sections: {
+                        logo: {
+                            title: "Logo",
+                            desc: "Use o logo principal em contextos de alto contraste. Apenas ícone para espaços compactos."
+                        },
+                        colors: {
+                            title: "Cores",
+                            desc: "Respeite os tokens do tema e requisitos de contraste."
+                        },
+                        typography: {
+                            title: "Tipografia",
+                            desc: "Use a escala e famílias existentes em toda a UI."
+                        },
+                        usage: {
+                            title: "Regras de Uso",
+                            rules: [
+                                "Mantenha espaço livre ao redor do logo.",
+                                "Use cores oficiais e proporções originais.",
+                                "Não altere, distorça ou aplique efeitos.",
+                                "Garanta contraste suficiente em todos os fundos."
+                            ]
+                        },
+                        accessibility: {
+                            title: "Acessibilidade",
+                            items: [
+                                "Componentes navegáveis por teclado.",
+                                "Papéis ARIA e rótulos onde apropriado.",
+                                "Contraste de cor WCAG 2.1 AA.",
+                                "Hierarquia de títulos significativa."
+                            ]
+                        },
+                        footer: {
+                            assets_text: "Procurando por ativos ou badges?",
+                            contact_text: "Entre em contato para recursos adicionais.",
+                            back_home: "Voltar ao Início"
+                        }
+                    }
+                },
+                success_page: {
+                    title: "obrigado!",
+                    message: "Recebemos sua mensagem. Um de nossos diretores criativos entrará em contato em até 24 horas.",
+                    back_home: "Voltar ao Início",
+                    explore_text: "Enquanto aguarda, explore nossos",
+                    case_studies: "Estudos de Caso"
+                },
+                studio_page: {
+                    hero_title: "nós somos<br />eco studios.",
+                    about_label: "O Estúdio",
+                    about_title: "Construindo mundos, bloco por bloco, pixel por pixel.",
+                    about_p1: "Somos uma equipe de criadores apaixonados dedicados a expandir os limites do que é possível no Minecraft e no desenvolvimento de jogos. Nosso amor pelos jogos não é apenas um hobby; é o combustível que nos impulsiona a criar experiências imersivas, mapas intrincados e mecânicas de jogo envolventes que ressoam com jogadores em todo o mundo.",
+                    about_p2: "Da liberdade sandbox do Minecraft ao universo mais amplo do design de jogos, colocamos nossos corações em cada projeto. Não construímos apenas níveis; criamos memórias, fomentando comunidades e despertando a imaginação através dos jogos que amamos e dos mundos que trazemos à vida.",
+                    about_p3: "A Eco Studios tornou-se Parceira Oficial do Minecraft no final de 2021.",
+                    team_title: "nossa equipe",
+                    team_subtitle: "Um grupo multidisciplinar de pensadores, criadores e exploradores.",
+                    more_members: "Mais membros",
+                    join_us: "Junte-se a nós",
+                    roles: {
+                        ceo: "Diretor Executivo (CEO)",
+                        lead_developer: "Desenvolvedor Líder",
+                        lead_designer: "Designer Líder",
+                        designer_3d: "Designer 3D",
+                        level_designer: "Level Designer",
+                        developer: "Desenvolvedor"
+                    },
+                    alts: {
+                        minecraft_partner: "Parceiro Oficial Minecraft",
+                        eco_badge: "Emblema Eco Studios",
+                        team_img: "Equipe criativa colaborando em um estúdio moderno"
+                    }
+                },
+                admin: {
+                    loading: "Carregando...",
+                    title: "Acesso Admin",
+                    email: "E-mail",
+                    password: "Senha",
+                    login_btn: "Entrar",
+                    logging_in: "Entrando...",
+                    error: "Erro de login: ",
+                    success: "Sucesso",
+                    dashboard: "Painel",
+                    logout: "Sair",
+                    messages: "Mensagens",
+                    no_messages: "Nenhuma mensagem encontrada.",
+                    delete: "Excluir",
+                    close: "Fechar",
+                    message_details: "Detalhes da Mensagem",
+                    services: "Serviços",
+                    form_submissions: "Envios de Formulário",
+                    go_to_site: "Ir para o Site",
+                    date: "Data",
+                    name: "Nome",
+                    budget: "Orçamento",
+                    details: "Detalhes",
+                    actions: "Ações",
+                    view_details: "Ver Detalhes",
+                    submission_details: "Detalhes do Envio",
+                    confirm_delete: "Tem certeza que deseja excluir este contato?",
+                    delete_error: "Erro ao excluir: ",
+                    fetch_error: "Erro ao buscar contatos. Verifique se você está logado e se as regras de segurança permitem.",
+                    no_submissions: "Nenhum envio encontrado."
+                }
+            }
+        };
+
+        const LanguageProvider = ({ children }) => {
+            const [language, setLanguage] = useState('en');
+
+            const toggleLanguage = (lang) => {
+                if (lang === 'en' || lang === 'pt') {
+                    setLanguage(lang);
+                } else {
+                    setLanguage(prev => prev === 'en' ? 'pt' : 'en');
+                }
+            };
+
+            const t = (key, params = {}) => {
+                const keys = key.split('.');
+                let value = TRANSLATIONS[language];
+                for (const k of keys) {
+                    if (value && value[k]) {
+                        value = value[k];
+                    } else {
+                        return key; // Fallback
+                    }
+                }
+                if (typeof value === 'string' && Object.keys(params).length > 0) {
+                    return value.replace(/\{(\w+)\}/g, (_, k) => params[k] !== undefined ? params[k] : `{${k}}`);
+                }
+                return value;
+            };
+
+            return (
+                <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
+                    {children}
+                </LanguageContext.Provider>
+            );
+        };
+
+        const useLanguage = () => useContext(LanguageContext);
+
+        const LanguageSwitcher = ({ className = "" }) => {
+            const { language, toggleLanguage } = useLanguage();
+            return (
+                <div className={`flex items-center gap-2 pointer-events-auto ${className}`}>
+                    <button
+                        onClick={() => toggleLanguage('en')}
+                        className={`text-sm font-bold uppercase transition-colors ${language === 'en' ? 'text-waaark-dark-blue dark:text-white underline decoration-2 underline-offset-4' : 'text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300'}`}
+                    >
+                        EN
+                    </button>
+                    <span className="text-gray-300 dark:text-gray-600">|</span>
+                    <button
+                        onClick={() => toggleLanguage('pt')}
+                        className={`text-sm font-bold uppercase transition-colors ${language === 'pt' ? 'text-waaark-dark-blue dark:text-white underline decoration-2 underline-offset-4' : 'text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300'}`}
+                    >
+                        PT
+                    </button>
+                </div>
+            );
+        };
+
         const TransitionProvider = ({ children }) => {
             const [phase, setPhase] = useState('idle'); // idle, mounting, active, exit
             const [colors, setColors] = useState({ first: '#eaca57', second: '#d66b8a' });
@@ -815,6 +1441,7 @@
             const [lastScrollY, setLastScrollY] = useState(0);
             const location = useLocation();
             const isHome = location.pathname === '/';
+            const { t } = useLanguage();
 
             useEffect(() => {
                 setIsMenuOpen(false);
@@ -843,17 +1470,20 @@
                         <Link className={`text-2xl md:text-3xl font-black tracking-tight text-waaark-dark-blue dark:text-white transition-colors ${isHome ? "invisible" : ""}`} to="/">
                             eco studios
                         </Link>
-                        <button
-                            onClick={() => setIsMenuOpen(true)}
-                            className="flex items-center gap-4 text-waaark-dark-blue dark:text-white group focus:outline-none"
-                        >
-                            <span className="text-sm md:text-base font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Menu</span>
-                            <div className="flex flex-col gap-[6px] items-end">
-                                <span className="block w-8 h-[2px] bg-current"></span>
-                                <span className="block w-5 h-[2px] bg-current group-hover:w-8 transition-all duration-300"></span>
-                                <span className="block w-8 h-[2px] bg-current"></span>
-                            </div>
-                        </button>
+                        <div className="flex items-center gap-6">
+                            <LanguageSwitcher />
+                            <button
+                                onClick={() => setIsMenuOpen(true)}
+                                className="flex items-center gap-4 text-waaark-dark-blue dark:text-white group focus:outline-none"
+                            >
+                                <span className="text-sm md:text-base font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">{t('menu')}</span>
+                                <div className="flex flex-col gap-[6px] items-end">
+                                    <span className="block w-8 h-[2px] bg-current"></span>
+                                    <span className="block w-5 h-[2px] bg-current group-hover:w-8 transition-all duration-300"></span>
+                                    <span className="block w-8 h-[2px] bg-current"></span>
+                                </div>
+                            </button>
+                        </div>
                     </nav>
 
                     {/* Full Screen Menu Overlay */}
@@ -866,7 +1496,7 @@
                                 onClick={() => setIsMenuOpen(false)}
                                 className="flex items-center gap-3 text-gray-900 group cursor-pointer focus:outline-none select-none"
                             >
-                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Close</span>
+                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">{t('close')}</span>
                                 <div className="relative w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full group-hover:border-gray-900 transition-colors">
                                     <span className="absolute w-3 h-[2px] bg-gray-900 rotate-45 transform transition-transform duration-300"></span>
                                     <span className="absolute w-3 h-[2px] bg-gray-900 -rotate-45 transform transition-transform duration-300"></span>
@@ -876,19 +1506,19 @@
 
                         <nav className="flex-grow flex flex-col items-center justify-center gap-2 md:gap-4 relative z-40">
                             <Link to="/" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                home
+                                {t('home')}
                             </Link>
                             <Link to="/works" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                works
+                                {t('works')}
                             </Link>
                             <Link to="/studio" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                studio
+                                {t('studio')}
                             </Link>
                             <Link to="/services" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                services
+                                {t('services')}
                             </Link>
                             <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                contact
+                                {t('contact')}
                             </Link>
                         </nav>
 
@@ -917,6 +1547,7 @@
         const Home = () => {
             const [isMenuOpen, setIsMenuOpen] = useState(false);
             const location = useLocation();
+            const { t } = useLanguage();
 
             useEffect(() => {
                 setIsMenuOpen(false);
@@ -929,17 +1560,20 @@
                         <Link className="text-2xl md:text-3xl font-black tracking-tight text-waaark-dark-blue dark:text-white transition-colors invisible" to="/">
                             eco studios
                         </Link>
-                        <button
-                            onClick={() => setIsMenuOpen(true)}
-                            className="flex items-center gap-3 text-waaark-dark-blue dark:text-white group focus:outline-none"
-                        >
-                            <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Menu</span>
-                            <div className="flex flex-col gap-[5px] items-end">
-                                <span className="block w-6 h-[2px] bg-current"></span>
-                                <span className="block w-4 h-[2px] bg-current group-hover:w-6 transition-all duration-300"></span>
-                                <span className="block w-6 h-[2px] bg-current"></span>
-                            </div>
-                        </button>
+                        <div className="flex items-center gap-6">
+                            <LanguageSwitcher />
+                            <button
+                                onClick={() => setIsMenuOpen(true)}
+                                className="flex items-center gap-3 text-waaark-dark-blue dark:text-white group focus:outline-none"
+                            >
+                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">{t('menu')}</span>
+                                <div className="flex flex-col gap-[5px] items-end">
+                                    <span className="block w-6 h-[2px] bg-current"></span>
+                                    <span className="block w-4 h-[2px] bg-current group-hover:w-6 transition-all duration-300"></span>
+                                    <span className="block w-6 h-[2px] bg-current"></span>
+                                </div>
+                            </button>
+                        </div>
                     </nav>
 
                     {/* Full Screen Menu Overlay */}
@@ -952,7 +1586,7 @@
                                 onClick={() => setIsMenuOpen(false)}
                                 className="flex items-center gap-3 text-gray-900 group cursor-pointer focus:outline-none select-none"
                             >
-                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">Close</span>
+                                <span className="text-xs md:text-sm font-medium tracking-[0.2em] uppercase hidden md:block opacity-70 group-hover:opacity-100 transition-opacity">{t('close')}</span>
                                 <div className="relative w-8 h-8 flex items-center justify-center border border-gray-300 rounded-full group-hover:border-gray-900 transition-colors">
                                     <span className="absolute w-3 h-[2px] bg-gray-900 rotate-45 transform transition-transform duration-300"></span>
                                     <span className="absolute w-3 h-[2px] bg-gray-900 -rotate-45 transform transition-transform duration-300"></span>
@@ -962,19 +1596,19 @@
 
                         <nav className="flex-grow flex flex-col items-center justify-center gap-2 md:gap-4 relative z-40">
                             <Link to="/" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                home
+                                {t('home')}
                             </Link>
                             <Link to="/works" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                works
+                                {t('works')}
                             </Link>
                             <Link to="/studio" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                studio
+                                {t('studio')}
                             </Link>
                             <Link to="/services" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                services
+                                {t('services')}
                             </Link>
                             <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="strike-link relative text-6xl md:text-8xl lg:text-9xl font-bold text-gray-900 lowercase tracking-tighter hover:text-waaark-dark-blue transition-colors duration-300">
-                                contact
+                                {t('contact')}
                             </Link>
                         </nav>
 
@@ -1020,7 +1654,7 @@
                                     eco studios
                                 </h1>
                                 <p className="mt-2 md:mt-4 text-white/90 text-lg md:text-2xl font-light tracking-wide font-sans drop-shadow-sm">
-                                    Education, Games & Creativity
+                                    {t('education_games_creativity')}
                                 </p>
                                 <Link to="/works" className="mt-8 w-4 h-4 rounded-full bg-waaark-dark-blue shadow-lg cursor-pointer hover:scale-125 transition-transform animate-bounce"></Link>
                             </div>
@@ -1056,6 +1690,9 @@
                                     <a href="https://waypointstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card">
                                         <img alt="Waypoint Studios" src="Logo Waypoint 2.svg" className="logo-item logo-item-waypoint" />
                                     </a>
+                                    <a href="#" className="logo-card">
+                                        <img alt="Partner" src="https://i.imgur.com/VPZlHKg.png" className="logo-item logo-item-xbox" />
+                                    </a>
 
                                     {/* Set 2 (Duplicate) */}
                                     <a href="https://www.4ksstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card logo-card-compact">
@@ -1082,6 +1719,9 @@
                                     <a href="https://waypointstudios.com" target="_blank" rel="noopener noreferrer" className="logo-card">
                                         <img alt="Waypoint Studios" src="Logo Waypoint 2.svg" className="logo-item logo-item-waypoint" />
                                     </a>
+                                    <a href="#" className="logo-card">
+                                        <img alt="Partner" src="https://i.imgur.com/VPZlHKg.png" className="logo-item logo-item-xbox" />
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -1093,13 +1733,14 @@
         };
 
         const ShowcaseComp = () => {
+            const { t } = useLanguage();
             const showcaseImages = [
-                { type: 'image', src: 'https://i.imgur.com/fYEO5L6.png', title: 'Armors+', description: 'Equip yourself with legendary armor sets designed for the ultimate warriors.', link: '#', locked: true },
-                { type: 'image', src: 'https://i.imgur.com/N2eArep.png', title: 'Autofarm+', description: 'Automate your agricultural empire with advanced farming technologies.', link: '#', locked: true },
-                { type: 'image', src: 'https://i.imgur.com/XudXaRz.png', title: 'Anime Pack', description: 'Join the squad and explore the wild.', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/anime-pack-2.0/4710635b-0a3f-4d3a-8990-b45232ae6b14' },
-                { type: 'image', src: 'https://i.imgur.com/0dy3FOn.png', title: 'World Soccer', description: 'Compete in the ultimate global soccer tournament.', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/world-soccer/f21bda3f-ae04-485a-ba9a-da660200cf15' },
-                { type: 'image', src: 'https://i.imgur.com/NeKgMWr.png', title: 'Ice Temple', description: 'Embark on this frozen adventure!', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/ice-temple/cd9ab9dc-b06f-490d-a0fb-49381077b2f4' },
-                { type: 'image', src: 'https://i.imgur.com/nLWi3dO.png', title: 'Pink House', description: 'A cozy atmosphere, sunny day and lots of fun!', link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/pink-house/a633d941-f5c8-4fdf-9698-31bce462312e' },
+                { type: 'image', src: 'https://i.imgur.com/fYEO5L6.png', title: t('showcase_items.armors_plus.title'), description: t('showcase_items.armors_plus.description'), link: '#', locked: true },
+                { type: 'image', src: 'https://i.imgur.com/N2eArep.png', title: t('showcase_items.autofarm_plus.title'), description: t('showcase_items.autofarm_plus.description'), link: '#', locked: true },
+                { type: 'image', src: 'https://i.imgur.com/XudXaRz.png', title: t('showcase_items.anime_pack.title'), description: t('showcase_items.anime_pack.description'), link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/anime-pack-2.0/4710635b-0a3f-4d3a-8990-b45232ae6b14' },
+                { type: 'image', src: 'https://i.imgur.com/0dy3FOn.png', title: t('showcase_items.world_soccer.title'), description: t('showcase_items.world_soccer.description'), link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/world-soccer/f21bda3f-ae04-485a-ba9a-da660200cf15' },
+                { type: 'image', src: 'https://i.imgur.com/NeKgMWr.png', title: t('showcase_items.ice_temple.title'), description: t('showcase_items.ice_temple.description'), link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/ice-temple/cd9ab9dc-b06f-490d-a0fb-49381077b2f4' },
+                { type: 'image', src: 'https://i.imgur.com/nLWi3dO.png', title: t('showcase_items.pink_house.title'), description: t('showcase_items.pink_house.description'), link: 'https://www.minecraft.net/pt-br/marketplace/pdp/eco-studios/pink-house/a633d941-f5c8-4fdf-9698-31bce462312e' },
                 { type: 'coming_soon' },
                 { type: 'coming_soon' },
             ];
@@ -1187,8 +1828,8 @@
             return (
                 <section className="relative w-full overflow-hidden py-24 bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-white/5">
                     <div className="mb-12 text-center px-6 relative z-10">
-                        <span className="inline-block mb-4 text-xs font-bold uppercase tracking-widest text-primary-accent rounded-full px-3 py-1 bg-white/70 dark:bg-white/10 border border-white/40 dark:border-white/10">Showcase</span>
-                        <h2 className="text-3xl md:text-5xl font-black text-[#121118] dark:text-white tracking-tight">Success Cases</h2>
+                        <span className="inline-block mb-4 text-xs font-bold uppercase tracking-widest text-primary-accent rounded-full px-3 py-1 bg-white/70 dark:bg-white/10 border border-white/40 dark:border-white/10">{t('showcase')}</span>
+                        <h2 className="text-3xl md:text-5xl font-black text-[#121118] dark:text-white tracking-tight">{t('success_cases')}</h2>
                     </div>
 
                     <div
@@ -1247,12 +1888,12 @@
                                             <div className="w-full h-full overflow-hidden relative bg-gray-200 dark:bg-[#2a2640] flex items-center justify-center">
                                                 {item.type === 'image' ? (
                                                     <React.Fragment>
-                                                        <img src={item.src} alt="Showcase" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" />
+                                                        <img src={item.src} alt={t('showcase')} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" loading="lazy" />
                                                         <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300 pointer-events-none"></div>
                                                     </React.Fragment>
                                                 ) : (
                                                     <div className="flex flex-col items-center justify-center h-full w-full bg-gray-100 dark:bg-[#2a2640] text-gray-400 dark:text-gray-500">
-                                                        <span className="text-xl font-bold uppercase tracking-widest opacity-50">Coming Soon</span>
+                                                        <span className="text-xl font-bold uppercase tracking-widest opacity-50">{t('coming_soon')}</span>
                                                     </div>
                                                 )}
                                             </div>
@@ -1291,7 +1932,7 @@
                                             className="flex items-center justify-center gap-2 w-full py-4 bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-bold rounded-xl cursor-not-allowed"
                                         >
                                             <span className="material-symbols-outlined">lock</span>
-                                            COMING SOON
+                                            {t('showcase_items.locked_btn')}
                                         </button>
                                     ) : (
                                         <a
@@ -1301,7 +1942,7 @@
                                             className="flex items-center justify-center gap-2 w-full py-4 bg-primary-accent text-white font-bold rounded-xl hover:bg-primary-accent/90 transition-all active:scale-95 shadow-lg shadow-primary-accent/25 hover:shadow-primary-accent/40"
                                         >
                                             <span className="material-symbols-outlined">download</span>
-                                            DOWNLOAD NOW
+                                            {t('showcase_items.download_btn')}
                                         </a>
                                     )}
                                 </div>
@@ -1320,6 +1961,7 @@
         };
 
         const StatsHighlight = () => {
+            const { t } = useLanguage();
             const counterRef = React.useRef(null);
             const suffixRef = React.useRef(null);
             const [hasAnimated, setHasAnimated] = React.useState(false);
@@ -1399,10 +2041,10 @@
                     <div className="text-center px-6 relative">
                         <h2 className="text-[60px] md:text-[90px] lg:text-[120px] font-black leading-[0.9] tracking-tighter font-display text-text-dark dark:text-white">
                             <span ref={counterRef} className="counter text-primary-accent inline-block origin-center" data-target="3">0</span>
-                            <span ref={suffixRef}>+ Million</span>
+                            <span ref={suffixRef}>{t('stats_highlight.suffix')}</span>
                         </h2>
                         <p className="mt-4 text-sm md:text-xl font-bold tracking-widest uppercase text-gray-400 dark:text-gray-500 font-display">
-                            Impressions across all platforms
+                            {t('stats_highlight.impressions')}
                         </p>
                     </div>
                 </section>
@@ -1411,6 +2053,7 @@
 
         const WorksGalleryComp = () => {
             const navigate = useNavigate();
+            const { t } = useLanguage();
             const [selectedImage, setSelectedImage] = React.useState(null);
             const [isZoomed, setIsZoomed] = React.useState(false);
 
@@ -1531,10 +2174,10 @@
                             <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 mb-12">
                                 <section className="py-12 md:py-20 max-w-4xl">
                                     <h1 className="text-4xl md:text-6xl lg:text-[64px] font-bold leading-[1.1] tracking-tight text-text-dark dark:text-white mb-6">
-                                        We craft <span className="text-primary-accent">digital experiences</span> that defy expectations.
+                                        {t('works_page.title_prefix')} <span className="text-primary-accent">{t('works_page.title_highlight')}</span> {t('works_page.title_suffix')}
                                     </h1>
                                     <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl font-medium">
-                                        A selected collection of our most recent works, blending technical precision with artistic direction.
+                                        {t('works_page.subtitle')}
                                     </p>
                                 </section>
                             </div>
@@ -1581,7 +2224,7 @@
                             <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24">
                                 <div className="flex justify-center mt-0">
                                     <a href="https://www.minecraft.net/pt-br/marketplace/creator/eco-studios" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 px-8 py-4 border border-gray-200 dark:border-gray-700 hover:border-primary-accent dark:hover:border-primary-accent rounded-full transition-colors duration-300 group bg-white dark:bg-transparent">
-                                        <span className="text-sm font-bold uppercase tracking-widest text-gray-500 group-hover:text-primary-accent transition-colors">Minecraft Marketplace</span>
+                                        <span className="text-sm font-bold uppercase tracking-widest text-gray-500 group-hover:text-primary-accent transition-colors">{t('works_page.marketplace_btn')}</span>
                                     </a>
                                 </div>
                             </div>
@@ -1594,17 +2237,17 @@
 
                         <footer className="border-t border-[#e5e5e5] dark:border-gray-800 bg-white dark:bg-background-dark py-16 md:py-24">
                             <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-24 flex flex-col items-center text-center gap-10">
-                                <h2 className="text-3xl md:text-5xl font-bold text-text-dark dark:text-white tracking-tight">Have an idea?</h2>
+                                <h2 className="text-3xl md:text-5xl font-bold text-text-dark dark:text-white tracking-tight">{t('works_page.footer_title')}</h2>
                                 <Link to="/contact" className="inline-flex items-center gap-2 text-primary-accent hover:text-primary-accent/80 transition-colors text-xl md:text-2xl font-bold border-b-2 border-primary-accent pb-1">
-                                    Start a project
+                                    {t('works_page.start_project')}
                                     <span className="material-symbols-outlined text-[28px]">arrow_outward</span>
                                 </Link>
                                 <div className="flex flex-col md:flex-row items-center justify-between w-full pt-10 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-500">
-                                    <p>© 2026 Eco Studios. All rights reserved.</p>
+                                    <p>{t('works_page.all_rights_reserved')}</p>
                                     <div className="flex gap-6 mt-4 md:mt-0">
-                                        <a className="hover:text-primary-accent" href="#">Privacy</a>
-                                        <a className="hover:text-primary-accent" href="#">Terms</a>
-                                        <Link className="hover:text-primary-accent" to="/design" aria-label="Brand & Design Guidelines">Brand & Design</Link>
+                                        <a className="hover:text-primary-accent" href="#">{t('works_page.privacy')}</a>
+                                        <a className="hover:text-primary-accent" href="#">{t('works_page.terms')}</a>
+                                        <Link className="hover:text-primary-accent" to="/design" aria-label={t('works_page.brand_guidelines')}>{t('works_page.brand_guidelines')}</Link>
                                     </div>
                                 </div>
                             </div>
@@ -1650,6 +2293,7 @@
 
         const SuccessPageComp = () => {
             const navigate = useNavigate();
+            const { t } = useLanguage();
             return (
                 <Layout>
                     <div className="font-manrope bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden flex flex-col min-h-screen">
@@ -1666,19 +2310,19 @@
                                     <span className="material-symbols-outlined text-4xl">check</span>
                                 </div>
                                 <h1 className="text-white text-6xl md:text-8xl lg:text-9xl font-extrabold lowercase tracking-tighter mb-6 drop-shadow-lg leading-none">
-                                    thank you!
+                                    {t('success_page.title')}
                                 </h1>
                                 <p className="text-white/90 text-lg md:text-xl font-medium leading-relaxed max-w-lg mx-auto mb-10 antialiased">
-                                    We've received your inquiry. One of our creative directors will be in touch within 24 hours.
+                                    {t('success_page.message')}
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
                                     <button onClick={() => navigate('/')} className="group relative flex min-w-[200px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-8 border-2 border-white/30 hover:border-white hover:bg-white transition-all duration-300 text-white hover:text-primary-accent text-base font-bold tracking-[0.015em]">
-                                        <span className="truncate group-hover:translate-x-1 transition-transform">Back to Home</span>
+                                        <span className="truncate group-hover:translate-x-1 transition-transform">{t('success_page.back_home')}</span>
                                         <span className="material-symbols-outlined ml-2 text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
                                     </button>
                                 </div>
                                 <div className="mt-16 text-white/50 text-sm">
-                                    <p>While you wait, explore our <Link to="/works" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white transition-all">Case Studies</Link></p>
+                                    <p>{t('success_page.explore_text')} <Link to="/works" className="text-white underline decoration-white/30 underline-offset-4 hover:decoration-white transition-all">{t('success_page.case_studies')}</Link></p>
                                 </div>
                             </div>
                         </main>
@@ -1689,6 +2333,7 @@
         const SuccessPage = React.memo(SuccessPageComp);
 
         const StudioComp = () => {
+            const { t } = useLanguage();
             return (
                 <Layout>
                     <div className="bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden font-manrope">
@@ -1696,37 +2341,39 @@
                             <section className="relative w-full min-h-[70vh] flex items-center justify-center bg-background-light dark:bg-background-dark overflow-hidden px-6">
                                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-blue-200/20 dark:bg-primary-accent/10 rounded-full blur-[100px] fluid-shape pointer-events-none" style={{ animationDuration: "25s" }}></div>
                                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-pink-200/30 dark:bg-pink-500/10 rounded-full blur-[120px] fluid-shape pointer-events-none" style={{ animationDelay: "-8s", animationDuration: "30s" }}></div>
-                                <h1 className="relative z-10 text-[13vw] md:text-[15vw] lg:text-[16vw] font-black leading-none tracking-[-0.06em] text-[#121118] dark:text-white text-center select-none pointer-events-none">
-                                    we are<br />eco studios.
+                                <h1
+                                    className="relative z-10 text-[13vw] md:text-[15vw] lg:text-[16vw] font-black leading-none tracking-[-0.06em] text-[#121118] dark:text-white text-center select-none pointer-events-none"
+                                    dangerouslySetInnerHTML={{ __html: t('studio_page.hero_title') }}
+                                >
                                 </h1>
                             </section>
 
                             <section className="flex flex-col lg:flex-row w-full bg-white dark:bg-[#1e1a32]">
                                 <div className="flex-1 px-8 py-20 lg:px-24 lg:py-32 flex flex-col justify-center border-r border-[#f1f0f4] dark:border-white/5">
                                     <div className="max-w-xl">
-                                        <span className="inline-block mb-6 text-sm font-bold uppercase tracking-widest text-primary-accent">The Studio</span>
+                                        <span className="inline-block mb-6 text-sm font-bold uppercase tracking-widest text-primary-accent">{t('studio_page.about_label')}</span>
                                         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-[1.1] mb-8 text-[#121118] dark:text-white tracking-[-0.02em]">
-                                            Building worlds, block by block, pixel by pixel.
+                                            {t('studio_page.about_title')}
                                         </h2>
                                         <div className="space-y-6 text-lg md:text-xl text-[#696388] dark:text-[#a09cb0] leading-relaxed">
                                             <p>
-                                                We are a team of passionate creators dedicated to pushing the boundaries of what's possible in Minecraft and game development. Our love for gaming isn't just a hobby; it's the fuel that drives us to craft immersive experiences, intricate maps, and engaging gameplay mechanics that resonate with players worldwide.
+                                                {t('studio_page.about_p1')}
                                             </p>
                                             <p>
-                                                From the sandbox freedom of Minecraft to the broader universe of game design, we pour our hearts into every project. We don't just build levels; we create memories, fostering communities and sparking imagination through the games we love and the worlds we bring to life.
+                                                {t('studio_page.about_p2')}
                                             </p>
                                             <p>
-                                                Eco Studios joined as an Official Minecraft Partner in late 2021.
+                                                {t('studio_page.about_p3')}
                                             </p>
                                         </div>
-                                        <div className="mt-10 flex items-center gap-1 transition-all duration-500">
-                                            <img src="https://i.imgur.com/Nmbkaoa.png" alt="Official Minecraft Partner" className="h-20 w-auto object-contain mix-blend-multiply dark:mix-blend-normal" />
-                                            <img src="https://i.imgur.com/FMXutf9.png" alt="1 Million Players Badge" className="h-[104px] w-auto object-contain mix-blend-multiply dark:mix-blend-normal" />
+                                        <div className="mt-10 flex items-center gap-6 transition-all duration-500">
+                                            <img src="https://i.imgur.com/Nmbkaoa.png" alt={t('studio_page.alts.minecraft_partner')} className="h-20 w-auto object-contain mix-blend-multiply dark:mix-blend-normal" />
+                                            <img src="MILLION.png" alt={t('studio_page.alts.eco_badge')} className="h-20 w-auto object-contain mix-blend-multiply dark:mix-blend-normal" />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="flex-1 min-h-[500px] lg:min-h-auto relative overflow-hidden group">
-                                    <img alt="Creative team collaborating in a modern studio" className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-100 group-hover:scale-105" src="https://i.imgur.com/PJ0fOIR.png" />
+                                    <img alt={t('studio_page.alts.team_img')} className="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-in-out scale-100 group-hover:scale-105" src="https://i.imgur.com/PJ0fOIR.png" />
                                     <div className="absolute inset-0 bg-primary-accent/10 mix-blend-multiply pointer-events-none"></div>
                                 </div>
                             </section>
@@ -1736,20 +2383,20 @@
                             <section className="py-24 px-8 lg:px-24 bg-background-light dark:bg-background-dark relative">
                                 <div className="max-w-screen-2xl mx-auto">
                                     <div className="mb-20 flex items-end justify-between border-b border-[#121118]/10 dark:border-white/10 pb-8">
-                                        <h2 className="text-6xl md:text-8xl font-black tracking-[-0.04em] text-[#121118] dark:text-white lowercase">our team</h2>
+                                        <h2 className="text-6xl md:text-8xl font-black tracking-[-0.04em] text-[#121118] dark:text-white lowercase">{t('studio_page.team_title')}</h2>
                                         <p className="hidden md:block text-[#696388] dark:text-[#a09cb0] max-w-xs text-right mb-2">
-                                            A multidisciplinary group of thinkers, makers, and explorers.
+                                            {t('studio_page.team_subtitle')}
                                         </p>
                                     </div>
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-16 gap-x-8">
                                         {[
-                                            { name: 'Leonardo Oliveira', role: 'Executive Director (CEO)' },
-                                            { name: 'Guilherry Pereira', role: 'Lead Developer' },
-                                            { name: 'Geraldo Manoel', role: 'Lead Designer' },
-                                            { name: 'Lucas Novossade', role: '3D Designer' },
-                                            { name: 'Daniel Calazans', role: 'Level Designer' },
-                                            { name: 'Lucas de Lima', role: 'Developer' },
-                                            { name: 'David Predro', role: 'Level Designer' }
+                                            { name: 'Leonardo Oliveira', role: t('studio_page.roles.ceo') },
+                                            { name: 'Guilherry Pereira', role: t('studio_page.roles.lead_developer') },
+                                            { name: 'Geraldo Manoel', role: t('studio_page.roles.lead_designer') },
+                                            { name: 'Lucas Novossade', role: t('studio_page.roles.designer_3d') },
+                                            { name: 'Daniel Calazans', role: t('studio_page.roles.level_designer') },
+                                            { name: 'Lucas de Lima', role: t('studio_page.roles.developer') },
+                                            { name: 'David Predro', role: t('studio_page.roles.level_designer') }
                                         ].map((member, i) => (
                                             <div key={i} className="group cursor-default">
                                                 <div className="mb-4 overflow-hidden">
@@ -1766,13 +2413,13 @@
                                                 <div className="mb-4 overflow-hidden">
                                                     <h3 className="text-4xl font-bold text-[#121118] dark:text-white group-hover:text-primary-accent transition-colors">+10</h3>
                                                     <p className="text-lg text-[#696388] dark:text-[#a09cb0] mt-1">
-                                                        More members
+                                                        {t('studio_page.more_members')}
                                                     </p>
                                                 </div>
                                                 <div className="w-full h-px bg-[#121118]/10 dark:bg-white/10 group-hover:bg-primary-accent transition-all duration-500 origin-left mb-4"></div>
                                             </div>
                                             <Link to="/contact" className="inline-flex items-center gap-2 text-primary-accent font-bold hover:gap-4 transition-all">
-                                                Join us
+                                                {t('studio_page.join_us')}
                                                 <span className="material-symbols-outlined">arrow_forward</span>
                                             </Link>
                                         </div>
@@ -1787,6 +2434,7 @@
         const Studio = React.memo(StudioComp);
 
         const DesignGuidelines = () => {
+            const { t } = useLanguage();
             const navigate = useNavigate();
             useEffect(function () {
                 document.title = 'eco studios — Brand & Design';
@@ -1808,23 +2456,23 @@
                                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-200/20 dark:bg-primary-accent/10 rounded-full blur-[100px] fluid-shape pointer-events-none" style={{ animationDuration: "25s" }}></div>
                                 <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-pink-200/30 dark:bg-pink-500/10 rounded-full blur-[120px] fluid-shape pointer-events-none" style={{ animationDelay: "-8s", animationDuration: "30s" }}></div>
                                 <div className="relative z-10 max-w-screen-lg text-center">
-                                    <span className="inline-block mb-4 text-xs font-bold uppercase tracking-widest text-primary-accent rounded-full px-3 py-1 bg-white/70 dark:bg-white/10 border border-white/40 dark:border-white/10">Guidelines</span>
-                                    <h1 className="text-4xl md:text-6xl font-black tracking-[-0.03em] text-[#121118] dark:text-white">Brand & Design System</h1>
-                                    <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-lg">Identity, components and usage rules aligned to Education, Games & Creativity.</p>
+                                    <span className="inline-block mb-4 text-xs font-bold uppercase tracking-widest text-primary-accent rounded-full px-3 py-1 bg-white/70 dark:bg-white/10 border border-white/40 dark:border-white/10">{t('design_guidelines.label')}</span>
+                                    <h1 className="text-4xl md:text-6xl font-black tracking-[-0.03em] text-[#121118] dark:text-white">{t('design_guidelines.title')}</h1>
+                                    <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-lg">{t('design_guidelines.subtitle')}</p>
                                 </div>
                             </section>
                             <section className="px-6 lg:px-24 py-12 lg:py-16 bg-white dark:bg-[#1e1a32]">
                                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                     <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
-                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">Logo</h2>
+                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">{t('design_guidelines.sections.logo.title')}</h2>
                                         <div className="flex items-center gap-4">
                                             <div className="w-24 h-24 rounded-lg bg-primary-accent/10 border border-primary-accent flex items-center justify-center text-primary-accent font-bold">eco</div>
                                             <div className="w-14 h-14 rounded-lg bg-primary-accent/10 border border-primary-accent flex items-center justify-center text-primary-accent font-bold">e</div>
                                         </div>
-                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">Use primary logo in high-contrast contexts. Icon-only for compact spaces.</p>
+                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">{t('design_guidelines.sections.logo.desc')}</p>
                                     </div>
                                     <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
-                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">Colors</h2>
+                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">{t('design_guidelines.sections.colors.title')}</h2>
                                         <div className="grid grid-cols-5 gap-3">
                                             <div className="h-10 rounded bg-primary-accent" title="primary-accent"></div>
                                             <div className="h-10 rounded bg-waaark-blue" title="waaark-blue"></div>
@@ -1832,34 +2480,32 @@
                                             <div className="h-10 rounded bg-background-light border border-[#f1f0f4]" title="background-light"></div>
                                             <div className="h-10 rounded bg-background-dark" title="background-dark"></div>
                                         </div>
-                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">Respect theme tokens and contrast requirements.</p>
+                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">{t('design_guidelines.sections.colors.desc')}</p>
                                     </div>
                                     <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
-                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">Typography</h2>
+                                        <h2 className="text-xl font-bold text-[#121118] dark:text-white mb-3">{t('design_guidelines.sections.typography.title')}</h2>
                                         <p className="text-2xl font-display text-[#121118] dark:text-white">Poppins Aa</p>
                                         <p className="text-lg manrope text-[#696388] dark:text-[#a09cb0]">Manrope Bb</p>
-                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">Use existing scale and families across UI.</p>
+                                        <p className="mt-4 text-[#696388] dark:text-[#a09cb0] text-sm">{t('design_guidelines.sections.typography.desc')}</p>
                                     </div>
                                 </div>
                             </section>
                             <section className="px-6 lg:px-24 py-12 bg-background-light dark:bg-background-dark">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                     <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
-                                        <h3 className="text-lg font-bold text-[#121118] dark:text-white mb-3">Usage Rules</h3>
+                                        <h3 className="text-lg font-bold text-[#121118] dark:text-white mb-3">{t('design_guidelines.sections.usage.title')}</h3>
                                         <ul className="space-y-2 text-[#696388] dark:text-[#a09cb0] text-sm">
-                                            <li>Keep clear space around the logo.</li>
-                                            <li>Use official colors and original proportions.</li>
-                                            <li>Do not alter, distort or apply effects.</li>
-                                            <li>Ensure sufficient contrast on all backgrounds.</li>
+                                            {(Array.isArray(t('design_guidelines.sections.usage.rules')) ? t('design_guidelines.sections.usage.rules') : []).map((rule, idx) => (
+                                                <li key={idx}>{rule}</li>
+                                            ))}
                                         </ul>
                                     </div>
                                     <div className="p-6 rounded-xl border border-[#f1f0f4] dark:border-white/10 bg-white dark:bg-[#141121]/60">
-                                        <h3 className="text-lg font-bold text-[#121118] dark:text-white mb-3">Accessibility</h3>
+                                        <h3 className="text-lg font-bold text-[#121118] dark:text-white mb-3">{t('design_guidelines.sections.accessibility.title')}</h3>
                                         <ul className="space-y-2 text-[#696388] dark:text-[#a09cb0] text-sm">
-                                            <li>Keyboard navigable components.</li>
-                                            <li>ARIA roles and labels where appropriate.</li>
-                                            <li>WCAG 2.1 AA color contrast.</li>
-                                            <li>Meaningful headings hierarchy.</li>
+                                            {(Array.isArray(t('design_guidelines.sections.accessibility.items')) ? t('design_guidelines.sections.accessibility.items') : []).map((item, idx) => (
+                                                <li key={idx}>{item}</li>
+                                            ))}
                                         </ul>
                                     </div>
                                 </div>
@@ -1867,11 +2513,11 @@
                             <section className="px-6 lg:px-24 py-12 bg-white dark:bg-[#1e1a32]">
                                 <div className="max-w-screen-lg mx-auto flex items-center justify-between">
                                     <div>
-                                        <p className="text-sm text-[#696388] dark:text-[#a09cb0]">Looking for assets or badges?</p>
-                                        <p className="text-sm text-[#696388] dark:text-[#a09cb0]">Contact us for additional resources.</p>
+                                        <p className="text-sm text-[#696388] dark:text-[#a09cb0]">{t('design_guidelines.footer.assets_text')}</p>
+                                        <p className="text-sm text-[#696388] dark:text-[#a09cb0]">{t('design_guidelines.footer.contact_text')}</p>
                                     </div>
                                     <button onClick={function () { navigate('/'); }} className="group flex items-center gap-2 text-primary-accent font-bold hover:gap-3 transition-all">
-                                        Back to Home
+                                        {t('design_guidelines.footer.back_home')}
                                         <span className="material-symbols-outlined">arrow_forward</span>
                                     </button>
                                 </div>
@@ -1889,6 +2535,7 @@
         const supabaseClient = (window.supabase && SUPABASE_URL.includes("http")) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
         const Contact = () => {
+            const { t } = useLanguage();
             const navigate = useNavigate();
             const [name, setName] = useState('');
             const [email, setEmail] = useState('');
@@ -1927,11 +2574,11 @@
                 const sanitizedEmail = sanitizeString(email);
                 const sanitizedDetails = sanitizeString(details);
                 const nextErrors = {};
-                if (!validateName(sanitizedName)) nextErrors.name = 'Informe um nome válido (mín. 2 caracteres).';
-                if (!validateEmail(sanitizedEmail)) nextErrors.email = 'Informe um e-mail válido.';
-                if (selectedServices.length === 0) nextErrors.services = 'Selecione pelo menos um serviço.';
-                if (!budget) nextErrors.budget = 'Selecione um orçamento.';
-                if (!sanitizedDetails) nextErrors.details = 'Descreva seu projeto.';
+                if (!validateName(sanitizedName)) nextErrors.name = t('contact_page.errors.name');
+                if (!validateEmail(sanitizedEmail)) nextErrors.email = t('contact_page.errors.email');
+                if (selectedServices.length === 0) nextErrors.services = t('contact_page.errors.services');
+                if (!budget) nextErrors.budget = t('contact_page.errors.budget');
+                if (!sanitizedDetails) nextErrors.details = t('contact_page.errors.details');
 
                 // Calendar validation removed since Discovery Call is unavailable
                 // if (isDisabledDay(calYear, calMonth, calDay)) nextErrors.date = 'Selecione uma data válida (sem domingos e sem datas passadas).';
@@ -1969,9 +2616,9 @@
                         console.error('Erro ao salvar no Supabase:', err);
                         setIsSubmitting(false);
                         if (err.code === '401' || (err.message && err.message.includes('row-level security'))) {
-                            alert("Erro de permissão (RLS). Vá no painel do Supabase > Table Editor > contacts > Clique em 'No active RLS policies' (ou no cadeado) > Disable RLS. Isso é necessário para testes públicos.");
+                            alert(t('contact_page.alerts.rls_error'));
                         } else {
-                            alert("Ocorreu um erro ao salvar seu contato. Detalhes no console.");
+                            alert(t('contact_page.alerts.save_error'));
                         }
                         return;
                     }
@@ -2004,11 +2651,11 @@
                         navigate('/success');
                     } else {
                         console.error("Erro no envio:", response.statusText);
-                        alert("Houve um erro ao enviar sua mensagem. Por favor, tente novamente.");
+                        alert(t('contact_page.alerts.send_error'));
                     }
                 } catch (error) {
                     console.error("Erro de rede:", error);
-                    alert("Erro de conexão. Verifique sua internet.");
+                    alert(t('contact_page.alerts.connection_error'));
                 }
                 */
 
@@ -2042,8 +2689,8 @@
                     : `${base} border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 bg-white dark:bg-white/5 hover:border-primary-accent hover:text-primary-accent hover:bg-gray-50 dark:hover:bg-white/10`;
             }
             // Calendar helpers
-            const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+            const MONTHS = t('calendar.months');
+            const WEEKDAYS = t('calendar.weekdays');
             function isLeapYear(y) { return (y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0); }
             function daysInMonth(y, m) { return m === 1 ? (isLeapYear(y) ? 29 : 28) : [31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m] !== -1 ? [31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m] : (isLeapYear(y) ? 29 : 28); }
             function firstDayOffset(y, m) { var d = new Date(y, m, 1).getDay(); return (d + 6) % 7; } // Monday-based
@@ -2056,13 +2703,13 @@
                 setCalYear(y); setCalMonth(m); setCalDay(d); setCalError('');
             }
             function setMonthDirect(m) {
-                if (m < 0 || m > 11) { setCalError('Invalid month'); return; }
+                if (m < 0 || m > 11) { setCalError(t('calendar.errors.invalid_month')); return; }
                 var d = clampDay(calYear, m, calDay);
                 setCalMonth(m); setCalDay(d); setCalError('');
             }
             function setYearDirect(v) {
                 var y = parseInt(v, 10);
-                if (isNaN(y) || y < 1900 || y > 2100) { setCalError('Informe um ano válido entre 1900 e 2100.'); return; }
+                if (isNaN(y) || y < 1900 || y > 2100) { setCalError(t('calendar.errors.invalid_year')); return; }
                 var d = clampDay(y, calMonth, calDay);
                 setCalYear(y); setCalDay(d); setCalError('');
             }
@@ -2083,7 +2730,7 @@
                 if (d > dim) { changeMonth(1); setCalDay(1); return; }
                 setCalDay(d);
             }
-            function selectDay(d) { if (isDisabledDay(calYear, calMonth, d)) { setCalError('Data indisponível'); return; } setCalDay(d); setSelectedTime(''); setCalError(''); }
+            function selectDay(d) { if (isDisabledDay(calYear, calMonth, d)) { setCalError(t('calendar.errors.unavailable_date')); return; } setCalDay(d); setSelectedTime(''); setCalError(''); }
             function getTimesForSelected() {
                 return ['09:30 AM', '11:00 AM', '02:15 PM'];
             }
@@ -2105,17 +2752,17 @@
                             <div className="flex-1 flex flex-col justify-center px-6 py-12 lg:px-20 xl:px-32 bg-white dark:bg-background-dark relative overflow-hidden">
                                 <div className="max-w-lg w-full mx-auto z-10">
                                     <div className="mb-10">
-                                        <p className="text-[#121118] dark:text-white text-5xl lg:text-6xl font-black leading-[0.9] tracking-[-0.033em] mb-4">let's talk</p>
+                                        <p className="text-[#121118] dark:text-white text-5xl lg:text-6xl font-black leading-[0.9] tracking-[-0.033em] mb-4">{t('contact_page.lets_talk')}</p>
                                         <p className="text-[#696388] dark:text-[#a09cb0] text-lg font-normal leading-relaxed">
-                                            Have an idea? We'd love to help you build it. Fill out the form or <a className="text-primary-accent hover:underline lg:hidden" href="#booking">book a call</a>.
+                                            {t('contact_page.subtitle_prefix')} <a className="text-primary-accent hover:underline lg:hidden" href="#booking">{t('contact_page.subtitle_link')}</a>.
                                         </p>
                                     </div>
                                     <form className="flex flex-col gap-8" onSubmit={handleSubmit} noValidate>
                                         <label className="group block">
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Name <span className="text-red-500">*</span></span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">{t('contact_page.name')} <span className="text-red-500">*</span></span>
                                             <input
                                                 className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
-                                                placeholder="Jane Doe"
+                                                placeholder={t('contact_page.placeholders.name')}
                                                 type="text"
                                                 autoComplete="name"
                                                 value={name}
@@ -2128,10 +2775,10 @@
                                             )}
                                         </label>
                                         <label className="group block">
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Email <span className="text-red-500">*</span></span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">{t('contact_page.email')} <span className="text-red-500">*</span></span>
                                             <input
                                                 className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none"
-                                                placeholder="jane@example.com"
+                                                placeholder={t('contact_page.placeholders.email')}
                                                 type="email"
                                                 autoComplete="email"
                                                 value={email}
@@ -2144,27 +2791,27 @@
                                             )}
                                         </label>
                                         <div>
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">What services are you interested in? <span className="text-red-500">*</span></span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">{t('contact_page.services_label')} <span className="text-red-500">*</span></span>
                                             <div className="flex flex-wrap gap-3">
                                                 {serviceOptions.map((s) => (
                                                     <button key={s} type="button" onClick={() => toggleService(s)} className={chipClasses(isServiceSelected(s))}>
-                                                        {s}
+                                                        {t(`contact_page.service_options.${s}`) || s}
                                                     </button>
                                                 ))}
-                                                <button type="button" onClick={() => toggleService('All')} className={chipClasses(isServiceSelected('All'))}>All</button>
+                                                <button type="button" onClick={() => toggleService('All')} className={chipClasses(isServiceSelected('All'))}>{t('contact_page.service_options.All')}</button>
                                             </div>
                                             {errors.services && (
                                                 <span className="mt-2 text-sm text-red-600 block">{errors.services}</span>
                                             )}
                                         </div>
                                         <div>
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">Expected project budget? <span className="text-red-500">*</span></span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-3 block">{t('contact_page.budget_label')} <span className="text-red-500">*</span></span>
                                             <div className="flex flex-wrap gap-3">
                                                 {budgetOptions.map((b) => {
                                                     const selected = budget === b;
                                                     return (
                                                         <button key={b} type="button" onClick={() => setBudget(b)} className={chipClasses(selected)}>
-                                                            {b}
+                                                            {t(`contact_page.budget_options.${b}`) || b}
                                                         </button>
                                                     );
                                                 })}
@@ -2174,10 +2821,10 @@
                                             )}
                                         </div>
                                         <label className="group block">
-                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">Project details <span className="text-red-500">*</span></span>
+                                            <span className="text-[#696388] dark:text-[#a09cb0] text-sm font-medium mb-1 block">{t('contact_page.details_label')} <span className="text-red-500">*</span></span>
                                             <textarea
                                                 className="w-full bg-transparent border-0 border-b-2 border-[#dddce5] dark:border-white/20 px-0 py-3 text-lg text-[#121118] dark:text-white placeholder-gray-300 focus:ring-0 focus:border-primary-accent transition-colors rounded-none h-24 resize-none"
-                                                placeholder="Tell us about your project..."
+                                                placeholder={t('contact_page.details_placeholder')}
                                                 value={details}
                                                 onChange={(e) => setDetails(e.target.value)}
                                             />
@@ -2194,12 +2841,12 @@
                                             >
                                                 {isSubmitting ? (
                                                     <React.Fragment>
-                                                        Sending...
+                                                        {t('contact_page.sending_btn')}
                                                         <span className="animate-spin material-symbols-outlined text-lg">progress_activity</span>
                                                     </React.Fragment>
                                                 ) : (
                                                     <React.Fragment>
-                                                        Send Message
+                                                        {t('contact_page.send_btn')}
                                                         <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
                                                     </React.Fragment>
                                                 )}
@@ -2213,13 +2860,13 @@
                                 <div className="absolute inset-0 z-50 bg-background-light/80 dark:bg-[#1e1a32]/80 backdrop-blur-sm flex flex-col items-center justify-center text-center p-8">
                                     <div className="bg-white dark:bg-[#141121] p-6 rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 max-w-sm">
                                         <span className="material-symbols-outlined text-4xl text-gray-400 mb-4">event_busy</span>
-                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Unavailable</h3>
-                                        <p className="text-gray-600 dark:text-gray-400 mb-6">Discovery calls are currently unavailable. Please contact us via the form.</p>
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('contact_page.discovery.unavailable')}</h3>
+                                        <p className="text-gray-600 dark:text-gray-400 mb-6">{t('contact_page.discovery.unavailable_desc')}</p>
 
                                         <div className="border-t border-gray-200 dark:border-white/10 pt-4 mt-2">
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Looking for help with a Marketplace World or Add-On?</p>
+                                            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{t('contact_page.discovery.help_marketplace')}</p>
                                             <a href="https://discord.gg/gtwMDfCM7n" target="_blank" rel="noopener noreferrer" className="text-primary-accent hover:underline text-sm font-semibold flex items-center justify-center gap-1">
-                                                Join our Discord to open a ticket
+                                                {t('contact_page.discovery.discord_btn')}
                                                 <span className="material-symbols-outlined text-sm">open_in_new</span>
                                             </a>
                                         </div>
@@ -2234,10 +2881,10 @@
                                 <div className="relative z-10 w-full max-w-md mx-auto">
                                     <div className="mb-8 text-center lg:text-left">
                                         <span className="inline-block py-1 px-3 rounded-full bg-white/60 dark:bg-white/10 backdrop-blur-sm border border-white/40 dark:border-white/5 text-xs font-bold uppercase tracking-wider text-primary-accent mb-3 shadow-sm">
-                                            Discovery Call
+                                            {t('contact_page.discovery.tag')}
                                         </span>
-                                        <h2 className="text-3xl lg:text-4xl font-bold text-[#121118] dark:text-white mb-2">Ready to start?</h2>
-                                        <p className="text-[#696388] dark:text-[#a09cb0]">Book a 15-min discovery call directly.</p>
+                                        <h2 className="text-3xl lg:text-4xl font-bold text-[#121118] dark:text-white mb-2">{t('contact_page.discovery.title')}</h2>
+                                        <p className="text-[#696388] dark:text-[#a09cb0]">{t('contact_page.discovery.desc')}</p>
                                     </div>
 
                                     <div className="bg-white/70 dark:bg-[#141121]/80 backdrop-blur-xl rounded-xl shadow-xl border border-white/50 dark:border-white/5 overflow-hidden p-6">
@@ -2254,13 +2901,13 @@
                                         </div>
                                         <div className="flex items-center gap-3 mb-4">
                                             <label className="flex items-center gap-2 text-xs text-[#696388] dark:text-[#a09cb0]">
-                                                <span>Month</span>
+                                                <span>{t('calendar.month_label')}</span>
                                                 <select value={calMonth} onChange={(e) => setMonthDirect(parseInt(e.target.value, 10))} className="text-sm px-2 py-1 rounded border border-[#dddce5] dark:border-white/10 bg-white/70 dark:bg-transparent">
                                                     {MONTHS.map(function (m, i) { return <option key={i} value={i}>{m}</option>; })}
                                                 </select>
                                             </label>
                                             <label className="flex items-center gap-2 text-xs text-[#696388] dark:text-[#a09cb0]">
-                                                <span>Year</span>
+                                                <span>{t('calendar.year_label')}</span>
                                                 <input type="number" min="1900" max="2100" value={calYear} onChange={(e) => setYearDirect(e.target.value)} className="text-sm px-2 py-1 rounded border border-[#dddce5] dark:border-white/10 bg-white/70 dark:bg-transparent w-[90px]" />
                                             </label>
                                             {calError && <span className="text-red-600 text-xs">{calError}</span>}
@@ -2291,7 +2938,7 @@
                                             })}
                                         </div>
                                         <div className="border-t border-gray-100 dark:border-white/10 pt-5">
-                                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-3">Available times on {MONTHS[calMonth].slice(0, 3)} {calDay}</p>
+                                            <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-3">{t('calendar.available_times')} {MONTHS[calMonth].slice(0, 3)} {calDay}</p>
                                             <div className="flex flex-wrap gap-2">
                                                 {getTimesForSelected().map(function (t) {
                                                     return (
@@ -2440,6 +3087,7 @@
         const SayHello = () => {
             const words = ['Hello', 'Hola', 'Bonjour', 'Olá', 'Ciao'];
             const [index, setIndex] = useState(0);
+            const { t } = useLanguage();
 
             useEffect(() => {
                 const interval = setInterval(() => {
@@ -2455,7 +3103,7 @@
 
                     {/* Main Title Animation */}
                     <h1 className="text-6xl lg:text-9xl font-bold tracking-tighter flex items-center justify-center gap-3 lg:gap-6 select-none z-10 w-full text-center">
-                        <span className="font-sans text-black">Say</span>
+                        <span className="font-sans text-black">{t('say_hello.static')}</span>
                         <div className="relative h-[1.3em] w-[300px] lg:w-[550px] overflow-hidden flex items-center text-left">
                             {words.map((word, i) => {
                                 let positionClass = 'translate-y-full opacity-0';
@@ -2481,10 +3129,8 @@
                     {/* Spiral Arrow SVG */}
                     <div className="my-8 lg:my-12 animate-bounce-slow opacity-100 relative left-0">
                         <svg width="60" height="120" viewBox="0 0 60 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-black transform rotate-0">
-                            {/* Spiral/Coil Arrow - Smoother transition to straight end */}
-                            <path d="M30 0 Q 55 15, 30 30 Q 5 45, 30 60 C 60 80, 30 90, 30 115" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-                            {/* Sharp, straight arrowhead aligned with flow */}
-                            <path d="M 22 103 L 30 115 L 38 103" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                            {/* Spiral Arrow SVG */}
+                            <path d="M 30 10 C 50 20, 50 50, 30 60 C 10 70, 30 90, 30 110 M 20 100 L 30 110 L 40 100" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
                         </svg>
                     </div>
 
@@ -2493,7 +3139,7 @@
                         href="#/contact"
                         className="group relative inline-flex items-center justify-center px-8 py-4 bg-black text-white font-bold uppercase tracking-widest text-sm hover:bg-blue-600 transition-all duration-300 rounded-full hover:scale-105"
                     >
-                        Start a Project
+                        {t('say_hello.cta')}
                         <span className="material-symbols-outlined ml-2 group-hover:rotate-45 transition-transform duration-300">arrow_outward</span>
                     </a>
 
@@ -2551,6 +3197,7 @@
             const [selectedService, setSelectedService] = useState(null);
             const [isModalOpen, setIsModalOpen] = useState(false);
             const [isProcessing, setIsProcessing] = useState(false);
+            const { t } = useLanguage();
 
             useEffect(() => {
                 document.title = 'eco studios — Services';
@@ -2583,8 +3230,12 @@
                     console.log(`[Services] Processing click for: ${serviceKey}`);
                     setIsProcessing(true);
 
+                    // Merge static data (images, id) with translated data (text)
+                    const staticData = SERVICE_DETAILS[serviceKey];
+                    const translatedData = t(`service_details.${serviceKey}`);
+
                     // Add a small delay to state update if needed, or just immediate
-                    setSelectedService(SERVICE_DETAILS[serviceKey]);
+                    setSelectedService({ ...staticData, ...translatedData });
                     setIsModalOpen(true);
 
                     // Lock interactions briefly to prevent accidental double-triggers
@@ -2615,61 +3266,61 @@
                     <div className="bg-white text-black min-h-screen font-sans">
                         {/* Main Content */}
                         <main className="w-full min-h-screen flex flex-col pt-24 lg:pt-16">
-                            <div className="flex flex-col lg:flex-row w-full h-full flex-grow relative px-4 lg:px-12 gap-4 lg:gap-0">
+                            <div className="flex flex-col lg:flex-row w-full h-full flex-grow relative px-4 lg:px-12 gap-4">
                                 {/* Decorative Top Line Container to clip tabs if needed, or just let them overflow */}
 
                                 {/* Column 1 - Educacional */}
                                 <article
                                     onClick={() => openModal('educational')}
-                                    className="group relative border border-gray-200 lg:border-0 lg:border-r lg:last:border-r-0 border-gray-300 flex flex-col overflow-visible transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex-1 lg:hover:flex-[3] min-w-0 bg-white hover:bg-[#dbeafe] cursor-pointer active:scale-[0.98] active:bg-blue-50 pt-6 lg:pt-0 shadow-sm lg:shadow-none rounded-lg lg:rounded-none"
+                                    className="group relative border-2 border-dashed border-gray-300 flex flex-col overflow-visible transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex-1 lg:hover:flex-[3] min-w-0 bg-white hover:bg-[#dbeafe] cursor-pointer active:scale-[0.98] active:bg-blue-50 pt-6 lg:pt-0 shadow-none rounded-3xl"
                                 >
                                     {/* Black Tab "Square" */}
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-3 bg-black z-20 transition-all duration-[800ms] group-hover:w-24 group-hover:h-4 group-hover:-top-4 rounded-t-sm"></div>
 
                                     <div className="p-8 lg:p-12 flex flex-col h-full min-w-[320px]">
                                         <div className="mb-6">
-                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Learning</span>
+                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">{t('service_details.educational.tag')}</span>
                                         </div>
                                         <h2 className="text-3xl md:text-4xl font-unbounded font-black uppercase mb-6 leading-none tracking-tight whitespace-nowrap group-hover:text-[#172554] transition-colors duration-[800ms]">
-                                            Educational
+                                            {t('service_details.educational.title')}
                                         </h2>
                                         <p className="text-sm md:text-base text-gray-800 group-hover:text-[#1e40af] leading-relaxed mb-12 max-w-sm font-medium transition-colors duration-[800ms]">
-                                            We transform learning with immersive experiences. Historical maps, interactive lessons, and gamification for schools and museums.
+                                            {t('service_details.educational.description')}
                                         </p>
                                         <div className="mt-auto flex justify-center items-center w-full relative h-[400px] lg:h-[600px]">
                                             <span className="absolute z-10 font-bold text-xs tracking-widest uppercase pointer-events-none mix-blend-multiply opacity-80 text-black group-hover:text-[#172554]/10 group-hover:mix-blend-normal transition-colors duration-[800ms]" style={{ top: '50%', left: '10%' }}>
                                                 ECO STUDIOS.
                                             </span>
-                                            <img alt="Minecraft Alex Character Example" className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/zaZjR5F.png" />
+                                            <img alt={t('service_details.alts.educational')} className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/zaZjR5F.png" />
                                         </div>
                                     </div>
 
                                     {/* Mobile Tap Hint */}
                                     <div className="absolute bottom-4 right-4 lg:hidden opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span className="bg-black/10 text-black text-xs px-2 py-1 rounded">Tap to see more</span>
+                                        <span className="bg-black/10 text-black text-xs px-2 py-1 rounded">{t('tap_to_see_more')}</span>
                                     </div>
                                 </article>
 
                                 {/* Column 2 - Institucional */}
                                 <article
                                     onClick={() => openModal('institutional')}
-                                    className="group relative border border-gray-200 lg:border-0 lg:border-r lg:last:border-r-0 border-gray-300 flex flex-col overflow-visible transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex-1 lg:hover:flex-[3] min-w-0 bg-white hover:bg-[#dbeafe] cursor-pointer active:scale-[0.98] active:bg-blue-50 pt-6 lg:pt-0 shadow-sm lg:shadow-none rounded-lg lg:rounded-none"
+                                    className="group relative border-2 border-dashed border-gray-300 flex flex-col overflow-visible transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex-1 lg:hover:flex-[3] min-w-0 bg-white hover:bg-[#dbeafe] cursor-pointer active:scale-[0.98] active:bg-blue-50 pt-6 lg:pt-0 shadow-none rounded-3xl"
                                 >
                                     {/* Black Tab "Square" */}
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-3 bg-black z-20 transition-all duration-[800ms] group-hover:w-24 group-hover:h-4 group-hover:-top-4 rounded-t-sm"></div>
 
                                     <div className="p-8 lg:p-12 flex flex-col h-full min-w-[320px]">
                                         <div className="mb-6">
-                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Corporate</span>
+                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">{t('service_details.institutional.tag')}</span>
                                         </div>
                                         <h2 className="text-3xl md:text-4xl font-unbounded font-black uppercase mb-6 leading-none tracking-tight whitespace-nowrap group-hover:text-[#172554] transition-colors duration-[800ms]">
-                                            Institutional
+                                            {t('service_details.institutional.title')}
                                         </h2>
                                         <p className="text-sm md:text-base text-gray-800 group-hover:text-[#1e40af] leading-relaxed mb-12 max-w-sm font-medium transition-colors duration-[800ms]">
-                                            Take your brand to the block metaverse. Headquarters recreation, brand activations, and corporate events within the game.
+                                            {t('service_details.institutional.description')}
                                         </p>
                                         <div className="mt-auto flex justify-center items-center w-full h-[400px] lg:h-[600px]">
-                                            <img alt="Minecraft Alex Character Example" className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/pUFnQgw.png" />
+                                            <img alt={t('service_details.alts.institutional')} className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/pUFnQgw.png" />
                                         </div>
                                     </div>
                                 </article>
@@ -2677,23 +3328,23 @@
                                 {/* Column 3 - Servidores */}
                                 <article
                                     onClick={() => openModal('servers')}
-                                    className="group relative border border-gray-200 lg:border-0 lg:border-r lg:last:border-r-0 border-gray-300 flex flex-col overflow-visible transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex-1 lg:hover:flex-[3] min-w-0 bg-white hover:bg-[#dbeafe] cursor-pointer active:scale-[0.98] active:bg-blue-50 pt-6 lg:pt-0 shadow-sm lg:shadow-none rounded-lg lg:rounded-none"
+                                    className="group relative border-2 border-dashed border-gray-300 flex flex-col overflow-visible transition-all duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] lg:flex-1 lg:hover:flex-[3] min-w-0 bg-white hover:bg-[#dbeafe] cursor-pointer active:scale-[0.98] active:bg-blue-50 pt-6 lg:pt-0 shadow-none rounded-3xl"
                                 >
                                     {/* Black Tab "Square" */}
                                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-3 bg-black z-20 transition-all duration-[800ms] group-hover:w-24 group-hover:h-4 group-hover:-top-4 rounded-t-sm"></div>
 
                                     <div className="p-8 lg:p-12 flex flex-col h-full min-w-[320px]">
                                         <div className="mb-6">
-                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">Multiplayer</span>
+                                            <span className="inline-block bg-[#f0f0f0] group-hover:bg-white rounded-sm px-3 py-1 text-xs font-medium text-gray-600 group-hover:text-[#2563eb] transition-colors duration-[800ms] uppercase tracking-wider">{t('service_details.servers.tag')}</span>
                                         </div>
                                         <h2 className="text-3xl md:text-4xl font-unbounded font-black uppercase mb-6 leading-none tracking-tight whitespace-nowrap group-hover:text-[#172554] transition-colors duration-[800ms]">
-                                            Servers
+                                            {t('service_details.servers.title')}
                                         </h2>
                                         <p className="text-sm md:text-base text-gray-800 group-hover:text-[#1e40af] leading-relaxed mb-12 max-w-sm font-medium transition-colors duration-[800ms]">
-                                            Complete server development. Plugin configuration, lobby building, and custom minigames.
+                                            {t('service_details.servers.description')}
                                         </p>
                                         <div className="mt-auto flex justify-center items-center w-full h-[400px] lg:h-[600px]">
-                                            <img alt="Minecraft Alex Character Example" className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/oNHhTmH.png" />
+                                            <img alt={t('service_details.alts.servers')} className="w-full h-full object-contain transition-transform duration-[800ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05]" src="https://i.imgur.com/oNHhTmH.png" />
                                         </div>
                                     </div>
                                 </article>
@@ -2711,6 +3362,7 @@
         // --- App & Routing ---
 
         const AdminLogin = () => {
+            const { t } = useLanguage();
             const [email, setEmail] = useState('');
             const [password, setPassword] = useState('');
             const [loading, setLoading] = useState(false);
@@ -2727,7 +3379,7 @@
                     if (error) throw error;
                     navigate('/admin/dashboard');
                 } catch (error) {
-                    alert('Erro no login: ' + error.message);
+                    alert(t('admin.error') + error.message);
                 } finally {
                     setLoading(false);
                 }
@@ -2736,10 +3388,10 @@
             return (
                 <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-[#111827] px-4">
                     <div className="max-w-md w-full bg-white dark:bg-[#1e1a32] p-8 rounded-xl shadow-xl">
-                        <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">Admin Access</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">{t('admin.title')}</h2>
                         <form onSubmit={handleLogin} className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium mb-1 dark:text-gray-300">Email</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-gray-300">{t('admin.email')}</label>
                                 <input
                                     type="email"
                                     value={email}
@@ -2749,7 +3401,7 @@
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1 dark:text-gray-300">Password</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-gray-300">{t('admin.password')}</label>
                                 <input
                                     type="password"
                                     value={password}
@@ -2763,7 +3415,7 @@
                                 disabled={loading}
                                 className="w-full py-2 bg-primary-accent text-white rounded-lg font-bold hover:opacity-90 transition-opacity"
                             >
-                                {loading ? 'Checking...' : 'Login'}
+                                {loading ? t('admin.logging_in') : t('admin.login_btn')}
                             </button>
                         </form>
                     </div>
@@ -2772,6 +3424,7 @@
         };
 
         const AdminDashboard = () => {
+            const { t } = useLanguage();
             const [contacts, setContacts] = useState([]);
             const [loading, setLoading] = useState(true);
             const [selectedContact, setSelectedContact] = useState(null);
@@ -2798,14 +3451,14 @@
                     setContacts(data || []);
                 } catch (error) {
                     console.error('Error fetching contacts:', error);
-                    alert('Erro ao carregar contatos. Verifique se você está logado e se o RLS permite leitura.');
+                    alert(t('admin.fetch_error'));
                 } finally {
                     setLoading(false);
                 }
             }
 
             async function handleDelete(id) {
-                if (!confirm('Tem certeza que deseja excluir este contato?')) return;
+                if (!confirm(t('admin.confirm_delete'))) return;
                 try {
                     const { error } = await supabaseClient
                         .from('contacts')
@@ -2815,7 +3468,7 @@
                     setContacts(contacts.filter(c => c.id !== id));
                     if (selectedContact && selectedContact.id === id) setSelectedContact(null);
                 } catch (error) {
-                    alert('Erro ao excluir: ' + error.message);
+                    alert(t('admin.delete_error') + error.message);
                 }
             }
 
@@ -2824,16 +3477,16 @@
                 navigate('/admin');
             }
 
-            if (loading) return <div className="min-h-screen flex items-center justify-center text-white">Loading...</div>;
+            if (loading) return <div className="min-h-screen flex items-center justify-center text-white">{t('admin.loading')}</div>;
 
             return (
                 <div className="min-h-screen bg-gray-50 dark:bg-[#111827] p-8">
                     <div className="max-w-7xl mx-auto">
                         <div className="flex justify-between items-center mb-8">
-                            <h1 className="text-3xl font-bold dark:text-white">Form Submissions</h1>
+                            <h1 className="text-3xl font-bold dark:text-white">{t('admin.form_submissions')}</h1>
                             <div className="flex gap-4">
-                                <button onClick={() => navigate('/')} className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:underline">Go to Site</button>
-                                <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Logout</button>
+                                <button onClick={() => navigate('/')} className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:underline">{t('admin.go_to_site')}</button>
+                                <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">{t('admin.logout')}</button>
                             </div>
                         </div>
 
@@ -2842,13 +3495,13 @@
                                 <table className="w-full text-left">
                                     <thead className="bg-gray-100 dark:bg-black/20 text-gray-600 dark:text-gray-400 uppercase text-xs font-bold">
                                         <tr>
-                                            <th className="px-6 py-4">Date</th>
-                                            <th className="px-6 py-4">Name</th>
-                                            <th className="px-6 py-4">Email</th>
-                                            <th className="px-6 py-4">Services</th>
-                                            <th className="px-6 py-4">Budget</th>
-                                            <th className="px-6 py-4">Details</th>
-                                            <th className="px-6 py-4">Actions</th>
+                                            <th className="px-6 py-4">{t('admin.date')}</th>
+                                            <th className="px-6 py-4">{t('admin.name')}</th>
+                                            <th className="px-6 py-4">{t('admin.email')}</th>
+                                            <th className="px-6 py-4">{t('admin.services')}</th>
+                                            <th className="px-6 py-4">{t('admin.budget')}</th>
+                                            <th className="px-6 py-4">{t('admin.details')}</th>
+                                            <th className="px-6 py-4">{t('admin.actions')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 dark:divide-white/5">
@@ -2872,14 +3525,14 @@
                                                     <button
                                                         onClick={() => setSelectedContact(contact)}
                                                         className="text-blue-500 hover:text-blue-700"
-                                                        title="View Details"
+                                                        title={t('admin.view_details')}
                                                     >
                                                         <span className="material-symbols-outlined">visibility</span>
                                                     </button>
                                                     <button
                                                         onClick={() => handleDelete(contact.id)}
                                                         className="text-red-500 hover:text-red-700"
-                                                        title="Delete"
+                                                        title={t('admin.delete')}
                                                     >
                                                         <span className="material-symbols-outlined">delete</span>
                                                     </button>
@@ -2889,7 +3542,7 @@
                                         {contacts.length === 0 && (
                                             <tr>
                                                 <td colSpan="7" className="px-6 py-12 text-center text-gray-500">
-                                                    No submissions found.
+                                                    {t('admin.no_submissions')}
                                                 </td>
                                             </tr>
                                         )}
@@ -2910,32 +3563,32 @@
                                     <span className="material-symbols-outlined">close</span>
                                 </button>
 
-                                <h2 className="text-2xl font-bold mb-6 dark:text-white border-b pb-4 border-gray-200 dark:border-gray-700">Submission Details</h2>
+                                <h2 className="text-2xl font-bold mb-6 dark:text-white border-b pb-4 border-gray-200 dark:border-gray-700">{t('admin.submission_details')}</h2>
 
                                 <div className="space-y-4 text-gray-800 dark:text-gray-300">
                                     <div className="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase">Date</label>
+                                            <label className="text-xs font-bold text-gray-500 uppercase">{t('admin.date')}</label>
                                             <p>{new Date(selectedContact.created_at).toLocaleString()}</p>
                                         </div>
                                         <div>
-                                            <label className="text-xs font-bold text-gray-500 uppercase">Budget</label>
+                                            <label className="text-xs font-bold text-gray-500 uppercase">{t('admin.budget')}</label>
                                             <p className="font-medium">{selectedContact.budget}</p>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Name</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">{t('admin.name')}</label>
                                         <p className="text-lg font-medium">{selectedContact.name}</p>
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Email</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">{t('admin.email')}</label>
                                         <p className="font-mono bg-gray-100 dark:bg-black/30 p-2 rounded">{selectedContact.email}</p>
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Services</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">{t('admin.services')}</label>
                                         <div className="flex flex-wrap gap-2 mt-1">
                                             {Array.isArray(selectedContact.services) ? selectedContact.services.map(s => (
                                                 <span key={s} className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full font-medium">{s}</span>
@@ -2944,9 +3597,9 @@
                                     </div>
 
                                     <div>
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Message Details</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">{t('admin.message_details')}</label>
                                         <div className="mt-1 p-4 bg-gray-50 dark:bg-black/20 rounded-lg border border-gray-200 dark:border-white/5 whitespace-pre-wrap leading-relaxed max-h-60 overflow-y-auto">
-                                            {selectedContact.details || "No details provided."}
+                                            {selectedContact.details || t('admin.no_messages')}
                                         </div>
                                     </div>
                                 </div>
@@ -2957,13 +3610,13 @@
                                         className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-medium flex items-center gap-2"
                                     >
                                         <span className="material-symbols-outlined text-lg">delete</span>
-                                        Delete
+                                        {t('admin.delete')}
                                     </button>
                                     <button
                                         onClick={() => setSelectedContact(null)}
                                         className="px-6 py-2 bg-primary-accent text-white rounded-lg hover:opacity-90 font-medium"
                                     >
-                                        Close
+                                        {t('admin.close')}
                                     </button>
                                 </div>
                             </div>
@@ -3004,23 +3657,25 @@
             }, []);
 
             return (
-                <HashRouter>
-                    <TransitionProvider>
-                        <RouteChangeTracker />
-                        <ScrollUnlocker />
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="/works" element={<WorksGallery />} />
-                            <Route path="/success" element={<SuccessPage />} />
-                            <Route path="/studio" element={<Studio />} />
-                            <Route path="/services" element={<Services />} />
-                            <Route path="/contact" element={<Contact />} />
-                            <Route path="/admin" element={<AdminLogin />} />
-                            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                            <Route path="/design" element={<DesignGuidelines />} />
-                        </Routes>
-                    </TransitionProvider>
-                </HashRouter>
+                <LanguageProvider>
+                    <HashRouter>
+                        <TransitionProvider>
+                            <RouteChangeTracker />
+                            <ScrollUnlocker />
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/works" element={<WorksGallery />} />
+                                <Route path="/success" element={<SuccessPage />} />
+                                <Route path="/studio" element={<Studio />} />
+                                <Route path="/services" element={<Services />} />
+                                <Route path="/contact" element={<Contact />} />
+                                <Route path="/admin" element={<AdminLogin />} />
+                                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                                <Route path="/design" element={<DesignGuidelines />} />
+                            </Routes>
+                        </TransitionProvider>
+                    </HashRouter>
+                </LanguageProvider>
             );
         };
 
