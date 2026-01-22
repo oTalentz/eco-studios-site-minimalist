@@ -797,6 +797,11 @@
                     team_subtitle: "A multidisciplinary group of thinkers, makers, and explorers.",
                     more_members: "More members",
                     join_us: "Join us",
+                    join_modal: {
+                        title: "Applications Unavailable",
+                        message: "Applications are currently unavailable. We appreciate your interest in joining Eco Studios. Please check back later.",
+                        close: "Close"
+                    },
                     roles: {
                         ceo: "Executive Director (CEO)",
                         lead_developer: "Lead Developer",
@@ -1076,6 +1081,11 @@
                     team_subtitle: "Um grupo multidisciplinar de pensadores, criadores e exploradores.",
                     more_members: "Mais membros",
                     join_us: "Junte-se a nós",
+                    join_modal: {
+                        title: "Inscrições Indisponíveis",
+                        message: "Inscrições indisponíveis no momento. Agradecemos seu interesse em fazer parte da Eco Studios. Por favor, verifique novamente mais tarde.",
+                        close: "Fechar"
+                    },
                     roles: {
                         ceo: "Diretor Executivo (CEO)",
                         lead_developer: "Desenvolvedor Líder",
@@ -2334,6 +2344,7 @@
 
         const StudioComp = () => {
             const { t } = useLanguage();
+            const [isJoinModalOpen, setIsJoinModalOpen] = React.useState(false);
             return (
                 <Layout>
                     <div className="bg-background-light dark:bg-background-dark text-[#121118] dark:text-white overflow-x-hidden font-manrope">
@@ -2419,15 +2430,40 @@
                                                 </div>
                                                 <div className="w-full h-px bg-[#121118]/10 dark:bg-white/10 group-hover:bg-primary-accent transition-all duration-500 origin-left mb-4"></div>
                                             </div>
-                                            <Link to="/contact" className="inline-flex items-center gap-2 text-primary-accent font-bold hover:gap-4 transition-all">
+                                            <button onClick={() => setIsJoinModalOpen(true)} className="inline-flex items-center gap-2 text-primary-accent font-bold hover:gap-4 transition-all">
                                                 {t('studio_page.join_us')}
                                                 <span className="material-symbols-outlined">arrow_forward</span>
-                                            </Link>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </section>
                         </main>
+                        {isJoinModalOpen && (
+                            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                                <div className="bg-white dark:bg-[#1e1a32] p-8 rounded-2xl shadow-2xl max-w-md w-full text-center relative border border-white/10">
+                                    <button
+                                        onClick={() => setIsJoinModalOpen(false)}
+                                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
+                                    >
+                                        <span className="material-symbols-outlined">close</span>
+                                    </button>
+                                    <span className="material-symbols-outlined text-4xl text-primary-accent mb-4">info</span>
+                                    <h3 className="text-xl font-bold text-[#121118] dark:text-white mb-2">
+                                        {t('studio_page.join_modal.title')}
+                                    </h3>
+                                    <p className="text-[#696388] dark:text-[#a09cb0] text-sm">
+                                        {t('studio_page.join_modal.message')}
+                                    </p>
+                                    <button
+                                        onClick={() => setIsJoinModalOpen(false)}
+                                        className="mt-6 px-6 py-2 bg-primary-accent text-white font-bold rounded-lg hover:bg-opacity-90 transition-all w-full"
+                                    >
+                                        {t('studio_page.join_modal.close')}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </Layout>
             );
